@@ -10,7 +10,7 @@ async function run() {
     const ref = core.getInput('ref');
     const token = core.getInput('token');
 
-    git.clone({ repository, token, ref });
+    git.cloneRepo({ repository, token, ref });
   } catch (error) {
     // @ts-ignore
     core.setFailed(error.message);

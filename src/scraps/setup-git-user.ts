@@ -4,10 +4,10 @@ import * as git from '../lib/git';
 
 async function run() {
   try {
-    const botUsername = core.getInput('botUsername');
-    const botEmail = core.getInput('botEmail');
+    const name = core.getInput('botUsername');
+    const email = core.getInput('botEmail');
 
-    git.setupGitUser(botUsername, botEmail);
+    git.setupGitUser({ name, email });
   } catch (error) {
     // @ts-ignore
     core.setFailed(error.message);

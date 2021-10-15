@@ -1,4 +1,4 @@
-import clone from './clone';
+import cloneRepo from './cloneRepo';
 import setupGitUser from './setupUser';
 
-export { clone, setupGitUser };
+export { cloneRepo, setupGitUser };

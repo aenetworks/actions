@@ -1,6 +1,16 @@
 import * as core from '@actions/core';
-import * as shell from 'shelljs';
-import { CloneProps, ExecCloneProps, ExecSwitchBranchProps } from "./interfaces";
+
+import execShellCommand from '../execShellCommand';
+
+interface ExecCloneProps {
+  readonly repository: string;
+  readonly token: string;
+}
+
+interface ExecSwitchBranchProps {
+  readonly ref: string;
+}
+type CloneProps = ExecCloneProps & ExecSwitchBranchProps;
 
 /**
  * Clone repository and switch to given ref.
@@ -8,32 +18,27 @@ import { CloneProps, ExecCloneProps, ExecSwitchBranchProps } from "./interfaces"
  * @param {string} repository - Repository name.
  * @param {string} token - GitHub token.
  * @param {string} ref - Git ref name (branch, tag).
+ * @throws {ShellCommandExecutionError}
  */
 const cloneRepo = ({ repository, token, ref }: CloneProps): void => {
   core.startGroup('Clone repository');
   _cloneRepository({ repository, token });
-  _switchBranchToRef({ref});
+  _switchBranchToRef({ ref });
   core.endGroup();
 };
 
-
-const _cloneRepository = ({ repository, token}: ExecCloneProps): void => {
+const _cloneRepository = ({ repository, token }: ExecCloneProps): void => {
   const cmd = `git clone https://bot:${token}@github.com/${repository}.git .`;
-  const res = shell.exec(cmd, { fatal: true });
+  const errorMessage = `Cannot clone repository '${repository}'`;
 
-  if (res.code) {
-    throw new Error(`Cannot clone repository '${repository}':\n${res.stderr}`);
-  }
-}
-
+  execShellCommand({ cmd, errorMessage });
+};
 
 const _switchBranchToRef = ({ ref }: ExecSwitchBranchProps): void => {
   const cmd = `git switch -c ${ref}`;
-  const res = shell.exec(cmd, { fatal: true });
+  const errorMessage = `Cannot switch to branch '${ref}'`;
 
-  if (res.code) {
-    throw new Error(`Cannot switch to branch '${ref}':\n${res.stderr}`);
-  }
-}
+  execShellCommand({ cmd, errorMessage });
+};
 
 export default cloneRepo;

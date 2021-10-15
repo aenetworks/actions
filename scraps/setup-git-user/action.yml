@@ -8,10 +8,10 @@ inputs:
     required: false
   botEmail:
     description: 'emails'
-    default: '<githubactionsbot@github.com>'
+    default: 'githubactionsbot@github.com'
     required: false
 runs:
   using: 'docker'
   image: '../Dockerfile'
-  args: ['node', '/action/lib/setup-git-user.js']
+  args: ['node', '/action/lib/scraps/setup-git-user.js']
 
