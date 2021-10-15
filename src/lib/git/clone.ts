@@ -22,7 +22,7 @@ const _cloneRepository = ({ repository, token}: ExecCloneProps): void => {
   const res = shell.exec(cmd, { fatal: true });
 
 
-  if (!res.code) {
+  if (res.code) {
     core.info('code: ' + res.code)
     core.info('stderr: ' + res.stderr)
     throw new Error('Cannot clone repository')
