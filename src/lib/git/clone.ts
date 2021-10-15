@@ -11,15 +11,18 @@ import { CloneProps, ExecCloneProps, ExecSwitchBranchProps } from "./interfaces"
  */
 const cloneRepo = ({ repository, token, ref }: CloneProps): void => {
   core.startGroup('Clone repository');
-  _execClone({ repository, token });
-  _execSwitchBranch({ref});
+  _cloneRepository({ repository, token });
+  _switchBranchToRef({ref});
   core.endGroup();
 };
 
 
-const _execClone = ({ repository, token}: ExecCloneProps): void => {
+const _cloneRepository = ({ repository, token}: ExecCloneProps): void => {
   const cmd = `git clone https://bot:${token}@github.com/${repository}.git .`;
   const res = shell.exec(cmd, { fatal: true });
+
+  core.info('code: ' + res.code)
+  core.info('stderr: ' + res.stderr)
 
   if (res.stderr !== '') {
     core.setFailed(res.stderr)
@@ -27,7 +30,7 @@ const _execClone = ({ repository, token}: ExecCloneProps): void => {
 }
 
 
-const _execSwitchBranch = ({ ref }: ExecSwitchBranchProps): void => {
+const _switchBranchToRef = ({ ref }: ExecSwitchBranchProps): void => {
   const cmd = `git switch -c ${ref}`;
   const res = shell.exec(cmd, { fatal: true });
 
