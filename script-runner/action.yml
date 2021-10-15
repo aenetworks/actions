@@ -10,7 +10,6 @@ inputs:
     required: false
   npmAuthToken:
     description: 'NPM Auth Token'
-    default: '${{ secrets.GPR_AUTH_TOKEN }}'
     required: false
   botUsername:
     description: 'username'
@@ -18,7 +17,6 @@ inputs:
     required: false
   botEmail:
     description: 'emails'
-    default: "${{ secrets.GITBOT_EMAIL }}"
     required: false
 runs:
   using: 'docker'
