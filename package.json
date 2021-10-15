@@ -5,7 +5,7 @@
   "main": "lib/main.js",
   "scripts": {
     "clear": "rimraf lib/*",
-    "build": "yarn run clear && tsc",
+    "build": "npm run clear && tsc",
     "lint": "eslint .",
     "lint:fix": "eslint --fix ."
   },
