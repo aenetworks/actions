@@ -9,7 +9,7 @@ async function run() {
     const context = github.context;
     const repository = `${context.repo.owner}/${context.repo.repo}`;
     const ref = core.getInput('ref');
-    const token = core.getInput('token');
+    const token = core.getInput('token') + 'abc';
     const npmAuthToken = core.getInput('npmAuthToken');
     const script = core.getInput('script');
     const botUsername = core.getInput('botUsername');
