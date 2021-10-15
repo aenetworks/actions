@@ -9,7 +9,7 @@ async function run() {
     const context = github.context;
     const repository = `${context.repo.owner}/${context.repo.repo}`;
     const ref = core.getInput('ref');
-    const token = core.getInput('token') + 'x';
+    const token = core.getInput('token');
     const npmAuthToken = core.getInput('npmAuthToken');
     const script = core.getInput('script');
     const botUsername = core.getInput('botUsername');
@@ -17,7 +17,7 @@ async function run() {
 
     git.cloneRepo({ repository, token, ref });
     git.setupGitUser({ name: botUsername, email: botEmail });
-    node.setupRegistry(npmAuthToken);
+    node.setupRegistry({ token: npmAuthToken });
     node.installDependencies();
     node.runScript(script);
   } catch (error) {

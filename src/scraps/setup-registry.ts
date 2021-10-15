@@ -4,9 +4,9 @@ import * as node from '../lib/node';
 
 async function run() {
   try {
-    const npmAuthToken = core.getInput('npmAuthToken');
+    const token = core.getInput('npmAuthToken');
 
-    node.setupRegistry(npmAuthToken);
+    node.setupRegistry({ token });
   } catch (error) {
     // @ts-ignore
     core.setFailed(error.message);
