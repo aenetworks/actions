@@ -22,7 +22,7 @@ const _cloneRepository = ({ repository, token}: ExecCloneProps): void => {
   const res = shell.exec(cmd, { fatal: true });
 
   if (res.code) {
-    throw new Error(`Cannot clone repository '${repository}':\n${res.stdout}`);
+    throw new Error(`Cannot clone repository '${repository}':\n${res.stderr}`);
   }
 }
 
@@ -32,7 +32,7 @@ const _switchBranchToRef = ({ ref }: ExecSwitchBranchProps): void => {
   const res = shell.exec(cmd, { fatal: true });
 
   if (res.code) {
-    throw new Error(`Cannot switch to branch '${ref}':\n${res.stdout}`);
+    throw new Error(`Cannot switch to branch '${ref}':\n${res.stderr}`);
   }
 }
 
