@@ -24,8 +24,9 @@ const _cloneRepository = ({ repository, token}: ExecCloneProps): void => {
   core.info('code: ' + res.code)
   core.info('stderr: ' + res.stderr)
 
-  if (res.stderr !== '') {
-    core.setFailed(res.stderr)
+  if (!res.code) {
+    core.setFailed('Cannot clone repository');
+    process.exit(1);
   }
 }
 
