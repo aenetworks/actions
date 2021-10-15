@@ -1,0 +1,12 @@
+name: 'Run script'
+description: 'test'
+author: 'Pawel Drozd'
+inputs:
+  script:
+    description: 'Script'
+    required: true
+runs:
+  using: 'docker'
+  image: '../Dockerfile'
+  args: ['node', '/action/lib/run-script.js']
+

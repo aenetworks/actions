@@ -1,0 +1,27 @@
+name: 'Script runner'
+description: 'Setup repository, install dependencies and run script'
+inputs:
+  script:
+    description: 'NPM script to execute'
+    required: true
+  ref:
+    description: 'Ref'
+    default: ${{ github.event.pull_request.head.sha || github.ref }}
+    required: false
+  npmAuthToken:
+    description: 'NPM Auth Token'
+    default: ${{ secrets.GPR_AUTH_TOKEN }}
+    required: false
+  botUsername:
+    description: 'username'
+    default: 'Github Actions Bot'
+    required: false
+  botEmail:
+    description: 'emails'
+    default: ${{ secrets.GITHUB_BOT_EMAIL }}
+    required: false
+runs:
+  using: 'docker'
+  image: '../Dockerfile'
+  args: ['node', '/action/lib/script-runner-action.js']
+

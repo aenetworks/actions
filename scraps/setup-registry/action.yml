@@ -1,0 +1,12 @@
+name: 'Setup registry'
+description: 'test'
+author: 'Pawel Drozd'
+inputs:
+  npmAuthToken:
+    description: 'auth token'
+    required: true
+runs:
+  using: 'docker'
+  image: '../Dockerfile'
+  args: ['node', '/action/lib/setup-registry.js']
+

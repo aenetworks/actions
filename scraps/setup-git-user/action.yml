@@ -1,0 +1,17 @@
+name: 'Setup git user'
+description: 'test'
+author: 'Pawel Drozd'
+inputs:
+  botUsername:
+    description: 'username'
+    default: 'Github Actions Bot'
+    required: false
+  botEmail:
+    description: 'emails'
+    default: '<githubactionsbot@github.com>'
+    required: false
+runs:
+  using: 'docker'
+  image: '../Dockerfile'
+  args: ['node', '/action/lib/setup-git-user.js']
+
