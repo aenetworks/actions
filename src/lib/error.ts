@@ -7,23 +7,7 @@ abstract class ErrorFactory<T = any> extends Error {
     this.name = this.constructor.name;
     this._msg = this.constructor['msg'];
 
-    this.message = this.getMessage(args);
-  }
-
-  protected getMessage(args?: T): string {
-    if (!!this._msg && !!args) {
-      return `${this._msg}: ${args}.`;
-    }
-
-    if (!!this._msg) {
-      return `${this._msg}.`;
-    }
-
-    if (!!args) {
-      return `${args}.`;
-    }
-
-    return '';
+    this.message = `${this.name}: ${this._msg}${args ? ': ' + args : ''}.`;
   }
 }
 
