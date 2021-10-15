@@ -8,6 +8,10 @@ inputs:
     description: 'Ref'
     default: ${{ github.event.pull_request.head.sha || github.ref }}
     required: false
+  token:
+    description: 'Token'
+    default: ${{ github.token }}
+    required: false
   npmAuthToken:
     description: 'NPM Auth Token'
     required: false
