@@ -21,12 +21,11 @@ const _cloneRepository = ({ repository, token}: ExecCloneProps): void => {
   const cmd = `git clone https://bot:${token}@github.com/${repository}.git .`;
   const res = shell.exec(cmd, { fatal: true });
 
-  core.info('code: ' + res.code)
-  core.info('stderr: ' + res.stderr)
 
   if (!res.code) {
-    core.setFailed('Cannot clone repository');
-    process.exit(1);
+    core.info('code: ' + res.code)
+    core.info('stderr: ' + res.stderr)
+    throw new Error('Cannot clone repository')
   }
 }
 
