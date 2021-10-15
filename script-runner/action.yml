@@ -18,7 +18,7 @@ inputs:
     required: false
   botEmail:
     description: 'emails'
-    default: ${{ secrets.GITHUB_BOT_EMAIL }}
+    default: ${{ secrets.GITBOT_EMAIL }}
     required: false
 runs:
   using: 'docker'
