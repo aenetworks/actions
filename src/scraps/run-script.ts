@@ -6,7 +6,7 @@ async function run() {
   try {
     const script = core.getInput('script');
 
-    node.runScript(script);
+    new node.RunScript(script).run();
   } catch (error) {
     // @ts-ignore
     core.setFailed(error.message);

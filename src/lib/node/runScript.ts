@@ -1,16 +1,27 @@
-import * as core from '@actions/core';
-import * as shell from 'shelljs';
+import { logGroup } from '../decorators';
+import execShellCommand from '../execShellCommand';
 
-const runScript = (script: string) => {
-  core.startGroup(`Run script: ${script}`);
+// const runScript = (script: string) => {
+//   logGroup(`Run script ${script}`, () => {
+//     const cmd = `npm run ${script}`;
+//
+//     execShellCommand({ cmd });
+//   });
+// };
+//
+// export default runScript;
 
-  const result = shell.exec(`npm run ${script}`, { fatal: true });
+export default class RunScript {
+  private readonly script: string;
+  private readonly cmd: string;
 
-  if (result.code > 0) {
-    core.setFailed(result.stderr);
+  constructor(script: string) {
+    this.script = script;
+    this.cmd = `npm run ${script}`;
   }
 
-  core.endGroup();
-};
-
-export default runScript;
+  @logGroup('Run script')
+  public run() {
+    execShellCommand({ cmd: this.cmd });
+  }
+}

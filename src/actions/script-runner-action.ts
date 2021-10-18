@@ -19,7 +19,7 @@ async function run() {
     git.setupGitUser({ name: botUsername, email: botEmail });
     node.setupRegistry({ token: npmAuthToken });
     node.installDependencies();
-    node.runScript(script);
+    new node.RunScript(script).run();
   } catch (error) {
     // @ts-ignore
     core.setFailed(error.message);
