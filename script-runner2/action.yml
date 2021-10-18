@@ -1,0 +1,43 @@
+name: 'Script runner'
+description: 'Setup repository, install dependencies and run script'
+inputs:
+  script:
+    description: 'NPM script to execute'
+    required: true
+  ref:
+    description: 'Ref'
+    default: ${{ github.event.pull_request.head.sha || github.ref }}
+    required: false
+  token:
+    description: 'GitHub Token'
+    default: ${{ github.token }}
+    required: false
+  npmAuthToken:
+    description: 'NPM Auth Token or env variable NPM_AUTH_TOKEN'
+    required: false
+  botUsername:
+    description: 'GitHub bot username or env variable BOT_NAME'
+    default: 'GitHub Actions Bot'
+    required: false
+  botEmail:
+    description: 'Github bot email or env variable BOT_EMAIL'
+    required: false
+runs:
+  using: 'composite'
+  steps:
+    - uses: ./scraps/clone-repository
+      with:
+        ref: ${{ inputs.ref }}
+        token: ${{ inputs.token }}
+    - uses: ./scraps/setup-git-user
+      with:
+        botUsername: ${{ inputs.botUsername }}
+        botEmail: ${{ inputs.botEmail }}
+    - uses: ./scraps/setup-npm-registry
+      with:
+        npmAuthToken: ${{ inputs.npmAuthToken }}
+    - uses: ./scraps/install-dependencies
+    - uses: ./scraps/run-script
+      with:
+        script: ${{ inputs.script }}
+
