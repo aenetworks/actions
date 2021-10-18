@@ -1,13 +1,15 @@
 import * as core from '@actions/core';
 
 import { SetupGitUser } from '../lib/git';
+import Inputs from '../lib/inputs';
 
 async function run() {
   try {
-    const name = core.getInput('botUsername');
-    const email = core.getInput('botEmail');
+    const inputs = new Inputs();
+    const botUsername = inputs.getBotUsername();
+    const botEmail = inputs.getBotEmail();
 
-    new SetupGitUser(name, email);
+    new SetupGitUser(botUsername, botEmail);
   } catch (error) {
     // @ts-ignore
     core.setFailed(error.message);

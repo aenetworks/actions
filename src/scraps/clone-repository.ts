@@ -1,14 +1,15 @@
 import * as core from '@actions/core';
-import * as github from '@actions/github';
 
 import { CloneRepository } from '../lib/git';
+import Inputs from '../lib/inputs';
 
 async function run() {
   try {
-    const context = github.context;
-    const repository = `${context.repo.owner}/${context.repo.repo}`;
-    const ref = core.getInput('ref');
-    const token = core.getInput('token');
+    const inputs = new Inputs();
+
+    const repository = inputs.getRepository();
+    const token = inputs.getGithubToken();
+    const ref = inputs.getRef();
 
     new CloneRepository(repository, token, ref).run();
   } catch (error) {

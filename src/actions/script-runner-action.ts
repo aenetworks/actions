@@ -1,25 +1,25 @@
 import * as core from '@actions/core';
-import * as github from '@actions/github';
 
 import { CloneRepository, SetupGitUser } from '../lib/git';
+import Inputs from '../lib/inputs';
 import { InstallDependencies, RunNpmScript, SetupNpmRegistry } from '../lib/node';
 
 async function run() {
   try {
-    const context = github.context;
-    const repository = `${context.repo.owner}/${context.repo.repo}`;
-    const ref = core.getInput('ref');
-    const token = core.getInput('token');
-    const npmAuthToken = core.getInput('npmAuthToken');
-    const script = core.getInput('script');
-    const botUsername = core.getInput('botUsername');
-    const botEmail = core.getInput('botEmail') || process.env.GITBOT_EMAIL || '';
+    const inputs = new Inputs();
+    const repository = inputs.getRepository();
+    const githubToken = inputs.getGithubToken();
+    const ref = inputs.getRef();
+    const botUsername = inputs.getBotUsername();
+    const botEmail = inputs.getBotEmail();
+    const npmAuthToken = inputs.getNpmAuthToken();
+    const scriptName = inputs.getScriptName();
 
-    new CloneRepository(repository, token, ref).run();
+    new CloneRepository(repository, githubToken, ref).run();
     new SetupGitUser(botUsername, botEmail).run();
     new SetupNpmRegistry(npmAuthToken).run();
     new InstallDependencies().run();
-    new RunNpmScript(script).run();
+    new RunNpmScript(scriptName).run();
   } catch (error) {
     // @ts-ignore
     core.setFailed(error.message);
