@@ -1,9 +1,6 @@
 name: 'Script runner'
 description: 'Setup repository, install dependencies and run script'
 inputs:
-  script:
-    description: 'NPM script to execute'
-    required: true
   ref:
     description: 'Ref'
     default: ${{ github.event.pull_request.head.sha || github.ref }}
@@ -25,5 +22,5 @@ inputs:
 runs:
   using: 'docker'
   image: '../Dockerfile'
-  args: ['node', '/action/lib/actions/script-runner-action.js']
+  args: ['node', '/action/lib/actions/test-action.js']
 

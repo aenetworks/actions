@@ -13,13 +13,12 @@ async function run() {
     const botUsername = inputs.getBotUsername();
     const botEmail = inputs.getBotEmail();
     const npmAuthToken = inputs.getNpmAuthToken();
-    const scriptName = inputs.getScriptName();
 
     new CloneRepository(repository, githubToken, ref).run();
     new SetupGitUser(botUsername, botEmail).run();
     new SetupNpmRegistry(npmAuthToken).run();
     new InstallDependencies().run();
-    new RunNpmScript(scriptName).run();
+    new RunNpmScript('test').run();
   } catch (error) {
     // @ts-ignore
     core.setFailed(error.message);
