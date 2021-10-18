@@ -25,19 +25,19 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - uses: aenetworks/actions/scraps/clone-repository@initial-approach
+    - uses: aenetworks/actions/clone-repository@initial-approach
       with:
         ref: ${{ inputs.ref }}
         token: ${{ inputs.token }}
-    - uses: aenetworks/actions/scraps/setup-git-user@initial-approach
+    - uses: aenetworks/actions/setup-git-user@initial-approach
       with:
         botUsername: ${{ inputs.botUsername }}
         botEmail: ${{ inputs.botEmail }}
-    - uses: aenetworks/actions/scraps/setup-npm-registry@initial-approach
+    - uses: aenetworks/actions/setup-npm-registry@initial-approach
       with:
         npmAuthToken: ${{ inputs.npmAuthToken }}
-    - uses: aenetworks/actions/scraps/install-dependencies@initial-approach
-    - uses: aenetworks/actions/scraps/run-script@initial-approach
+    - uses: aenetworks/actions/install-dependencies@initial-approach
+    - uses: aenetworks/actions/run-script@initial-approach
       with:
         script: ${{ inputs.script }}
 
