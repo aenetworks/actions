@@ -14,6 +14,7 @@ inputs:
     required: false
   npmAuthToken:
     description: 'NPM Auth Token'
+    default: '$NPM_AUTH_TOKEN'
     required: false
   botUsername:
     description: 'username'
@@ -21,6 +22,7 @@ inputs:
     required: false
   botEmail:
     description: 'emails'
+    default: '$BOT_EMAIL'
     required: false
 runs:
   using: 'docker'

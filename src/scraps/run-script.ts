@@ -1,12 +1,12 @@
 import * as core from '@actions/core';
 
-import * as node from '../lib/node';
+import { RunNpmScript } from '../lib/node';
 
 async function run() {
   try {
     const script = core.getInput('script');
 
-    new node.RunScript(script).run();
+    new RunNpmScript(script).run();
   } catch (error) {
     // @ts-ignore
     core.setFailed(error.message);

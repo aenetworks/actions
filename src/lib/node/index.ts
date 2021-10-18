@@ -1,5 +1,5 @@
-import installDependencies from './installDependencies';
-import RunScript from './runScript';
-import setupRegistry from './setupOrg';
+import InstallDependencies from './installDependencies';
+import RunNpmScript from './runNpmScript';
+import SetupNpmRegistry from './setupNpmRegistry';
 
-export { installDependencies, RunScript, setupRegistry };
+export { InstallDependencies, RunNpmScript, SetupNpmRegistry };

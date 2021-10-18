@@ -1,7 +1,7 @@
 import * as core from '@actions/core';
 import * as github from '@actions/github';
 
-import * as git from '../lib/git';
+import { CloneRepository } from '../lib/git';
 
 async function run() {
   try {
@@ -10,7 +10,7 @@ async function run() {
     const ref = core.getInput('ref');
     const token = core.getInput('token');
 
-    git.cloneRepo({ repository, token, ref });
+    new CloneRepository(repository, token, ref).run();
   } catch (error) {
     // @ts-ignore
     core.setFailed(error.message);

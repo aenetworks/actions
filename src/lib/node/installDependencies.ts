@@ -1,7 +1,8 @@
 import * as core from '@actions/core';
-import * as shell from 'shelljs';
 
+import { logGroup } from '../decorators';
 import execShellCommand from '../execShellCommand';
+import { Command } from '../seedWorks';
 import * as utils from './utils';
 
 const errorMessage = 'Error while installing packages';
@@ -9,34 +10,37 @@ const errorMessage = 'Error while installing packages';
 /**
  * Install JavaScript dependencies from package.json file.
  *
- * @throws {ShellCommandExecutionError}
+ * It uses package-lock.json or yarn.lock depending on which file is in repository.
+ * If both, yarn takes precedence over npm..
  */
-const installDependencies = () => {
-  core.startGroup('Install dependencies');
-
-  if (utils.shouldUseYarn()) {
-    _yarnInstall();
-  } else {
-    _npmInstall();
+export default class InstallNpmDependencies implements Command {
+  /**
+   * Run command.
+   *
+   * @throws {ShellCommandExecutionError}
+   */
+  @logGroup('Install dependencies')
+  public run(): void {
+    if (utils.shouldUseYarn()) {
+      this._yarnInstall();
+    } else {
+      this._npmInstall();
+    }
   }
 
-  core.endGroup();
-};
+  private _yarnInstall = () => {
+    core.debug('Using yarn');
 
-const _yarnInstall = () => {
-  console.debug('Using yarn');
+    const cmd = 'yarn install --frozen-lockfile';
 
-  const cmd = 'yarn install --frozen-lockfile';
+    execShellCommand({ cmd, errorMessage });
+  };
 
-  execShellCommand({ cmd, errorMessage });
-};
+  private _npmInstall = () => {
+    core.debug('Using npm');
 
-const _npmInstall = () => {
-  console.debug('Using npm');
+    const cmd = 'npm ci';
 
-  const cmd = 'npm ci';
-
-  execShellCommand({ cmd, errorMessage });
-};
-
-export default installDependencies;
+    execShellCommand({ cmd, errorMessage });
+  };
+}

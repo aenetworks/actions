@@ -1,10 +1,10 @@
 import * as core from '@actions/core';
 
-import * as node from '../lib/node';
+import { InstallDependencies } from '../lib/node';
 
 async function run() {
   try {
-    node.installDependencies();
+    new InstallDependencies().run();
   } catch (error) {
     // @ts-ignore
     core.setFailed(error.message);

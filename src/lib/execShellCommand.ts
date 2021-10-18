@@ -1,6 +1,11 @@
 import * as shell from 'shelljs';
 
-import { ShellCommandExecutionError } from './error';
+import { ErrorBase } from './seedWorks';
+
+/**
+ * Error while executing shell command.
+ */
+export class ShellCommandExecutionError extends ErrorBase {}
 
 interface ExecShellCommandProps {
   readonly cmd: string;
@@ -12,7 +17,7 @@ interface ExecShellCommandProps {
  *
  * @param {string} cmd - Command to execute.
  * @param {string} [errorMessage=''] - Error message used to throw error.
- * @throws {Error} - Command execution error.
+ * @throws {ShellCommandExecutionError} - Command execution error.
  */
 const execShellCommand = ({ cmd, errorMessage = '' }: ExecShellCommandProps): void => {
   const res = shell.exec(cmd, { fatal: true });

@@ -4,7 +4,13 @@ import * as fs from 'fs';
 import * as os from 'os';
 import * as path from 'path';
 
-import { NpmrcFileError } from '../error';
+import { logGroup } from '../decorators';
+import { Command, ErrorBase } from '../seedWorks';
+
+/**
+ * Error related to .npmrc file.
+ */
+export class NpmrcFileError extends ErrorBase {}
 
 interface NpmrcRegistry {
   readonly registry: string;
@@ -12,42 +18,53 @@ interface NpmrcRegistry {
   readonly scope: string;
 }
 
-interface SetupRegistryProps {
-  readonly token: string;
+/**
+ * Setup Npm registry command.
+ *
+ * Configure .npmrc file containing access to actual repository organization package
+ * files.
+ */
+export default class SetupNpmRegistry implements Command {
+  private readonly token: string;
+  private readonly registry: NpmrcRegistry;
+
+  constructor(token: string) {
+    this.token = token;
+    this.registry = this._constructRegistry();
+  }
+
+  /**
+   * Run command.
+   *
+   * @throws {NpmrcFileError}
+   */
+  @logGroup('Setup private registry')
+  public run(): void {
+    core.debug(`Setting up registry: ${this.registry.url} with scope ${this.registry.scope}`);
+
+    const npmrcFile = new NpmrcFile(this.registry, this.token);
+
+    npmrcFile.save();
+
+    core.exportVariable('NODE_AUTH_TOKEN', this.token);
+  }
+
+  private _constructRegistry = (): NpmrcRegistry => {
+    const registry = '//npm.pkg.github.com/';
+    const url = `https:${registry}`;
+    const scope = '@' + github.context.repo.owner;
+
+    return {
+      registry,
+      url,
+      scope,
+    };
+  };
 }
 
 /**
- * Setup Npm registryl
- *
- * @param {string} token - Npm token.
- * @throws {NpmrcFileError}
+ * Npmrc file representation.
  */
-const setupRegistry = ({ token }: SetupRegistryProps): void => {
-  core.startGroup('Setup private registry');
-
-  const registry = _constructRegistry();
-  const npmrcFile = new NpmrcFile(registry, token);
-
-  console.debug(`Setting up registry: ${registry.url} with scope ${registry.scope}`);
-
-  npmrcFile.save();
-
-  core.exportVariable('NODE_AUTH_TOKEN', token);
-  core.endGroup();
-};
-
-const _constructRegistry = (): NpmrcRegistry => {
-  const registry = '//npm.pkg.github.com/';
-  const url = `https:${registry}`;
-  const scope = '@' + github.context.repo.owner;
-
-  return {
-    registry,
-    url,
-    scope,
-  };
-};
-
 class NpmrcFile {
   private readonly content: string;
 
@@ -106,5 +123,3 @@ class NpmrcFile {
     return content;
   }
 }
-
-export default setupRegistry;
