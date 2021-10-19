@@ -21,7 +21,7 @@ async function run() {
     new CloneRepository(repository, githubToken, ref).run();
 
     if (!unitTestsCommand.hasScript()) {
-      new CancelRun().run();
+      await new CancelRun(githubToken, 'Script "test" does not exists').run();
     } else {
       new SetupGitUser(botUsername, botEmail).run();
       new SetupNpmRegistry(npmAuthToken).run();
