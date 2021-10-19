@@ -16,7 +16,7 @@ async function run() {
     new CloneRepository(repository, githubToken, ref).run();
     new SetupNpmRegistry(npmAuthToken).run();
     new InstallDependencies().run();
-    new RunNpmScript('lint').run();
+    new RunNpmScript('lint', true).run();
   } catch (error) {
     // @ts-ignore
     core.setFailed(error.message);

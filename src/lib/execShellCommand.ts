@@ -11,6 +11,7 @@ export class ShellCommandExecutionError extends ErrorBase {}
 interface ExecShellCommandProps {
   readonly cmd: string;
   readonly errorMessage?: string;
+  readonly useStdout?: boolean;
 }
 
 /**
@@ -21,17 +22,15 @@ interface ExecShellCommandProps {
  * @return {string} - Command output.
  * @throws {ShellCommandExecutionError} - Command execution error.
  */
-const execShellCommand = ({ cmd, errorMessage = '' }: ExecShellCommandProps): string => {
+const execShellCommand = ({ cmd, errorMessage = '', useStdout = false }: ExecShellCommandProps): string => {
   core.debug(`Running command: \`${cmd}\``);
 
   const res = shell.exec(cmd, { fatal: true });
 
-  console.log('stdout');
-  console.log(res.stdout);
-  console.log('---');
-
   if (res.code) {
-    throw new ShellCommandExecutionError(`${errorMessage}\n${res.stderr}`);
+    const errorDescription = useStdout ? res.stdout : res.stderr;
+
+    throw new ShellCommandExecutionError(`${errorMessage}\n${errorDescription}`);
   }
 
   return res.stdout;
