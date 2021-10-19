@@ -34,9 +34,17 @@ export default class CloneRepository implements Command {
   };
 
   private _switchBranchToRef = (ref: string): void => {
-    const cmd = `git switch -c ${ref}`;
-    const errorMessage = `Cannot switch to branch '${ref}'`;
+    try {
+      const cmd = `git checkout ${ref}`;
 
-    execShellCommand({ cmd, errorMessage });
+      execShellCommand({ cmd });
+      core.info(`Checkout to '${ref}'`);
+    } catch (e) {
+      const cmd = `git switch -c ${ref}`;
+      const errorMessage = `Cannot switch to branch '${ref}'`;
+
+      execShellCommand({ cmd, errorMessage });
+      core.info(`Switched to branch '${ref}'`);
+    }
   };
 }
