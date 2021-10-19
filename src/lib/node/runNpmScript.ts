@@ -11,9 +11,7 @@ import { Command } from '../seedWorks';
  * Runs npm script if is defined in package.json file.
  */
 export default class RunNpmScript implements Command {
-  private readonly script: string;
   private readonly cmd: string;
-  private readonly useStdout: boolean = false;
 
   /**
    * Construct RunNpmScriptCommand.
@@ -21,10 +19,8 @@ export default class RunNpmScript implements Command {
    * @param {string} script - Script name to run.
    * @param {boolean} [useStdout=false] - Should include Stdout as error description..
    */
-  constructor(script: string, useStdout: boolean = false) {
-    this.script = script;
-    this.useStdout = useStdout;
-    this.cmd = `npm run --if-present ${script}`;
+  constructor(private readonly script: string, private readonly useStdout: boolean = false) {
+    this.cmd = `npm run ${script}`;
   }
 
   /**
@@ -32,11 +28,9 @@ export default class RunNpmScript implements Command {
    *
    * @throws {ShellCommandExecutionError}
    */
-  @logGroup('Run script')
+  // @logGroup('Run script')
   public run(): void {
     core.info(`Running npm script: '${this.script}'`);
-    execShellCommand({ cmd: 'git branch' });
-    execShellCommand({ cmd: 'ls' });
     execShellCommand({ cmd: this.cmd, useStdout: this.useStdout });
   }
 
