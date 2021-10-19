@@ -1,3 +1,6 @@
+import * as fs from 'fs';
+import * as path from 'path';
+
 import { logGroup } from '../decorators';
 import execShellCommand from '../execShellCommand';
 import { Command } from '../seedWorks';
@@ -16,13 +19,13 @@ export default class DescribeChanges implements Command {
   /**
    * Run command.
    */
-  @logGroup('Describe changes.')
-  public async run(): Promise<void> {
+  @logGroup('Describe changes')
+  public run(): string {
     const currentVersion = this._getCurrentVersion();
 
-    await this._ensureRightVersionIsDescribed(currentVersion);
-    // echo "$(npx standard-version --dry-run --silent | tail -n +3 | head -n -2)" > /tmp/changelog.txt
-    // cat /tmp/changelog.txt
+    this._ensureRightVersionIsDescribed(currentVersion);
+
+    return this._getChangelogEntry();
   }
 
   private _getCurrentVersion = (): string => {
@@ -32,10 +35,23 @@ export default class DescribeChanges implements Command {
     return execShellCommand({ cmd, errorMessage });
   };
 
-  private async _ensureRightVersionIsDescribed(currentVersion: string): Promise<void> {
-    const packageJson = require('./package.json');
+  private _ensureRightVersionIsDescribed(currentVersion: string): void {
+    const filePath = path.join(process.cwd(), 'package.json');
+    const packageJson = require(filePath);
 
     packageJson.version = currentVersion;
-    console.log(packageJson);
+    fs.writeFileSync(filePath, JSON.stringify(packageJson, null, 2));
+  }
+
+  private _getChangelogEntry(): string {
+    const cmd = 'npx standard-version --dry-run --silent';
+
+    const rawChangelog = execShellCommand({ cmd });
+    const changelogLines = rawChangelog.split('\n');
+    const changelog = changelogLines.slice(3, changelogLines.length - 3).join('\n');
+
+    console.log(changelog);
+
+    return changelog;
   }
 }
