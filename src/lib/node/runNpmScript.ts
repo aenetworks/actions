@@ -38,4 +38,10 @@ export default class RunNpmScript implements Command {
     execShellCommand({ cmd: 'ls' });
     execShellCommand({ cmd: this.cmd, useStdout: this.useStdout });
   }
+
+  public hasScript(): boolean {
+    const { scripts } = require('./package.json');
+
+    return Object.keys(scripts).includes(this.script);
+  }
 }

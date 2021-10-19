@@ -19,6 +19,7 @@ interface ExecShellCommandProps {
  *
  * @param {string} cmd - Command to execute.
  * @param {string} [errorMessage=''] - Error message used to throw error.
+ * @param {boolean} [useStdout=false] - Should use Stdout instead Stderr to describe error details.
  * @return {string} - Command output.
  * @throws {ShellCommandExecutionError} - Command execution error.
  */

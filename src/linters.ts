@@ -1,5 +1,6 @@
 import * as core from '@actions/core';
 
+import CancelRun from './lib/cancelRun';
 import { CloneRepository } from './lib/git';
 import Inputs from './lib/inputs';
 import { InstallDependencies, RunNpmScript, SetupNpmRegistry } from './lib/node';
@@ -13,10 +14,17 @@ async function run() {
     const ref = inputs.getRef();
     const npmAuthToken = inputs.getNpmAuthToken();
 
+    const lintersCommand = new RunNpmScript('lint', true);
+
     new CloneRepository(repository, githubToken, ref).run();
-    new SetupNpmRegistry(npmAuthToken).run();
-    new InstallDependencies().run();
-    new RunNpmScript('lint', true).run();
+
+    if (!lintersCommand.hasScript()) {
+      new CancelRun().run();
+    } else {
+      new SetupNpmRegistry(npmAuthToken).run();
+      new InstallDependencies().run();
+      lintersCommand.run();
+    }
   } catch (error) {
     // @ts-ignore
     core.setFailed(error.message);

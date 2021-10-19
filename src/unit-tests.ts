@@ -1,5 +1,6 @@
 import * as core from '@actions/core';
 
+import CancelRun from './lib/cancelRun';
 import { CloneRepository, SetupGitUser } from './lib/git';
 import Inputs from './lib/inputs';
 import { InstallDependencies, RunNpmScript, SetupNpmRegistry } from './lib/node';
@@ -15,11 +16,18 @@ async function run() {
     const botEmail = inputs.getBotEmail();
     const npmAuthToken = inputs.getNpmAuthToken();
 
+    const unitTestsCommand = new RunNpmScript('test');
+
     new CloneRepository(repository, githubToken, ref).run();
-    new SetupGitUser(botUsername, botEmail).run();
-    new SetupNpmRegistry(npmAuthToken).run();
-    new InstallDependencies().run();
-    new RunNpmScript('test').run();
+
+    if (!unitTestsCommand.hasScript()) {
+      new CancelRun().run();
+    } else {
+      new SetupGitUser(botUsername, botEmail).run();
+      new SetupNpmRegistry(npmAuthToken).run();
+      new InstallDependencies().run();
+      unitTestsCommand.run();
+    }
   } catch (error) {
     // @ts-ignore
     core.setFailed(error.message);
