@@ -1,5 +1,5 @@
-name: 'Script runner'
-description: 'Setup repository, install dependencies and run script'
+name: 'Unit Tests'
+description: 'Run unit tests'
 inputs:
   ref:
     description: 'Ref'
@@ -22,5 +22,5 @@ inputs:
 runs:
   using: 'docker'
   image: '../Dockerfile'
-  args: ['node', '/action/lib/actions/test-action.js']
+  args: ['node', '/action/lib/unit-tests.js']
 

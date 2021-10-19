@@ -1,4 +1,4 @@
-name: 'Run linters'
+name: 'Linters'
 description: 'Run linters'
 inputs:
   ref:
@@ -22,5 +22,5 @@ inputs:
 runs:
   using: 'docker'
   image: '../Dockerfile'
-  args: ['node', '/action/lib/actions/lint-action.js']
+  args: ['node', '/action/lib/linters.js']
 
