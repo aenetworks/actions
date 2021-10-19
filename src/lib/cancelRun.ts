@@ -21,15 +21,10 @@ export default class CancelRun implements Command {
       core.warning('Canceling run');
     }
 
-    console.log(github.context.workflow);
-    console.log(github.context.runId);
-    console.log(github.context.runNumber);
-    console.log(github.context.job);
-
     const octokit = github.getOctokit(this.token);
     const res = await octokit.rest.actions.cancelWorkflowRun({
       ...github.context.repo,
-      run_id: Number(github.context.job),
+      run_id: Number(github.context.runId),
     });
 
     console.log(res.status);
