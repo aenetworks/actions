@@ -26,6 +26,10 @@ const execShellCommand = ({ cmd, errorMessage = '' }: ExecShellCommandProps): st
 
   const res = shell.exec(cmd, { fatal: true });
 
+  console.log('stdout');
+  console.log(res.stdout);
+  console.log('---');
+
   if (res.code) {
     throw new ShellCommandExecutionError(`${errorMessage}\n${res.stderr}`);
   }

@@ -1,9 +1,9 @@
 import * as core from '@actions/core';
 
 import { CloneRepository, SetupGitUser } from './lib/git';
-import { DescribeChanges, BumpVersion, CreateDraftRelease} from "./lib/version";
 import Inputs from './lib/inputs';
 import { SetupNpmRegistry } from './lib/node';
+import { BumpVersion, CreateDraftRelease, DescribeChanges } from './lib/version';
 
 async function run() {
   try {
