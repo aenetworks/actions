@@ -1,3 +1,4 @@
+import * as core from '@actions/core';
 import * as shell from 'shelljs';
 
 import { ErrorBase } from './seedWorks';
@@ -20,6 +21,8 @@ interface ExecShellCommandProps {
  * @throws {ShellCommandExecutionError} - Command execution error.
  */
 const execShellCommand = ({ cmd, errorMessage = '' }: ExecShellCommandProps): void => {
+  core.debug(`Running command: \`${cmd}\``);
+
   const res = shell.exec(cmd, { fatal: true });
 
   if (res.code) {

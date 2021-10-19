@@ -40,7 +40,7 @@ export default class SetupNpmRegistry implements Command {
    */
   @logGroup('Setup private registry')
   public run(): void {
-    core.debug(`Setting up registry: ${this.registry.url} with scope ${this.registry.scope}`);
+    core.info(`Setting up registry: ${this.registry.url} with scope ${this.registry.scope}`);
 
     const npmrcFile = new NpmrcFile(this.registry, this.token);
 

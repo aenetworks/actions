@@ -21,6 +21,7 @@ export default class CloneRepository implements Command {
    */
   @logGroup('Clone repository')
   public run(): void {
+    core.info(`Cloning repository ${this.repository}`);
     this._cloneRepository(this.repository, this.token);
     this._switchBranchToRef(this.ref);
   }

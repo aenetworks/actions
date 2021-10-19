@@ -1,3 +1,5 @@
+import * as core from '@actions/core';
+
 import { logGroup } from '../decorators';
 import execShellCommand from '../execShellCommand';
 import { Command } from '../seedWorks';
@@ -27,6 +29,7 @@ export default class RunNpmScript implements Command {
    */
   @logGroup('Run script')
   public run(): void {
+    core.info(`Running npm script: '${this.script}'`);
     execShellCommand({ cmd: this.cmd });
   }
 }

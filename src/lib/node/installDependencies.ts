@@ -21,6 +21,8 @@ export default class InstallNpmDependencies implements Command {
    */
   @logGroup('Install dependencies')
   public run(): void {
+    core.info('Installing dependencies.');
+
     if (utils.shouldUseYarn()) {
       this._yarnInstall();
     } else {
@@ -29,7 +31,7 @@ export default class InstallNpmDependencies implements Command {
   }
 
   private _yarnInstall = () => {
-    core.debug('Using yarn');
+    core.info('Using yarn');
 
     const cmd = 'yarn install --frozen-lockfile';
 
@@ -37,7 +39,7 @@ export default class InstallNpmDependencies implements Command {
   };
 
   private _npmInstall = () => {
-    core.debug('Using npm');
+    core.info('Using npm');
 
     const cmd = 'npm ci';
 

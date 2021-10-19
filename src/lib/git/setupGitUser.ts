@@ -20,6 +20,7 @@ export default class SetupGitUser implements Command {
    */
   @logGroup('Setup bot user')
   public run(): void {
+    core.info(`Setup git user ${this.name}`);
     this._setGitUserName(this.name);
     this._setGitUserEmail(this.email);
   }
