@@ -29,7 +29,7 @@ export default class Inputs {
     const value = core.getInput('force');
 
     if (value === 'true') {
-      core.info('"Force" set to true. It will override targetRef!');
+      core.notice('"Force" set to true. It will override targetRef!');
 
       return true;
     } else if (value === 'false') {
