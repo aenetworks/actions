@@ -75,7 +75,7 @@ export default class MergeBranches implements Command {
 
     const splitted = out.split('\n');
 
-    // console.log(splitted[1]);
+    console.log('splitted ' + splitted);
 
     // const filtered = out.split('\n').find((tag) => tag === this.sourceRef);
     //
