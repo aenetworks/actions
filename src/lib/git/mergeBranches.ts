@@ -71,11 +71,8 @@ export default class MergeBranches implements Command {
   };
 
   private _isTagRef = (): boolean => {
-    const out = execShellCommand({ cmd: 'git tag --list' });
+    const out = execShellCommand({ cmd: `git tag --list "${this.sourceRef}"` });
 
-    const splitted = out.split('\n');
-    const filtered = splitted.find((tag) => tag === this.sourceRef);
-
-    return !!filtered;
+    return !!out.length;
   };
 }
