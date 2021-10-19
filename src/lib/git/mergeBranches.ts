@@ -18,17 +18,13 @@ export default class MergeBranches implements Command {
    * @param {boolean} force - Flag to force push.
    */
   constructor(private readonly targetRef: string, sourceRef: string, private readonly force: boolean = false) {
-    console.log(targetRef, sourceRef, force);
-
     if (sourceRef === MergeBranches.LAST_TAG) {
       this.sourceRef = this._getTag();
     } else {
       this.sourceRef = sourceRef;
     }
 
-    console.log(this.sourceRef);
     this.isTag = this._isTagRef();
-    console.log(this.isTag);
   }
 
   /**
@@ -76,7 +72,7 @@ export default class MergeBranches implements Command {
 
   private _isTagRef = () => {
     const out = execShellCommand({ cmd: `git tag --list | grep ${this.sourceRef}` });
-
+    console.log(out);
     return !!out.length;
   };
 }
