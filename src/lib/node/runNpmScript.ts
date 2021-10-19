@@ -1,4 +1,5 @@
 import * as core from '@actions/core';
+import * as path from 'path';
 
 import { logGroup } from '../decorators';
 import execShellCommand from '../execShellCommand';
@@ -40,7 +41,7 @@ export default class RunNpmScript implements Command {
   }
 
   public hasScript(): boolean {
-    const { scripts } = require('./package.json');
+    const { scripts } = require(path.join(process.cwd(), 'package.json'));
 
     return Object.keys(scripts).includes(this.script);
   }
