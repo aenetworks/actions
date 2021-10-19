@@ -21,7 +21,7 @@ async function run() {
     new CloneRepository(repository, githubToken, ref).run();
 
     if (!unitTestsCommand.hasScript()) {
-      await new CancelRun(githubToken, 'Script "test" does not exists').run();
+      core.notice('Unit tests job skipped, because script "test" does not exists in package.json');
     } else {
       new SetupGitUser(botUsername, botEmail).run();
       new SetupNpmRegistry(npmAuthToken).run();

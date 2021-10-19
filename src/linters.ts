@@ -19,7 +19,7 @@ async function run() {
     new CloneRepository(repository, githubToken, ref).run();
 
     if (!lintersCommand.hasScript()) {
-      await new CancelRun(githubToken, 'Script "lint" does not exists').run();
+      core.notice('Linters job skipped, because script "lint" does not exists in package.json');
     } else {
       new SetupNpmRegistry(npmAuthToken).run();
       new InstallDependencies().run();
