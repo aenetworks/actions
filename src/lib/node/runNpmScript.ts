@@ -34,6 +34,8 @@ export default class RunNpmScript implements Command {
   @logGroup('Run script')
   public run(): void {
     core.info(`Running npm script: '${this.script}'`);
+    execShellCommand({ cmd: 'git branch' });
+    execShellCommand({ cmd: 'ls' });
     execShellCommand({ cmd: this.cmd, useStdout: this.useStdout });
   }
 }
