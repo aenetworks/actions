@@ -70,11 +70,11 @@ export default class MergeBranches implements Command {
     execShellCommand({ cmd, errorMessage });
   };
 
-  private _isTagRef = () => {
-    const out = execShellCommand({ cmd: `git tag --list | grep ${this.sourceRef}` });
-
-    console.log(out);
-
-    return !!out.length;
+  private _isTagRef = (): boolean => {
+    // const out = execShellCommand({ cmd: 'git tag --list' });
+    // const filtered = out.split('\n').find((tag) => tag === this.sourceRef);
+    //
+    // return !!filtered;
+    return false
   };
 }

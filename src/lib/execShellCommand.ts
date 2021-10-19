@@ -28,8 +28,6 @@ const execShellCommand = ({ cmd, errorMessage = '', useStdout = false }: ExecShe
 
   const res = shell.exec(cmd);
 
-  console.log(res.code, res.stderr, res.stdout);
-
   if (res.code) {
     const errorDescription = useStdout ? res.stdout : res.stderr;
 
