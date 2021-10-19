@@ -18,9 +18,10 @@ interface ExecShellCommandProps {
  *
  * @param {string} cmd - Command to execute.
  * @param {string} [errorMessage=''] - Error message used to throw error.
+ * @return {string} - Command output.
  * @throws {ShellCommandExecutionError} - Command execution error.
  */
-const execShellCommand = ({ cmd, errorMessage = '' }: ExecShellCommandProps): void => {
+const execShellCommand = ({ cmd, errorMessage = '' }: ExecShellCommandProps): string => {
   core.debug(`Running command: \`${cmd}\``);
 
   const res = shell.exec(cmd, { fatal: true });
@@ -28,6 +29,8 @@ const execShellCommand = ({ cmd, errorMessage = '' }: ExecShellCommandProps): vo
   if (res.code) {
     throw new ShellCommandExecutionError(`${errorMessage}\n${res.stderr}`);
   }
+
+  return res.stdout;
 };
 
 export default execShellCommand;

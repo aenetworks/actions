@@ -1,0 +1,22 @@
+name: 'Deploy QA'
+description: 'Move code from develop to master branch which triggers deploy QA environment.'
+inputs:
+  sourceRef:
+    description: 'From which branch it should be deployed.'
+    default: 'develop'
+    required: false
+  targetRef:
+    description: 'To which branch it should be deployed.'
+    default: 'master'
+    required: false
+  token:
+    description: 'GitHub Token'
+    default: ${{ github.token }}
+    required: false
+  npmAuthToken:
+    description: 'NPM Auth Token or env variable NPM_AUTH_TOKEN'
+    required: false
+runs:
+  using: 'docker'
+  image: '../Dockerfile'
+  args: ['node', '/action/lib/deploy-qa.js']

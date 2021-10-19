@@ -17,6 +17,32 @@ export default class Inputs {
     return core.getInput('ref');
   }
 
+  getSourceRef(): string {
+    return core.getInput('sourceRef');
+  }
+
+  getTargetRef(): string {
+    return core.getInput('targetRef');
+  }
+
+  getForce(): boolean {
+    const value = core.getInput('force');
+
+    if (value === 'true') {
+      core.info('"Force" set to true. It will override targetRef!');
+
+      return true;
+    } else if (value === 'false') {
+      core.info('"Force" set to false.');
+
+      return false;
+    } else {
+      core.warning(`"Force" has unrecognized value '${value}'. Set to false as fallback.`);
+
+      return false;
+    }
+  }
+
   getGithubToken(): string {
     return core.getInput('token');
   }
@@ -35,5 +61,9 @@ export default class Inputs {
 
   getBotEmail(): string {
     return core.getInput('botEmail') || process.env.BOT_EMAIL || '';
+  }
+
+  isPrerelease(): boolean {
+    return core.getInput('isPrerelease') === 'true';
   }
 }

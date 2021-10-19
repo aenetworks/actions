@@ -1,0 +1,18 @@
+name: 'Publish release package'
+description: 'Publish npm package to registry from last release'
+inputs:
+  ref:
+    description: 'Ref'
+    default: ${{ github.event.pull_request.head.sha || github.ref }}
+    required: false
+  token:
+    description: 'GitHub Token'
+    default: ${{ github.token }}
+    required: false
+  npmAuthToken:
+    description: 'NPM Auth Token or env variable NPM_AUTH_TOKEN'
+    required: false
+runs:
+  using: 'docker'
+  image: '../Dockerfile'
+  args: ['node', '/action/lib/publish-release.js']
