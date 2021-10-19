@@ -26,7 +26,9 @@ interface ExecShellCommandProps {
 const execShellCommand = ({ cmd, errorMessage = '', useStdout = false }: ExecShellCommandProps): string => {
   core.debug(`Running command: \`${cmd}\``);
 
-  const res = shell.exec(cmd, { fatal: true });
+  const res = shell.exec(cmd);
+
+  console.log(res.code, res.stderr, res.stdout);
 
   if (res.code) {
     const errorDescription = useStdout ? res.stdout : res.stderr;
