@@ -36,9 +36,15 @@ export default class MergeBranches implements Command {
   public run(): void {
     core.info(`Merging '${this.sourceRef}' into '${this.targetRef}'`);
 
-    this._checkout(this.targetRef);
-    this._mergeBranches(this.sourceRef, this.targetRef, this.isTag);
-    this._pushTargetBranch(this.targetRef, this.force);
+    if (this.force) {
+      this._checkout(this.sourceRef);
+      this._resetTargetBranch(this.sourceRef, this.targetRef, this.isTag);
+      this._pushTargetBranch(this.targetRef, true);
+    } else {
+      this._checkout(this.targetRef);
+      this._mergeBranches(this.sourceRef, this.targetRef);
+      this._pushTargetBranch(this.targetRef, false);
+    }
   }
 
   private _getTag(): string {
@@ -57,13 +63,18 @@ export default class MergeBranches implements Command {
     execShellCommand({ cmd, errorMessage });
   };
 
-  private _mergeBranches = (sourceRef: string, targetRef: string, isTag: boolean): void => {
-    const source = isTag ? sourceRef : 'origin/' + sourceRef;
-
-    const cmd = `git merge --ff-only ${source}`;
+  private _mergeBranches = (sourceRef: string, targetRef: string): void => {
+    const cmd = `git merge --ff-only origin/${sourceRef}`;
     const errorMessage = `Cannot merge '${sourceRef}' into '${targetRef}'`;
 
     execShellCommand({ cmd, errorMessage });
+  };
+
+  private _resetTargetBranch = (sourceRef: string, targetRef: string, isTag: boolean): void => {
+    const source = isTag ? sourceRef : `origin/${sourceRef}`;
+    const cmd = `git reset --hard ${source}`;
+
+    execShellCommand({ cmd });
   };
 
   private _pushTargetBranch = (targetRef: string, isForce: boolean): void => {
