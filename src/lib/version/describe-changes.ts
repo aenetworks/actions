@@ -48,9 +48,9 @@ export default class DescribeChanges implements Command {
 
     const rawChangelog = execShellCommand({ cmd });
     const changelogLines = rawChangelog.split('\n');
+    console.log(changelogLines)
     const changelog = changelogLines.slice(6, changelogLines.length - 4).join('\n');
 
-    console.log(rawChangelog);
     console.log('------------------------');
     console.log(changelog);
 
