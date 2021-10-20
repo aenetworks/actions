@@ -1,9 +1,13 @@
 name: 'Deploy Prod'
 description: 'Move code from last tag to release branch which triggers deploy Prod environment.'
 inputs:
+  sourceRef:
+    description: 'From which branch it should be deployed.'
+    default: 'master'
+    required: false
   targetRef:
     description: 'To which branch it should be deployed.'
-    default: 'master'
+    default: 'release'
     required: false
   token:
     description: 'GitHub Token'
