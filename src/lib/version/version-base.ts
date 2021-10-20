@@ -13,11 +13,17 @@ export default class VersionBase {
    */
   constructor(private readonly releaseType: ReleaseType) {}
 
-  protected _getCurrentVersion = (): string => {
-    const cmd = 'git describe --abbrev=0 --tags | cut -c2-';
+  protected _getCurrentTag = (): string => {
+    const cmd = 'git describe --abbrev=0 --tags';
     const errorMessage = 'Cannot get current version';
 
     return execShellCommand({ cmd, errorMessage, silent: true });
+  };
+
+  protected _getCurrentVersion = (): string => {
+    const tag = this._getCurrentTag();
+
+    return tag.slice(1);
   };
 
   protected _ensureRightVersionIsDescribed(currentVersion: string): void {

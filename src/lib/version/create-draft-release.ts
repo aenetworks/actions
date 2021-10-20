@@ -1,3 +1,4 @@
+import * as core from '@actions/core';
 import * as github from '@actions/github';
 
 import { logGroup } from '../decorators';
@@ -28,6 +29,6 @@ export default class CreateDraftRelease implements Command {
       generate_release_notes: true,
     });
 
-    console.log(res);
+    core.notice(`Draft release: ${res.data.html_url}`);
   }
 }
