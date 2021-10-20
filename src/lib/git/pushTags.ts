@@ -14,7 +14,7 @@ export default class PushTags implements Command {
   }
 
   private _pushTags = (): void => {
-    const cmd = `git push --follow-tags -set-upstream origin ${this.ref}`;
+    const cmd = `git push --follow-tags --set-upstream origin ${this.ref}`;
 
     execShellCommand({
       cmd,
