@@ -2,6 +2,8 @@ import * as core from '@actions/core';
 import * as github from '@actions/github';
 import { Context } from '@actions/github/lib/context';
 
+import ReleaseType, { ReleaseTypeError } from './releaseType';
+
 export default class Inputs {
   context: Context;
 
@@ -65,5 +67,27 @@ export default class Inputs {
 
   isPrerelease(): boolean {
     return core.getInput('isPrerelease') === 'true';
+  }
+
+  getSkipCommit(): boolean {
+    return core.getInput('skipCommit') === 'true';
+  }
+
+  getReleaseType(): ReleaseType {
+    const releaseType = core.getInput('releaseType');
+
+    if (!releaseType || releaseType === ReleaseType.PROD) {
+      return ReleaseType.PROD;
+    } else if (releaseType === ReleaseType.BETA) {
+      return ReleaseType.BETA;
+    } else if (releaseType === ReleaseType.ALPHA) {
+      return ReleaseType.ALPHA;
+    } else if (releaseType === ReleaseType.RC) {
+      return ReleaseType.RC;
+    }
+
+    throw new ReleaseTypeError(
+      `Unknown release type ${releaseType}. Should be one of: "", "${ReleaseType.PROD}", "${ReleaseType.BETA}", "${ReleaseType.ALPHA}", "${ReleaseType.RC}"`
+    );
   }
 }

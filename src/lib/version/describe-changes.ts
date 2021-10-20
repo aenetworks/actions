@@ -1,21 +1,11 @@
-import * as fs from 'fs';
-import * as path from 'path';
-
 import { logGroup } from '../decorators';
-import execShellCommand from '../execShellCommand';
 import { Command } from '../seedWorks';
+import VersionBase from './version-base';
 
 /**
  * Describe changes based on Conventional Commits.
  */
-export default class DescribeChanges implements Command {
-  /**
-   * Constructs DescribeChanges command.
-   *
-   * @param {boolean} [saveToFile=false] - Should save to temporary file.
-   */
-  constructor(private readonly saveToFile: boolean = false) {}
-
+export default class DescribeChanges extends VersionBase implements Command {
   /**
    * Run command.
    */
@@ -26,33 +16,5 @@ export default class DescribeChanges implements Command {
     this._ensureRightVersionIsDescribed(currentVersion);
 
     return this._getChangelogEntry();
-  }
-
-  private _getCurrentVersion = (): string => {
-    const cmd = 'git describe --abbrev=0 --tags | cut -c2-';
-    const errorMessage = 'Cannot get current version';
-
-    return execShellCommand({ cmd, errorMessage });
-  };
-
-  private _ensureRightVersionIsDescribed(currentVersion: string): void {
-    const filePath = path.join(process.cwd(), 'package.json');
-    const packageJson = require(filePath);
-
-    packageJson.version = currentVersion;
-    fs.writeFileSync(filePath, JSON.stringify(packageJson, null, 2));
-  }
-
-  private _getChangelogEntry(): string {
-    const cmd = 'npx standard-version --dry-run --silent';
-
-    const rawChangelog = execShellCommand({ cmd });
-    const changelogLines = rawChangelog.split('\n');
-    console.log(changelogLines);
-    const changelog = changelogLines.slice(2, changelogLines.length - 3).join('\n');
-    console.log('------------------------');
-    console.log(changelog);
-
-    return changelog;
   }
 }
