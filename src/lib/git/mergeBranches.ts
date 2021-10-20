@@ -37,7 +37,7 @@ export default class MergeBranches implements Command {
     core.info(`Merging '${this.sourceRef}' into '${this.targetRef}'`);
 
     if (this.force) {
-      this._checkout(this.sourceRef);
+      this._checkout(this.targetRef);
       this._resetTargetBranch(this.sourceRef, this.targetRef, this.isTag);
       this._pushTargetBranch(this.targetRef, true);
     } else {
