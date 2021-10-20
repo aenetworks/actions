@@ -1,3 +1,5 @@
+import * as core from '@actions/core';
+
 import { logGroup } from '../decorators';
 import ReleaseType from '../releaseType';
 import { Command } from '../seedWorks';
@@ -21,6 +23,10 @@ export default class BumpVersion extends VersionBase implements Command {
   public run(): string {
     this._bumpVersion(this.skipCommit);
 
-    return this._getCurrentVersion();
+    const version = this._getCurrentVersion();
+
+    core.info(`New version: ${version}`);
+
+    return version;
   }
 }
