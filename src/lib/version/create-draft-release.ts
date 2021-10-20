@@ -18,7 +18,7 @@ export default class CreateDraftRelease implements Command {
   public async run(): Promise<void> {
     const octokit = github.getOctokit(this.token);
 
-    await octokit.rest.repos.createRelease({
+    const res = await octokit.rest.repos.createRelease({
       ...github.context.repo,
       tag_name: this.version,
       name: this.version,
@@ -27,5 +27,7 @@ export default class CreateDraftRelease implements Command {
       prerelease: this.isPrerelease,
       generate_release_notes: true,
     });
+
+    console.log(res);
   }
 }

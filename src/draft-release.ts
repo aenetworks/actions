@@ -29,8 +29,6 @@ async function run() {
 
     new PushTags(ref).run();
     await new CreateDraftRelease(githubToken, version, isPrerelease, changelog).run();
-
-    core.notice(changelog);
   } catch (error) {
     // @ts-ignore
     core.setFailed(error.message);
