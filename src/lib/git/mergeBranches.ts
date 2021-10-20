@@ -35,16 +35,23 @@ export default class MergeBranches implements Command {
   @logGroup('Merge branches')
   public run(): void {
     core.info(`Merging '${this.sourceRef}' into '${this.targetRef}'`);
-    this._checkout(this.targetRef);
-    this._mergeBranches(this.sourceRef, this.targetRef, this.isTag);
-    this._pushTargetBranch(this.targetRef, this.force);
+    if (this.force) {
+      this._checkout(this.sourceRef);
+      this._pushTargetBranch(this.targetRef, this.force);
+    } else {
+      this._checkout(this.targetRef);
+      this._mergeBranches(this.sourceRef, this.targetRef, this.isTag);
+      this._pushTargetBranch(this.targetRef, this.force);
+    }
   }
 
   private _getTag(): string {
     const cmd = 'git describe --abbrev=0 --tags';
     const errorMessage = 'Cannot read last tag.';
 
-    return execShellCommand({ cmd, errorMessage });
+    const output = execShellCommand({ cmd, errorMessage });
+
+    return output.trim();
   }
 
   private _checkout = (targetRef: string): void => {

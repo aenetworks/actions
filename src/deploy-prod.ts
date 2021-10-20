@@ -12,7 +12,7 @@ async function run() {
     const targetRef = inputs.getTargetRef();
     const force = inputs.getForce();
 
-    new CloneRepository(repository, githubToken, targetRef).run();
+    new CloneRepository(repository, githubToken, 'master').run();
     new MergeBranches(targetRef, MergeBranches.LAST_TAG, force).run();
   } catch (error) {
     // @ts-ignore
