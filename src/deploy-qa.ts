@@ -16,7 +16,7 @@ async function run() {
     const force = inputs.getForce();
 
     new CloneRepository(repository, githubToken, targetRef).run();
-    new MergeBranches(sourceRef, targetRef, force).run();
+    new MergeBranches(targetRef, sourceRef, force).run();
     new DescribeChanges(ReleaseType.PROD).run();
   } catch (error) {
     // @ts-ignore
