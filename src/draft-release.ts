@@ -27,7 +27,7 @@ async function run() {
     const changelog = new DescribeChanges(releaseType).run();
     const version = new BumpVersion(releaseType, skipCommit).run();
 
-    new PushTags(ref).run();
+    new PushTags().run();
     await new CreateDraftRelease(githubToken, version, isPrerelease, changelog).run();
   } catch (error) {
     // @ts-ignore

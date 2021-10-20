@@ -3,7 +3,7 @@ description: 'Create draft release'
 inputs:
   ref:
     description: 'Ref'
-    default: ${{ github.event.pull_request.head.sha || github.ref }}
+    default: 'master'
     required: false
   token:
     description: 'GitHub Token'
