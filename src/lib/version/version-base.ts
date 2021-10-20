@@ -17,7 +17,9 @@ export default class VersionBase {
     const cmd = 'git describe --abbrev=0 --tags';
     const errorMessage = 'Cannot get current version';
 
-    return execShellCommand({ cmd, errorMessage, silent: true });
+    const output = execShellCommand({ cmd, errorMessage, silent: true });
+
+    return output.trim();
   };
 
   protected _getCurrentVersion = (): string => {
