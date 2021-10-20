@@ -35,6 +35,7 @@ export default class MergeBranches implements Command {
   @logGroup('Merge branches')
   public run(): void {
     core.info(`Merging '${this.sourceRef}' into '${this.targetRef}'`);
+
     if (this.force) {
       this._checkout(this.sourceRef);
       this._pushTargetBranch(this.targetRef, this.force);
