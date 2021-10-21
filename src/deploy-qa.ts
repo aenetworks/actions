@@ -17,7 +17,6 @@ async function run() {
 
     new CloneRepository(repository, githubToken, targetRef).run();
     new MergeBranches(targetRef, sourceRef, force).run();
-
     new DescribeChanges(ReleaseType.PROD).previewChangelog();
   } catch (error) {
     // @ts-ignore
