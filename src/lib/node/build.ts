@@ -1,4 +1,5 @@
 import * as core from '@actions/core';
+import * as path from 'path';
 
 import { logGroup } from '../decorators';
 import execShellCommand from '../execShellCommand';
@@ -19,7 +20,7 @@ export default class Build implements Command {
    */
   @logGroup('Build')
   public run(): void {
-    const { scripts } = require('package.json');
+    const { scripts } = require(path.join(process.cwd(), 'package.json'));
 
     if (Object.keys(scripts).includes('build')) {
       this._runBuild();

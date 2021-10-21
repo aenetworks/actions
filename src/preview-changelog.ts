@@ -2,7 +2,8 @@ import * as core from '@actions/core';
 
 import { CloneRepository } from './lib/git';
 import Inputs from './lib/inputs';
-import { InstallDependencies, RunNpmScript, SetupNpmRegistry } from './lib/node';
+import ReleaseType from './lib/releaseType';
+import { DescribeChanges } from './lib/version';
 
 async function run() {
   try {
@@ -11,19 +12,13 @@ async function run() {
     const repository = inputs.getRepository();
     const githubToken = inputs.getGithubToken();
     const ref = inputs.getRef();
-    const npmAuthToken = inputs.getNpmAuthToken();
-
-    const lintersCommand = new RunNpmScript('lint', true);
 
     new CloneRepository(repository, githubToken, ref).run();
 
-    if (!lintersCommand.hasScript()) {
-      core.notice('Linters job skipped, because script "lint" does not exists in package.json');
-    } else {
-      new SetupNpmRegistry(npmAuthToken).run();
-      new InstallDependencies().run();
-      lintersCommand.run();
-    }
+    const changelog = new DescribeChanges(ReleaseType.PROD).run();
+    const tempChangelog = changelog.replace(/compare\/(.*?)\.\.\.(.*?)\)/, 'compare/$1...master)');
+
+    core.notice(tempChangelog);
   } catch (error) {
     // @ts-ignore
     core.setFailed(error.message);

@@ -20,7 +20,7 @@ inputs:
     description: 'Github bot email or env variable BOT_EMAIL'
     required: false
   releaseType:
-    description: 'Type of release. Leave empty for production. Type name for prerelease [alpha|beta|rc]'
+    description: 'Type of release. Prod is production release, alpha, beta, rc is prerelease [prod|alpha|beta|rc]'
     default: ''
     required: true
   skipCommit:

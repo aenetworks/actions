@@ -12,8 +12,6 @@ async function run() {
     const repository = inputs.getRepository();
     const githubToken = inputs.getGithubToken();
     const ref = inputs.getRef();
-    const botUsername = inputs.getBotUsername();
-    const botEmail = inputs.getBotEmail();
     const npmAuthToken = inputs.getNpmAuthToken();
 
     const unitTestsCommand = new RunNpmScript('test');
@@ -23,7 +21,6 @@ async function run() {
     if (!unitTestsCommand.hasScript()) {
       core.notice('Unit tests job skipped, because script "test" does not exists in package.json');
     } else {
-      new SetupGitUser(botUsername, botEmail).run();
       new SetupNpmRegistry(npmAuthToken).run();
       new InstallDependencies().run();
       unitTestsCommand.run();

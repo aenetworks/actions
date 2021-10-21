@@ -1,4 +1,3 @@
-import * as core from '@actions/core';
 import fs from 'fs';
 import path from 'path';
 
@@ -41,11 +40,10 @@ export default class VersionBase {
 
     const rawChangelog = execShellCommand({ cmd, silent: true });
     const changelogLines = rawChangelog.split('\n');
+
     const changelog = changelogLines.slice(2, changelogLines.length - 3).join('\n');
 
-    core.notice(changelog);
-
-    return changelog;
+    return changelog.replace(/^#{1,3}/, '##');
   }
 
   protected _getReleaseTypeParam(): string {
