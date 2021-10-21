@@ -41,7 +41,9 @@ export default class VersionBase {
     const rawChangelog = execShellCommand({ cmd, silent: true });
     const changelogLines = rawChangelog.split('\n');
 
-    return changelogLines.slice(2, changelogLines.length - 3).join('\n');
+    const changelog = changelogLines.slice(2, changelogLines.length - 3).join('\n');
+
+    return changelog.replace(/^#{1,3}/, '##');
   }
 
   protected _getReleaseTypeParam(): string {
