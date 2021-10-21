@@ -14,11 +14,7 @@ async function run() {
     const ref = inputs.getRef();
 
     new CloneRepository(repository, githubToken, ref).run();
-
-    const changelog = new DescribeChanges(ReleaseType.PROD).run();
-    const tempChangelog = changelog.replace(/compare\/(.*?)\.\.\.(.*?)\)/, 'compare/$1...master)');
-
-    core.notice(tempChangelog);
+    new DescribeChanges(ReleaseType.PROD).previewChangelog();
   } catch (error) {
     // @ts-ignore
     core.setFailed(error.message);

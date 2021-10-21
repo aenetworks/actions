@@ -1,6 +1,6 @@
 import CloneRepository from './cloneRepository';
 import MergeBranches from './mergeBranches';
-import PushTags from './pushTags';
+import Push from './push';
 import SetupGitUser from './setupGitUser';
 
-export { CloneRepository, MergeBranches, PushTags, SetupGitUser };
+export { CloneRepository, MergeBranches, Push, SetupGitUser };

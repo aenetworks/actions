@@ -1,6 +1,6 @@
 import * as core from '@actions/core';
 
-import { CloneRepository, PushTags, SetupGitUser } from './lib/git';
+import { CloneRepository, Push, SetupGitUser } from './lib/git';
 import Inputs from './lib/inputs';
 import { SetupNpmRegistry } from './lib/node';
 import ReleaseType from './lib/releaseType';
@@ -27,7 +27,7 @@ async function run() {
     const changelog = new DescribeChanges(releaseType).run();
     const version = new BumpVersion(releaseType, skipCommit).run();
 
-    new PushTags().run();
+    new Push(skipCommit).run();
     await new CreateDraftRelease(githubToken, version, isPrerelease, changelog).run();
   } catch (error) {
     // @ts-ignore
