@@ -58,11 +58,11 @@ export default class Inputs {
   }
 
   getBotUsername(): string {
-    return core.getInput('botUsername') || process.env.BOT_NAME || '';
+    return core.getInput('botUsername') || process.env.GH_ACTION_BOT_NAME || '';
   }
 
   getBotEmail(): string {
-    return core.getInput('botEmail') || process.env.BOT_EMAIL || '';
+    return core.getInput('botEmail') || process.env.GH_ACTION_BOT_EMAIL || '';
   }
 
   isPrerelease(): boolean {
