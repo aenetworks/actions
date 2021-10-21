@@ -1,0 +1,8 @@
+{
+    "root": true,
+    "extends": [
+        "plugin:@aenetworks/eslint-plugin/node",
+        "plugin:@aenetworks/eslint-plugin/ts",
+        "plugin:@aenetworks/eslint-plugin/md"
+    ]
+}

@@ -1,0 +1,8 @@
+name: 'Install dependencies'
+description: 'test'
+author: 'Pawel Drozd'
+runs:
+  using: 'docker'
+  image: '../Dockerfile'
+  args: ['node', '/action/lib/install-dependencies.js']
+

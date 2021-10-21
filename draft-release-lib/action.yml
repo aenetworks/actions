@@ -1,0 +1,34 @@
+name: 'Draft Release'
+description: 'Create draft release'
+inputs:
+  ref:
+    description: 'Ref'
+    default: 'master'
+    required: false
+  token:
+    description: 'GitHub Token'
+    default: ${{ github.token }}
+    required: false
+  npmAuthToken:
+    description: 'NPM Auth Token or env variable NPM_AUTH_TOKEN'
+    required: false
+  botUsername:
+    description: 'GitHub bot username or env variable BOT_NAME'
+    default: 'GitHub Actions Bot'
+    required: false
+  botEmail:
+    description: 'Github bot email or env variable BOT_EMAIL'
+    required: false
+  releaseType:
+    description: 'Type of release. Leave empty for production. Type name for prerelease [alpha|beta|rc]'
+    default: ''
+    required: true
+  skipCommit:
+    description: 'Should skip create release commit. Set to true for apps, false for libraries [true|false]'
+    default: 'false'
+    required: true
+runs:
+  using: 'docker'
+  image: '../Dockerfile'
+  args: ['node', '/action/lib/draft-release.js']
+

@@ -1,0 +1,16 @@
+name: 'Clone'
+description: 'test'
+inputs:
+  ref:
+    description: 'Ref'
+    default: ${{ github.event.pull_request.head.sha || github.ref }}
+    required: false
+  token:
+    description: 'Token'
+    default: ${{ github.token }}
+    required: false
+runs:
+  using: 'docker'
+  image: '../Dockerfile'
+  args: ['node', '/action/lib/scraps/clone-repository.js']
+

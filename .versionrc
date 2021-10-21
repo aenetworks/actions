@@ -1,0 +1,4 @@
+{
+  "issueUrlFormat": "https://aetndigital.atlassian.net/browse/{{issue}}"
+}
+
