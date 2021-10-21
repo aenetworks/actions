@@ -2,8 +2,6 @@ import * as core from '@actions/core';
 
 import { CloneRepository, MergeBranches } from './lib/git';
 import Inputs from './lib/inputs';
-import ReleaseType from './lib/releaseType';
-import { DescribeChanges } from './lib/version';
 
 async function run() {
   try {
@@ -17,7 +15,6 @@ async function run() {
 
     new CloneRepository(repository, githubToken, targetRef).run();
     new MergeBranches(targetRef, sourceRef, force).run();
-    new DescribeChanges(ReleaseType.PROD).run();
   } catch (error) {
     // @ts-ignore
     core.setFailed(error.message);
