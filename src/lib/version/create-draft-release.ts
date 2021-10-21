@@ -27,7 +27,6 @@ export default class CreateDraftRelease implements Command {
       body: this.changelog,
       draft: true,
       prerelease: this.isPrerelease,
-      generate_release_notes: true,
     });
 
     core.notice(`Draft release: ${res.data.html_url}`);
