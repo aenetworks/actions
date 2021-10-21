@@ -1,0 +1,15 @@
+name: 'Preview changelog'
+description: 'Display predicted changelog entry.'
+inputs:
+  ref:
+    description: 'From which branch it should be deployed.'
+    default: 'master'
+    required: false
+  token:
+    description: 'GitHub Token'
+    default: ${{ github.token }}
+    required: false
+runs:
+  using: 'docker'
+  image: '../Dockerfile'
+  args: ['node', '/action/lib/preview-changelog.js']
