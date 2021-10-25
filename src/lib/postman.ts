@@ -26,12 +26,10 @@ export default class Postman implements Command {
       collection: this._getCollectionUrl(),
       environment: this._getEnvironmentUrl(),
     };
-    console.log(`${this.apiKey.split('')}`)
-
-    console.log(options);
 
     newman.run(options, (err) => {
       if (err) {
+        console.warn(err.message);
         throw err;
       }
     });
