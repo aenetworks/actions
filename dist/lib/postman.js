@@ -46,6 +46,7 @@ class Postman {
         const options = {
             collection: this._getCollectionUrl(),
             environment: this._getEnvironmentUrl(),
+            apiKey: this.apiKey,
         };
         newman.run(options, (err) => {
             if (err) {
