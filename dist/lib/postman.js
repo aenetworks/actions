@@ -37,7 +37,7 @@ class Postman {
         this.apiKey = apiKey;
         this.collectionId = collectionId;
         this.environmentId = environmentId;
-        this.apiUrl = 'https://api.postman.com';
+        this.apiUrl = 'https://api.getpostman.com';
     }
     /**
      * Run command.
@@ -47,6 +47,7 @@ class Postman {
             collection: this._getCollectionUrl(),
             environment: this._getEnvironmentUrl(),
             apiKey: this.apiKey,
+            apikey: this.apiKey,
         };
         console.log(options);
         newman.run(options, (err) => {

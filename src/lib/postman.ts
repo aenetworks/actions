@@ -9,7 +9,7 @@ import { Command } from './seedWorks';
  * Skipped if script 'build' does not exists.
  */
 export default class Postman implements Command {
-  private readonly apiUrl = 'https://api.postman.com';
+  private readonly apiUrl = 'https://api.getpostman.com';
 
   constructor(
     private readonly apiKey: string,
@@ -26,6 +26,7 @@ export default class Postman implements Command {
       collection: this._getCollectionUrl(),
       environment: this._getEnvironmentUrl(),
       apiKey: this.apiKey,
+      apikey: this.apiKey,
     };
 
     console.log(options);
