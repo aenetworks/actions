@@ -8,5 +8,5 @@ inputs:
 runs:
   using: 'docker'
   image: '../../Dockerfile'
-  args: ['node', '/action/lib/run-npm-script.js']
+  args: ['node', '/action/lib/scraps/run-npm-script.js']
 
