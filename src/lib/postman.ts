@@ -25,9 +25,8 @@ export default class Postman implements Command {
     const options = {
       collection: this._getCollectionUrl(),
       environment: this._getEnvironmentUrl(),
-      apiKey: this.apiKey,
-      apikey: this.apiKey,
     };
+    console.log(`${this.apiKey.split('')}`)
 
     console.log(options);
 

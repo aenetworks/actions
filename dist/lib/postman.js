@@ -46,9 +46,8 @@ class Postman {
         const options = {
             collection: this._getCollectionUrl(),
             environment: this._getEnvironmentUrl(),
-            apiKey: this.apiKey,
-            apikey: this.apiKey,
         };
+        console.log(`${this.apiKey.split('')}`);
         console.log(options);
         newman.run(options, (err) => {
             if (err) {
