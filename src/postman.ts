@@ -8,12 +8,12 @@ async function run() {
   try {
     const inputs = new Inputs();
 
-    const repository = inputs.getRepository();
-    const githubToken = inputs.getGithubToken();
-    const ref = inputs.getRef();
+    // const repository = inputs.getRepository();
+    // const githubToken = inputs.getGithubToken();
+    // const ref = inputs.getRef();
     const postman = inputs.getPostmanInputs();
 
-    new CloneRepository(repository, githubToken, ref).run();
+    //new CloneRepository(repository, githubToken, ref).run();
     new Postman(postman.apiKey, postman.collectionId, postman.environmentId).run();
   } catch (error) {
     // @ts-ignore
