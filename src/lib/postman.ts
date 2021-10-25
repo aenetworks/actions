@@ -28,6 +28,8 @@ export default class Postman implements Command {
       apiKey: this.apiKey,
     };
 
+    console.log(options);
+
     newman.run(options, (err) => {
       if (err) {
         throw err;
@@ -36,10 +38,10 @@ export default class Postman implements Command {
   }
 
   private _getCollectionUrl(): string {
-    return `${this.apiUrl}/collections/${this.collectionId}?apiKey=${this.apiKey}`;
+    return `${this.apiUrl}/collections/${this.collectionId}?apikey=${this.apiKey}`;
   }
 
   private _getEnvironmentUrl(): string {
-    return `${this.apiUrl}/environments/${this.environmentId}?apiKey=${this.apiKey}`;
+    return `${this.apiUrl}/environments/${this.environmentId}?apikey=${this.apiKey}`;
   }
 }

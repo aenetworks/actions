@@ -48,6 +48,7 @@ class Postman {
             environment: this._getEnvironmentUrl(),
             apiKey: this.apiKey,
         };
+        console.log(options);
         newman.run(options, (err) => {
             if (err) {
                 throw err;
@@ -55,10 +56,10 @@ class Postman {
         });
     }
     _getCollectionUrl() {
-        return `${this.apiUrl}/collections/${this.collectionId}?apiKey=${this.apiKey}`;
+        return `${this.apiUrl}/collections/${this.collectionId}?apikey=${this.apiKey}`;
     }
     _getEnvironmentUrl() {
-        return `${this.apiUrl}/environments/${this.environmentId}?apiKey=${this.apiKey}`;
+        return `${this.apiUrl}/environments/${this.environmentId}?apikey=${this.apiKey}`;
     }
 }
 __decorate([
