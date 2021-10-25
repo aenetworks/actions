@@ -98,7 +98,7 @@ export default class Inputs {
   }
 
   getPostmanInputs(): PostmanInputs {
-    const apiKey = core.getInput('postmanApiKey', { required: true });
+    const apiKey = core.getInput('apiKey', { required: true });
     const collectionId = core.getInput('collectionId', { required: true });
     const environmentId = core.getInput('environmentId', { required: true });
 
