@@ -42,11 +42,9 @@ function run() {
             const repository = inputs.getRepository();
             const githubToken = inputs.getGithubToken();
             const ref = inputs.getRef();
-            const postmanApiKey = inputs.getPostmanApiKey();
-            const postmanCollectionId = inputs.getPostmanCollectionId();
-            const postmanEnvironmentId = inputs.getPostmanEnvironmentId();
+            const postman = inputs.getPostmanInputs();
             new git_1.CloneRepository(repository, githubToken, ref).run();
-            new postman_1.default(postmanApiKey, postmanCollectionId, postmanEnvironmentId).run();
+            new postman_1.default(postman.apiKey, postman.collectionId, postman.environmentId).run();
         }
         catch (error) {
             // @ts-ignore

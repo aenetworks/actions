@@ -4,6 +4,12 @@ import { Context } from '@actions/github/lib/context';
 
 import ReleaseType, { ReleaseTypeError } from './releaseType';
 
+interface PostmanInputs {
+  apiKey: string;
+  collectionId: string;
+  environmentId: string;
+}
+
 export default class Inputs {
   context: Context;
 
@@ -91,15 +97,15 @@ export default class Inputs {
     );
   }
 
-  getPostmanApiKey(): string {
-    return core.getInput('postmanApiKey');
-  }
+  getPostmanInputs(): PostmanInputs {
+    const apiKey = core.getInput('postmanApiKey', { required: true });
+    const collectionId = core.getInput('collectionId', { required: true });
+    const environmentId = core.getInput('environmentId', { required: true });
 
-  getPostmanCollectionId(): string {
-    return core.getInput('postmanCollectionId');
-  }
-
-  getPostmanEnvironmentId(): string {
-    return core.getInput('postmanEnvironmentId');
+    return {
+      apiKey,
+      collectionId,
+      environmentId,
+    };
   }
 }

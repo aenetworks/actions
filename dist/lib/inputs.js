@@ -90,14 +90,15 @@ class Inputs {
         }
         throw new releaseType_1.ReleaseTypeError(`Unknown release type ${releaseType}. Should be one of: "", "${releaseType_1.default.PROD}", "${releaseType_1.default.BETA}", "${releaseType_1.default.ALPHA}", "${releaseType_1.default.RC}"`);
     }
-    getPostmanApiKey() {
-        return core.getInput('postmanApiKey');
-    }
-    getPostmanCollectionId() {
-        return core.getInput('postmanCollectionId');
-    }
-    getPostmanEnvironmentId() {
-        return core.getInput('postmanEnvironmentId');
+    getPostmanInputs() {
+        const apiKey = core.getInput('postmanApiKey', { required: true });
+        const collectionId = core.getInput('collectionId', { required: true });
+        const environmentId = core.getInput('environmentId', { required: true });
+        return {
+            apiKey,
+            collectionId,
+            environmentId,
+        };
     }
 }
 exports.default = Inputs;
