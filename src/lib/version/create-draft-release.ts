@@ -2,7 +2,6 @@ import * as core from '@actions/core';
 import * as github from '@actions/github';
 
 import { logGroup } from '../decorators';
-import execShellCommand from '../execShellCommand';
 import { Command } from '../seedWorks';
 
 export default class CreateDraftRelease implements Command {
