@@ -4,5 +4,5 @@ author: 'Pawel Drozd'
 runs:
   using: 'docker'
   image: '../../Dockerfile'
-  args: ['node', '/action/lib/scraps/install-dependencies.js']
+  args: ['node', '/action/dist/scraps/install-dependencies.js']
 

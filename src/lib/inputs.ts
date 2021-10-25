@@ -90,4 +90,16 @@ export default class Inputs {
       `Unknown release type ${releaseType}. Should be one of: "", "${ReleaseType.PROD}", "${ReleaseType.BETA}", "${ReleaseType.ALPHA}", "${ReleaseType.RC}"`
     );
   }
+
+  getPostmanApiKey(): string {
+    return core.getInput('postmanApiKey');
+  }
+
+  getPostmanCollectionId(): string {
+    return core.getInput('postmanCollectionId');
+  }
+
+  getPostmanEnvironmentId(): string {
+    return core.getInput('postmanEnvironmentId');
+  }
 }

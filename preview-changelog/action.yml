@@ -12,4 +12,4 @@ inputs:
 runs:
   using: 'docker'
   image: '../Dockerfile'
-  args: ['node', '/action/lib/preview-changelog.js']
+  args: ['node', '/action/dist/preview-changelog.js']
