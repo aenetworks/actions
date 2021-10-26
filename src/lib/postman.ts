@@ -38,9 +38,11 @@ export default class Postman implements Command {
 
     newman.run(options, (err) => {
       if (err) {
-        if (err.message === PostmanErrors.COLLECTION_LOAD_ERROR_MESSAGE) {
+        const errorDescription = err.message.split('/n');
+
+        if (errorDescription[0] === PostmanErrors.COLLECTION_LOAD_ERROR_MESSAGE) {
           throw new PostmanApiError(`Collection "${this.collectionId}" cannot be loaded. Check if collection exists.`);
-        } else if (err.message === PostmanErrors.LOAD_ERROR_MESSAGE) {
+        } else if (errorDescription[0] === PostmanErrors.LOAD_ERROR_MESSAGE) {
           throw new PostmanApiError('It cannot be loaded. Check if api key is valid.');
         }
 
