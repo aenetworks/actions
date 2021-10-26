@@ -25,6 +25,7 @@ export default class Postman implements Command {
     const options = {
       collection: this._getCollectionUrl(),
       environment: this._getEnvironmentUrl(),
+      reporters: 'cli'
     };
 
     newman.run(options, (err) => {
