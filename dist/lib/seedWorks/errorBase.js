@@ -5,13 +5,7 @@ class ErrorBase extends Error {
         super();
         Object.setPrototypeOf(this, new.target.prototype);
         this.name = this.constructor.name;
-        this.message = this.getMessage(args);
-    }
-    getMessage(args) {
-        if (args) {
-            return `${this.name}: ${args}`;
-        }
-        return this.name;
+        this.message = `${args}`;
     }
 }
 exports.default = ErrorBase;

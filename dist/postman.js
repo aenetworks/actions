@@ -38,16 +38,12 @@ function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const inputs = new inputs_1.default();
-            // const repository = inputs.getRepository();
-            // const githubToken = inputs.getGithubToken();
-            // const ref = inputs.getRef();
             const postman = inputs.getPostmanInputs();
-            //new CloneRepository(repository, githubToken, ref).run();
             new postman_1.default(postman.apiKey, postman.collectionId, postman.environmentId).run();
         }
         catch (error) {
             // @ts-ignore
-            core.setFailed(error.message);
+            core.setFailed(error);
         }
     });
 }

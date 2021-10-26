@@ -16,7 +16,7 @@ async function run() {
     new MergeBranches(targetRef, MergeBranches.LAST_TAG, force).run();
   } catch (error) {
     // @ts-ignore
-    core.setFailed(error.message);
+    core.setFailed(error);
   }
 }
 

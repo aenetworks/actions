@@ -31,7 +31,7 @@ async function run() {
     await new CreateDraftRelease(githubToken, version, isPrerelease, changelog).run();
   } catch (error) {
     // @ts-ignore
-    core.setFailed(error.message);
+    core.setFailed(error);
   }
 }
 
