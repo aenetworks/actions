@@ -1,7 +1,15 @@
 import * as newman from 'newman';
 
 import { logGroup } from './decorators';
-import { Command } from './seedWorks';
+import { Command, ErrorBase } from './seedWorks';
+
+enum PostmanErrors {
+  COLLECTION_LOAD_ERROR_MESSAGE = 'collection could not be loaded',
+  ITERATION_DATA_LOAD_ERROR_MESSAGE = 'iteration data could not be loaded',
+  LOAD_ERROR_MESSAGE = 'could not load ',
+}
+
+class PostmanApiError extends ErrorBase {}
 
 /**
  * Build package.
@@ -25,11 +33,17 @@ export default class Postman implements Command {
     const options = {
       collection: this._getCollectionUrl(),
       environment: this._getEnvironmentUrl(),
-      reporters: 'cli'
+      reporters: 'cli',
     };
 
     newman.run(options, (err) => {
       if (err) {
+        if (err.message === PostmanErrors.COLLECTION_LOAD_ERROR_MESSAGE) {
+          throw new PostmanApiError(`Collection "${this.collectionId}" cannot be loaded. Check if collection exists.`);
+        } else if (err.message === PostmanErrors.LOAD_ERROR_MESSAGE) {
+          throw new PostmanApiError('It cannot be loaded. Check if api key is valid.');
+        }
+
         console.warn(err.message);
         throw err;
       }

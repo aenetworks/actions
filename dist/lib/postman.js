@@ -27,6 +27,15 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const newman = __importStar(require("newman"));
 const decorators_1 = require("./decorators");
+const seedWorks_1 = require("./seedWorks");
+var PostmanErrors;
+(function (PostmanErrors) {
+    PostmanErrors["COLLECTION_LOAD_ERROR_MESSAGE"] = "collection could not be loaded";
+    PostmanErrors["ITERATION_DATA_LOAD_ERROR_MESSAGE"] = "iteration data could not be loaded";
+    PostmanErrors["LOAD_ERROR_MESSAGE"] = "could not load ";
+})(PostmanErrors || (PostmanErrors = {}));
+class PostmanApiError extends seedWorks_1.ErrorBase {
+}
 /**
  * Build package.
  *
@@ -46,10 +55,16 @@ class Postman {
         const options = {
             collection: this._getCollectionUrl(),
             environment: this._getEnvironmentUrl(),
-            reporters: 'cli'
+            reporters: 'cli',
         };
         newman.run(options, (err) => {
             if (err) {
+                if (err.message === PostmanErrors.COLLECTION_LOAD_ERROR_MESSAGE) {
+                    throw new PostmanApiError(`Collection "${this.collectionId}" cannot be loaded. Check if collection exists.`);
+                }
+                else if (err.message === PostmanErrors.LOAD_ERROR_MESSAGE) {
+                    throw new PostmanApiError('It cannot be loaded. Check if api key is valid.');
+                }
                 console.warn(err.message);
                 throw err;
             }
