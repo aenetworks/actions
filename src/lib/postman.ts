@@ -49,7 +49,9 @@ export default class Postman implements Command {
         console.warn(
           JSON.stringify({
             msg: err.message,
+            d: errorDescription,
             a: err.message === PostmanErrors.COLLECTION_LOAD_ERROR_MESSAGE,
+            b: errorDescription[0] === PostmanErrors.COLLECTION_LOAD_ERROR_MESSAGE,
           })
         );
         throw err;
