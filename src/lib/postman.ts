@@ -44,7 +44,12 @@ export default class Postman implements Command {
           throw new PostmanApiError('It cannot be loaded. Check if api key is valid.');
         }
 
-        console.warn(err.message);
+        console.warn(
+          JSON.stringify({
+            msg: err.message,
+            a: err.message === PostmanErrors.COLLECTION_LOAD_ERROR_MESSAGE,
+          })
+        );
         throw err;
       }
     });
