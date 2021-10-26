@@ -60,18 +60,18 @@ class Postman {
         newman.run(options, (err) => {
             if (err) {
                 const errorDescription = err.message.split('\n');
+                console.warn(JSON.stringify({
+                    msg: errorDescription,
+                }));
                 if (errorDescription[0] === PostmanErrors.COLLECTION_LOAD_ERROR_MESSAGE) {
-                    throw new PostmanApiError(`Collection "${this.collectionId}" cannot be loaded. Check if collection exists.`);
+                    throw new PostmanApiError(`Collection "${this.collectionId}" cannot be loaded. Check if it exists.`);
+                }
+                else if (errorDescription[0] === PostmanErrors.COLLECTION_LOAD_ERROR_MESSAGE) {
+                    throw new PostmanApiError(`Environment "${this.environmentId}" cannot be loaded. Check if it exists.`);
                 }
                 else if (errorDescription[0] === PostmanErrors.LOAD_ERROR_MESSAGE) {
                     throw new PostmanApiError('It cannot be loaded. Check if api key is valid.');
                 }
-                console.warn(JSON.stringify({
-                    msg: err.message,
-                    d: errorDescription,
-                    a: err.message === PostmanErrors.COLLECTION_LOAD_ERROR_MESSAGE,
-                    b: errorDescription[0] === PostmanErrors.COLLECTION_LOAD_ERROR_MESSAGE,
-                }));
                 throw err;
             }
         });
