@@ -5,7 +5,7 @@ import { Command, ErrorBase } from './seedWorks';
 
 enum PostmanErrors {
   COLLECTION_LOAD_ERROR_MESSAGE = 'collection could not be loaded',
-  ITERATION_DATA_LOAD_ERROR_MESSAGE = 'iteration data could not be loaded',
+  ENVIRONMENT_LOAD_ERROR_MESSAGE = 'could not load environment',
   LOAD_ERROR_MESSAGE = 'could not load ',
 }
 
@@ -48,7 +48,7 @@ export default class Postman implements Command {
 
         if (errorDescription[0] === PostmanErrors.COLLECTION_LOAD_ERROR_MESSAGE) {
           throw new PostmanApiError(`Collection "${this.collectionId}" cannot be loaded. Check if it exists.`);
-        } else if (errorDescription[0] === PostmanErrors.COLLECTION_LOAD_ERROR_MESSAGE) {
+        } else if (errorDescription[0] === PostmanErrors.ENVIRONMENT_LOAD_ERROR_MESSAGE) {
           throw new PostmanApiError(`Environment "${this.environmentId}" cannot be loaded. Check if it exists.`);
         } else if (errorDescription[0] === PostmanErrors.LOAD_ERROR_MESSAGE) {
           throw new PostmanApiError('It cannot be loaded. Check if api key is valid.');

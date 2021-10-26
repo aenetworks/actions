@@ -31,7 +31,7 @@ const seedWorks_1 = require("./seedWorks");
 var PostmanErrors;
 (function (PostmanErrors) {
     PostmanErrors["COLLECTION_LOAD_ERROR_MESSAGE"] = "collection could not be loaded";
-    PostmanErrors["ITERATION_DATA_LOAD_ERROR_MESSAGE"] = "iteration data could not be loaded";
+    PostmanErrors["ENVIRONMENT_LOAD_ERROR_MESSAGE"] = "could not load environment";
     PostmanErrors["LOAD_ERROR_MESSAGE"] = "could not load ";
 })(PostmanErrors || (PostmanErrors = {}));
 class PostmanApiError extends seedWorks_1.ErrorBase {
@@ -66,7 +66,7 @@ class Postman {
                 if (errorDescription[0] === PostmanErrors.COLLECTION_LOAD_ERROR_MESSAGE) {
                     throw new PostmanApiError(`Collection "${this.collectionId}" cannot be loaded. Check if it exists.`);
                 }
-                else if (errorDescription[0] === PostmanErrors.COLLECTION_LOAD_ERROR_MESSAGE) {
+                else if (errorDescription[0] === PostmanErrors.ENVIRONMENT_LOAD_ERROR_MESSAGE) {
                     throw new PostmanApiError(`Environment "${this.environmentId}" cannot be loaded. Check if it exists.`);
                 }
                 else if (errorDescription[0] === PostmanErrors.LOAD_ERROR_MESSAGE) {
