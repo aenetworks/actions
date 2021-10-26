@@ -41,7 +41,8 @@ var PostmanErrors;
 (function (PostmanErrors) {
     PostmanErrors["COLLECTION_LOAD_ERROR_MESSAGE"] = "collection could not be loaded";
     PostmanErrors["ENVIRONMENT_LOAD_ERROR_MESSAGE"] = "could not load environment";
-    PostmanErrors["LOAD_ERROR_MESSAGE"] = "could not load ";
+    PostmanErrors["LOAD_ERROR_MESSAGE"] = "could not load";
+    PostmanErrors["API_KEY_ERROR_MESSAGE"] = "Invalid API Key. Every request requires a valid API Key to be sent.";
 })(PostmanErrors || (PostmanErrors = {}));
 const Done = 'OK';
 class PostmanApiError extends seedWorks_1.ErrorBase {
@@ -86,18 +87,19 @@ class Postman {
         });
     }
     _handleError(err) {
-        const errorDescription = err.message.split('\n');
-        console.warn(JSON.stringify({
-            msg: errorDescription,
-        }));
-        if (errorDescription[0] === PostmanErrors.COLLECTION_LOAD_ERROR_MESSAGE) {
+        const errorDescription = err.message.split('\n').map((v) => v.trim());
+        if (errorDescription[0] === PostmanErrors.COLLECTION_LOAD_ERROR_MESSAGE &&
+            errorDescription[2] === PostmanErrors.API_KEY_ERROR_MESSAGE) {
+            return new PostmanApiError('Invalid API key. Check if API key is valid.');
+        }
+        else if (errorDescription[0] === PostmanErrors.COLLECTION_LOAD_ERROR_MESSAGE) {
             return new PostmanApiError(`Collection "${this.collectionId}" cannot be loaded. Check if it exists.`);
         }
         else if (errorDescription[0] === PostmanErrors.ENVIRONMENT_LOAD_ERROR_MESSAGE) {
             return new PostmanApiError(`Environment "${this.environmentId}" cannot be loaded. Check if it exists.`);
         }
         else if (errorDescription[0] === PostmanErrors.LOAD_ERROR_MESSAGE) {
-            return new PostmanApiError('It cannot be loaded. Check if api key is valid.');
+            return new PostmanApiError(errorDescription[2].trim());
         }
         else {
             return new PostmanError(err.message);
