@@ -20,7 +20,7 @@ async function run() {
     new DescribeChanges(ReleaseType.PROD).previewChangelog();
   } catch (error) {
     // @ts-ignore
-    core.setFailed(error.message);
+    core.setFailed(error);
   }
 }
 

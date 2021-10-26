@@ -4,6 +4,12 @@ import { Context } from '@actions/github/lib/context';
 
 import ReleaseType, { ReleaseTypeError } from './releaseType';
 
+interface PostmanInputs {
+  apiKey: string;
+  collectionId: string;
+  environmentId: string;
+}
+
 export default class Inputs {
   context: Context;
 
@@ -89,5 +95,17 @@ export default class Inputs {
     throw new ReleaseTypeError(
       `Unknown release type ${releaseType}. Should be one of: "", "${ReleaseType.PROD}", "${ReleaseType.BETA}", "${ReleaseType.ALPHA}", "${ReleaseType.RC}"`
     );
+  }
+
+  getPostmanInputs(): PostmanInputs {
+    const apiKey = core.getInput('apiKey', { required: true });
+    const collectionId = core.getInput('collectionId', { required: true });
+    const environmentId = core.getInput('environmentId', { required: true });
+
+    return {
+      apiKey,
+      collectionId,
+      environmentId,
+    };
   }
 }

@@ -15,5 +15,5 @@ inputs:
 runs:
   using: 'docker'
   image: '../Dockerfile'
-  args: ['node', '/action/lib/linters.js']
+  args: ['node', '/action/dist/linters.js']
 

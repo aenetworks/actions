@@ -12,5 +12,5 @@ inputs:
 runs:
   using: 'docker'
   image: '../../Dockerfile'
-  args: ['node', '/action/lib/scraps/clone-repository.js']
+  args: ['node', '/action/dist/scraps/clone-repository.js']
 

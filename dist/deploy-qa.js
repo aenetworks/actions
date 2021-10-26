@@ -42,13 +42,16 @@ function run() {
             const inputs = new inputs_1.default();
             const repository = inputs.getRepository();
             const githubToken = inputs.getGithubToken();
-            const ref = inputs.getRef();
-            new git_1.CloneRepository(repository, githubToken, ref).run();
+            const sourceRef = inputs.getSourceRef();
+            const targetRef = inputs.getTargetRef();
+            const force = inputs.getForce();
+            new git_1.CloneRepository(repository, githubToken, targetRef).run();
+            new git_1.MergeBranches(targetRef, sourceRef, force).run();
             new version_1.DescribeChanges(releaseType_1.default.PROD).previewChangelog();
         }
         catch (error) {
             // @ts-ignore
-            core.setFailed(error.message);
+            core.setFailed(error);
         }
     });
 }

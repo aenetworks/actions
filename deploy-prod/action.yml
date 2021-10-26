@@ -19,4 +19,4 @@ inputs:
 runs:
   using: 'docker'
   image: '../Dockerfile'
-  args: ['node', '/action/lib/deploy-prod.js']
+  args: ['node', '/action/dist/deploy-prod.js']

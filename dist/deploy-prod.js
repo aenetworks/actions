@@ -34,25 +34,20 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const core = __importStar(require("@actions/core"));
 const git_1 = require("./lib/git");
 const inputs_1 = __importDefault(require("./lib/inputs"));
-const node_1 = require("./lib/node");
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const inputs = new inputs_1.default();
             const repository = inputs.getRepository();
             const githubToken = inputs.getGithubToken();
-            const ref = inputs.getRef();
-            const npmAuthToken = inputs.getNpmAuthToken();
-            const isPrerelease = inputs.isPrerelease();
-            new git_1.CloneRepository(repository, githubToken, ref).run();
-            new node_1.SetupNpmRegistry(npmAuthToken).run();
-            new node_1.InstallDependencies().run();
-            new node_1.Build().run();
-            new node_1.Publish(isPrerelease).run();
+            const targetRef = inputs.getTargetRef();
+            const force = inputs.getForce();
+            new git_1.CloneRepository(repository, githubToken, 'master').run();
+            new git_1.MergeBranches(targetRef, git_1.MergeBranches.LAST_TAG, force).run();
         }
         catch (error) {
             // @ts-ignore
-            core.setFailed(error.message);
+            core.setFailed(error);
         }
     });
 }

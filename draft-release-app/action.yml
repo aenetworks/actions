@@ -30,5 +30,5 @@ inputs:
 runs:
   using: 'docker'
   image: '../Dockerfile'
-  args: ['node', '/action/lib/draft-release.js']
+  args: ['node', '/action/dist/draft-release.js']
 

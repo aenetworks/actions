@@ -8,5 +8,5 @@ inputs:
 runs:
   using: 'docker'
   image: '../../Dockerfile'
-  args: ['node', '/action/lib/scraps/setup-registry.js']
+  args: ['node', '/action/dist/scraps/setup-registry.js']
 

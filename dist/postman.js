@@ -32,31 +32,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const core = __importStar(require("@actions/core"));
-const git_1 = require("./lib/git");
 const inputs_1 = __importDefault(require("./lib/inputs"));
-const node_1 = require("./lib/node");
+const postman_1 = __importDefault(require("./lib/postman"));
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const inputs = new inputs_1.default();
-            const repository = inputs.getRepository();
-            const githubToken = inputs.getGithubToken();
-            const ref = inputs.getRef();
-            const npmAuthToken = inputs.getNpmAuthToken();
-            const lintersCommand = new node_1.RunNpmScript('lint', true);
-            new git_1.CloneRepository(repository, githubToken, ref).run();
-            if (!lintersCommand.hasScript()) {
-                core.notice('Linters job skipped, because script "lint" does not exists in package.json');
-            }
-            else {
-                new node_1.SetupNpmRegistry(npmAuthToken).run();
-                new node_1.InstallDependencies().run();
-                lintersCommand.run();
-            }
+            const postman = inputs.getPostmanInputs();
+            yield new postman_1.default(postman.apiKey, postman.collectionId, postman.environmentId).run();
         }
         catch (error) {
             // @ts-ignore
-            core.setFailed(error.message);
+            core.setFailed(error);
         }
     });
 }

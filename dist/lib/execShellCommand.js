@@ -43,8 +43,9 @@ const execShellCommand = ({ cmd, errorMessage = '', useStdout = false, silent = 
     core.debug(`Running command: \`${cmd}\``);
     const res = shell.exec(cmd, { silent });
     if (res.code) {
-        const errorDescription = useStdout ? res.stdout : res.stderr;
-        throw new ShellCommandExecutionError(`${errorMessage}\n${errorDescription}`);
+        const message = errorMessage ? errorMessage + '\n' : '';
+        const description = useStdout ? res.stdout : res.stderr;
+        throw new ShellCommandExecutionError(`${message}${description}`);
     }
     return res.stdout;
 };

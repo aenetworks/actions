@@ -15,5 +15,5 @@ inputs:
 runs:
   using: 'docker'
   image: '../Dockerfile'
-  args: ['node', '/action/lib/unit-tests.js']
+  args: ['node', '/action/dist/unit-tests.js']
 

@@ -1,7 +1,6 @@
 import * as core from '@actions/core';
 
-import CancelRun from './lib/cancelRun';
-import { CloneRepository, SetupGitUser } from './lib/git';
+import { CloneRepository } from './lib/git';
 import Inputs from './lib/inputs';
 import { InstallDependencies, RunNpmScript, SetupNpmRegistry } from './lib/node';
 
@@ -27,7 +26,7 @@ async function run() {
     }
   } catch (error) {
     // @ts-ignore
-    core.setFailed(error.message);
+    core.setFailed(error);
   }
 }
 

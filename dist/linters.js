@@ -35,8 +35,6 @@ const core = __importStar(require("@actions/core"));
 const git_1 = require("./lib/git");
 const inputs_1 = __importDefault(require("./lib/inputs"));
 const node_1 = require("./lib/node");
-const releaseType_1 = __importDefault(require("./lib/releaseType"));
-const version_1 = require("./lib/version");
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -44,23 +42,21 @@ function run() {
             const repository = inputs.getRepository();
             const githubToken = inputs.getGithubToken();
             const ref = inputs.getRef();
-            const botUsername = inputs.getBotUsername();
-            const botEmail = inputs.getBotEmail();
             const npmAuthToken = inputs.getNpmAuthToken();
-            const releaseType = inputs.getReleaseType();
-            const skipCommit = inputs.getSkipCommit();
-            const isPrerelease = releaseType !== releaseType_1.default.PROD;
+            const lintersCommand = new node_1.RunNpmScript('lint', true);
             new git_1.CloneRepository(repository, githubToken, ref).run();
-            new git_1.SetupGitUser(botUsername, botEmail).run();
-            new node_1.SetupNpmRegistry(npmAuthToken).run();
-            const changelog = new version_1.DescribeChanges(releaseType).run();
-            const version = new version_1.BumpVersion(releaseType, skipCommit).run();
-            new git_1.Push(skipCommit).run();
-            yield new version_1.CreateDraftRelease(githubToken, version, isPrerelease, changelog).run();
+            if (!lintersCommand.hasScript()) {
+                core.notice('Linters job skipped, because script "lint" does not exists in package.json');
+            }
+            else {
+                new node_1.SetupNpmRegistry(npmAuthToken).run();
+                new node_1.InstallDependencies().run();
+                lintersCommand.run();
+            }
         }
         catch (error) {
             // @ts-ignore
-            core.setFailed(error.message);
+            core.setFailed(error);
         }
     });
 }

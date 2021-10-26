@@ -13,5 +13,5 @@ inputs:
 runs:
   using: 'docker'
   image: '../../Dockerfile'
-  args: ['node', '/action/lib/scraps/setup-git-user.js']
+  args: ['node', '/action/dist/scraps/setup-git-user.js']
 

@@ -34,20 +34,21 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const core = __importStar(require("@actions/core"));
 const git_1 = require("./lib/git");
 const inputs_1 = __importDefault(require("./lib/inputs"));
+const releaseType_1 = __importDefault(require("./lib/releaseType"));
+const version_1 = require("./lib/version");
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const inputs = new inputs_1.default();
             const repository = inputs.getRepository();
             const githubToken = inputs.getGithubToken();
-            const targetRef = inputs.getTargetRef();
-            const force = inputs.getForce();
-            new git_1.CloneRepository(repository, githubToken, 'master').run();
-            new git_1.MergeBranches(targetRef, git_1.MergeBranches.LAST_TAG, force).run();
+            const ref = inputs.getRef();
+            new git_1.CloneRepository(repository, githubToken, ref).run();
+            new version_1.DescribeChanges(releaseType_1.default.PROD).previewChangelog();
         }
         catch (error) {
             // @ts-ignore
-            core.setFailed(error.message);
+            core.setFailed(error);
         }
     });
 }

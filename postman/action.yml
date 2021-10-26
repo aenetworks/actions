@@ -1,0 +1,16 @@
+name: 'Deploy QA'
+description: 'Move code from develop to master branch which triggers deploy QA environment.'
+inputs:
+  apiKey:
+    description: ''
+    required: true
+  collectionId:
+    description: ''
+    required: true
+  environmentId:
+    description: ''
+    required: true
+runs:
+  using: 'docker'
+  image: '../Dockerfile'
+  args: ['node', '/action/dist/postman.js']
