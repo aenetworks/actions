@@ -36,7 +36,7 @@
   },
   "devDependencies": {
     "@aenetworks/eslint-plugin": "^1.1.1",
-    "@types/node": "^16.11.2",
+    "@types/node": "^16.11.4",
     "@types/shelljs": "^0.8.9",
     "rimraf": "^3.0.2",
     "typescript": "^4.4.4"
