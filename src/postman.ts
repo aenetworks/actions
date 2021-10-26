@@ -8,7 +8,7 @@ async function run() {
     const inputs = new Inputs();
     const postman = inputs.getPostmanInputs();
 
-    new Postman(postman.apiKey, postman.collectionId, postman.environmentId).run();
+    await new Postman(postman.apiKey, postman.collectionId, postman.environmentId).run();
   } catch (error) {
     // @ts-ignore
     core.setFailed(error);

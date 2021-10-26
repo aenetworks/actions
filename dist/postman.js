@@ -39,7 +39,7 @@ function run() {
         try {
             const inputs = new inputs_1.default();
             const postman = inputs.getPostmanInputs();
-            new postman_1.default(postman.apiKey, postman.collectionId, postman.environmentId).run();
+            yield new postman_1.default(postman.apiKey, postman.collectionId, postman.environmentId).run();
         }
         catch (error) {
             // @ts-ignore
