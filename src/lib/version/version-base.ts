@@ -30,6 +30,26 @@ class Version {
     return Version.validVersionRegex.test(versionString);
   }
 
+  static sortAsc(first: Version, second: Version): number {
+    const comparedMajor = first.major - second.major;
+
+    if (comparedMajor !== 0) {
+      return comparedMajor;
+    }
+
+    const comparedMinor = first.minor - second.minor;
+
+    if (comparedMinor !== 0) {
+      return comparedMinor;
+    }
+
+    return first.patch - second.patch;
+  }
+
+  static sortDesc(first, second): number {
+    return -1 * this.sortAsc(first, second);
+  }
+
   asString(): string {
     if (this.original) {
       return this.original;
@@ -64,7 +84,8 @@ export default class VersionBase {
     const tags = tagsList
       .split('\n')
       .filter((tag) => Version.isValidVersion(tag))
-      .map((tag) => Version.parse(tag));
+      .map((tag) => Version.parse(tag))
+      .sort(Version.sortAsc);
 
     console.log(tags);
 
