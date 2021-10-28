@@ -23,7 +23,7 @@ export default class BumpVersion extends VersionBase implements Command {
   public run(): string {
     this._bumpVersion(this.skipCommit);
 
-    const version = this._getCurrentTag();
+    const version = this._getLatestVersion().asString();
 
     core.info(`New version: ${version}`);
 

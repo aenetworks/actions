@@ -47,7 +47,7 @@ class BumpVersion extends version_base_1.default {
      */
     run() {
         this._bumpVersion(this.skipCommit);
-        const version = this._getCurrentTag();
+        const version = this._getLatestVersion().asString();
         core.info(`New version: ${version}`);
         return version;
     }

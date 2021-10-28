@@ -39,7 +39,7 @@ class DescribeChanges extends version_base_1.default {
      * Run command.
      */
     run() {
-        const currentVersion = this._getCurrentVersion();
+        const currentVersion = this._getLatestVersion();
         this._ensureRightVersionIsDescribed(currentVersion);
         return this._getChangelogEntry();
     }
