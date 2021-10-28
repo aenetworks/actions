@@ -21,6 +21,12 @@ class VersionBase {
             const output = (0, execShellCommand_1.default)({ cmd, errorMessage, silent: true });
             return output.trim();
         };
+        this._getLatestTag = () => {
+            const cmd = 'git tag -l';
+            const errorMessage = 'Cannot get current version';
+            const output = (0, execShellCommand_1.default)({ cmd, errorMessage, silent: true });
+            return output.trim();
+        };
         this._getCurrentVersion = () => {
             const tag = this._getCurrentTag();
             return tag.slice(1);

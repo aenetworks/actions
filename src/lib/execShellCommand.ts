@@ -36,8 +36,8 @@ const execShellCommand = ({
   const res = shell.exec(cmd, { silent });
 
   if (res.code) {
-    const message = errorMessage ? errorMessage + '\n' : '';
-    const description = useStdout ? res.stdout : res.stderr;
+    const message = errorMessage ? errorMessage.trim() + '\n' : '';
+    const description = useStdout ? res.stdout.trim() : res.stderr.trim();
 
     throw new ShellCommandExecutionError(`${message}${description}`);
   }
