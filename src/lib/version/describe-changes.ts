@@ -13,7 +13,7 @@ export default class DescribeChanges extends VersionBase implements Command {
    */
   @logGroup('Describe changes')
   public run(): string {
-    const currentVersion = this._getCurrentVersion();
+    const currentVersion = this._getLatestVersion();
 
     this._ensureRightVersionIsDescribed(currentVersion);
 

@@ -13,7 +13,7 @@ export default class Tags extends VersionBase implements Command {
    */
   @logGroup('Tags')
   public run(): void {
-    const currentVersion = this._getLatestTag();
+    const currentVersion = this._getLatestVersion();
 
     console.log(currentVersion);
   }

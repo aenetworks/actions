@@ -46,8 +46,11 @@ class Version {
         }
         return `v${this.major}.${this.minor}.${this.patch}`;
     }
+    asStringWithoutPrefix() {
+        return this.asString().slice(1);
+    }
 }
-Version.validVersionRegex = /v(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d*)/;
+Version.validVersionRegex = /v(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)/;
 class VersionBase {
     /**
      * Constructs VersionBase.
@@ -56,34 +59,23 @@ class VersionBase {
      */
     constructor(releaseType) {
         this.releaseType = releaseType;
-        this._getCurrentTag = () => {
-            const cmd = 'git describe --abbrev=0 --tags';
-            const errorMessage = 'Cannot get current version';
-            const output = (0, execShellCommand_1.default)({ cmd, errorMessage, silent: true });
-            return output.trim();
-        };
-        this._getLatestTag = () => {
+        this._getLatestVersion = () => {
             const cmd = 'git tag -l';
             const errorMessage = 'Cannot get current version';
             const tagsList = (0, execShellCommand_1.default)({ cmd, errorMessage, silent: true });
             const tags = tagsList
                 .split('\n')
+                .map((tag) => tag.trim())
                 .filter((tag) => Version.isValidVersion(tag))
                 .map((tag) => Version.parse(tag))
-                .sort(Version.sortAsc);
-            console.log(tags);
-            return tags[0].asString();
-            // return output.trim();
-        };
-        this._getCurrentVersion = () => {
-            const tag = this._getCurrentTag();
-            return tag.slice(1);
+                .sort(Version.sortDesc);
+            return tags[0];
         };
     }
     _ensureRightVersionIsDescribed(currentVersion) {
         const filePath = path_1.default.join(process.cwd(), 'package.json');
         const packageJson = require(filePath);
-        packageJson.version = currentVersion;
+        packageJson.version = currentVersion.asStringWithoutPrefix();
         fs_1.default.writeFileSync(filePath, JSON.stringify(packageJson, null, 2));
     }
     _getChangelogEntry() {

@@ -5,7 +5,7 @@ import execShellCommand from '../execShellCommand';
 import ReleaseType from '../releaseType';
 
 class Version {
-  static readonly validVersionRegex = /v(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d*)/;
+  static readonly validVersionRegex = /v(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)/;
   constructor(
     public readonly major: number = 0,
     public readonly minor: number = 0,
@@ -57,6 +57,10 @@ class Version {
 
     return `v${this.major}.${this.minor}.${this.patch}`;
   }
+
+  asStringWithoutPrefix(): string {
+    return this.asString().slice(1);
+  }
 }
 
 export default class VersionBase {
@@ -67,44 +71,26 @@ export default class VersionBase {
    */
   constructor(private readonly releaseType: ReleaseType) {}
 
-  protected _getCurrentTag = (): string => {
-    const cmd = 'git describe --abbrev=0 --tags';
-    const errorMessage = 'Cannot get current version';
-
-    const output = execShellCommand({ cmd, errorMessage, silent: true });
-
-    return output.trim();
-  };
-
-  protected _getLatestTag = (): string => {
+  protected _getLatestVersion = (): Version => {
     const cmd = 'git tag -l';
     const errorMessage = 'Cannot get current version';
 
     const tagsList = execShellCommand({ cmd, errorMessage, silent: true });
     const tags = tagsList
       .split('\n')
+      .map((tag) => tag.trim())
       .filter((tag) => Version.isValidVersion(tag))
       .map((tag) => Version.parse(tag))
-      .sort(Version.sortAsc);
+      .sort(Version.sortDesc);
 
-    console.log(tags);
-
-    return tags[0].asString();
-
-    // return output.trim();
+    return tags[0];
   };
 
-  protected _getCurrentVersion = (): string => {
-    const tag = this._getCurrentTag();
-
-    return tag.slice(1);
-  };
-
-  protected _ensureRightVersionIsDescribed(currentVersion: string): void {
+  protected _ensureRightVersionIsDescribed(currentVersion: Version): void {
     const filePath = path.join(process.cwd(), 'package.json');
     const packageJson = require(filePath);
 
-    packageJson.version = currentVersion;
+    packageJson.version = currentVersion.asStringWithoutPrefix();
     fs.writeFileSync(filePath, JSON.stringify(packageJson, null, 2));
   }
 

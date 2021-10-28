@@ -19,7 +19,7 @@ class Tags extends version_base_1.default {
      * Run command.
      */
     run() {
-        const currentVersion = this._getLatestTag();
+        const currentVersion = this._getLatestVersion();
         console.log(currentVersion);
     }
 }
