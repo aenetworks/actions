@@ -1,7 +1,7 @@
 import * as core from '@actions/core';
 
-import ReleaseType from './lib/releaseType';
-import { Tags } from './lib/version';
+import ReleaseType from '../lib/releaseType';
+import { Tags } from '../lib/version';
 
 async function run() {
   try {

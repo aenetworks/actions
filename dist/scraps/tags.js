@@ -32,8 +32,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const core = __importStar(require("@actions/core"));
-const releaseType_1 = __importDefault(require("./lib/releaseType"));
-const version_1 = require("./lib/version");
+const releaseType_1 = __importDefault(require("../lib/releaseType"));
+const version_1 = require("../lib/version");
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
