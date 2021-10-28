@@ -47,7 +47,7 @@ export class Version {
   }
 
   static sortDesc(first, second): number {
-    return -1 * this.sortAsc(first, second);
+    return -1 * Version.sortAsc(first, second);
   }
 
   asString(): string {

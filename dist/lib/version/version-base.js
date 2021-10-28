@@ -39,7 +39,7 @@ class Version {
         return first.patch - second.patch;
     }
     static sortDesc(first, second) {
-        return -1 * this.sortAsc(first, second);
+        return -1 * Version.sortAsc(first, second);
     }
     asString() {
         if (this.original) {
