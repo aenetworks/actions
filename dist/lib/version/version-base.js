@@ -7,6 +7,33 @@ const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 const execShellCommand_1 = __importDefault(require("../execShellCommand"));
 const releaseType_1 = __importDefault(require("../releaseType"));
+class Version {
+    constructor(major = 0, minor = 0, patch = 0, original = '') {
+        this.major = major;
+        this.minor = minor;
+        this.patch = patch;
+        this.original = original;
+    }
+    static parse(versionString) {
+        const match = versionString.match(Version.validVersionRegex);
+        if (!match) {
+            // todo error
+            throw new Error('invalid version');
+        }
+        const { major, minor, patch } = match.groups;
+        return new Version(Number(major), Number(minor), Number(patch), versionString);
+    }
+    static isValidVersion(versionString) {
+        return Version.validVersionRegex.test(versionString);
+    }
+    asString() {
+        if (this.original) {
+            return this.original;
+        }
+        return `v${this.major}.${this.minor}.${this.patch}`;
+    }
+}
+Version.validVersionRegex = /v(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d*)/;
 class VersionBase {
     /**
      * Constructs VersionBase.
@@ -25,9 +52,12 @@ class VersionBase {
             const cmd = 'git tag -l';
             const errorMessage = 'Cannot get current version';
             const tagsList = (0, execShellCommand_1.default)({ cmd, errorMessage, silent: true });
-            const tags = tagsList.split('\n');
+            const tags = tagsList
+                .split('\n')
+                .filter((tag) => Version.isValidVersion(tag))
+                .map((tag) => Version.parse(tag));
             console.log(tags);
-            return tags[0];
+            return tags[0].asString();
             // return output.trim();
         };
         this._getCurrentVersion = () => {
