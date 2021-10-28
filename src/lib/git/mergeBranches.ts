@@ -3,6 +3,7 @@ import * as core from '@actions/core';
 import { logGroup } from '../decorators';
 import execShellCommand from '../execShellCommand';
 import { Command } from '../seedWorks';
+import { LatestVersion } from '../version';
 
 export default class MergeBranches implements Command {
   private readonly sourceRef: string;
@@ -19,7 +20,7 @@ export default class MergeBranches implements Command {
    */
   constructor(private readonly targetRef: string, sourceRef: string, private readonly force: boolean = false) {
     if (sourceRef === MergeBranches.LAST_TAG) {
-      this.sourceRef = this._getTag();
+      this.sourceRef = new LatestVersion().run().asString();
     } else {
       this.sourceRef = sourceRef;
     }
@@ -45,15 +46,6 @@ export default class MergeBranches implements Command {
       this._mergeBranches(this.sourceRef, this.targetRef);
       this._pushTargetBranch(this.targetRef, false);
     }
-  }
-
-  private _getTag(): string {
-    const cmd = 'git describe --abbrev=0 --tags';
-    const errorMessage = 'Cannot read last tag.';
-
-    const output = execShellCommand({ cmd, errorMessage });
-
-    return output.trim();
   }
 
   private _checkout = (targetRef: string): void => {

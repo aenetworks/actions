@@ -4,7 +4,7 @@ import path from 'path';
 import execShellCommand from '../execShellCommand';
 import ReleaseType from '../releaseType';
 
-class Version {
+export class Version {
   static readonly validVersionRegex = /v(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)/;
   constructor(
     public readonly major: number = 0,

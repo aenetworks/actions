@@ -31,6 +31,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const core = __importStar(require("@actions/core"));
 const decorators_1 = require("../decorators");
 const execShellCommand_1 = __importDefault(require("../execShellCommand"));
+const version_1 = require("../version");
 class MergeBranches {
     /**
      * Construct MergeBranches command.
@@ -68,7 +69,7 @@ class MergeBranches {
             return !!out.length;
         };
         if (sourceRef === MergeBranches.LAST_TAG) {
-            this.sourceRef = this._getTag();
+            this.sourceRef = new version_1.LatestVersion().run().asString();
         }
         else {
             this.sourceRef = sourceRef;
@@ -92,12 +93,6 @@ class MergeBranches {
             this._mergeBranches(this.sourceRef, this.targetRef);
             this._pushTargetBranch(this.targetRef, false);
         }
-    }
-    _getTag() {
-        const cmd = 'git describe --abbrev=0 --tags';
-        const errorMessage = 'Cannot read last tag.';
-        const output = (0, execShellCommand_1.default)({ cmd, errorMessage });
-        return output.trim();
     }
 }
 MergeBranches.LAST_TAG = 'LAST_TAG';

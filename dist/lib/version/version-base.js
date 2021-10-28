@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Version = void 0;
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 const execShellCommand_1 = __importDefault(require("../execShellCommand"));
@@ -50,6 +51,7 @@ class Version {
         return this.asString().slice(1);
     }
 }
+exports.Version = Version;
 Version.validVersionRegex = /v(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)/;
 class VersionBase {
     /**
