@@ -1,0 +1,22 @@
+# Deploy to master branch
+#
+# Docs: https://github.com/aenetworks/aetn.samples.release/blob/master/docs/app-workflow.md#deploy-qa
+---
+name: Deploy QA
+
+on:
+  workflow_dispatch:
+    inputs:
+      force:
+        description: 'Force push [true|false]'
+        required: false
+        default: 'false'
+
+jobs:
+  deploy-qa:
+    name: Deploy QA
+    runs-on: ubuntu-latest
+    steps:
+      - uses: aenetworks/actions/deploy-qa@release
+        with:
+          force: ${{ github.event.inputs.force }}
