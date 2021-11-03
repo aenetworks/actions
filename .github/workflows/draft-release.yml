@@ -1,0 +1,19 @@
+# Prepare draft release
+#
+# Docs: https://github.com/aenetworks/aetn.samples.release/blob/master/docs/app-workflow.md#prepare-draft-release
+---
+name: Prepare Draft Release
+
+on:
+  workflow_dispatch:
+
+env:
+  BOT_EMAIL: ${{ secrets.GH_ACTION_BOT_EMAIL }}
+  NPM_AUTH_TOKEN: ${{ secrets.GPR_AUTH_TOKEN }}
+
+jobs:
+  draft-release:
+    name: Prepare Draft Release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: aenetworks/actions/draft-release-app@release

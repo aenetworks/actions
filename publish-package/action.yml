@@ -19,4 +19,4 @@ inputs:
 runs:
   using: 'docker'
   image: '../Dockerfile'
-  args: ['node', '/action/dist/publish-release.js']
+  args: ['node', '/action/dist/publish-package.js']
