@@ -1,6 +1,6 @@
 FROM node:14-alpine
 
-RUN apk add --no-cache git make gcc g++ python
+RUN apk add --no-cache git
 
 COPY . /action
 
