@@ -1,0 +1,19 @@
+on:
+  workflow_call:
+    secrets:
+      token:
+        required: false
+      GPR_AUTH_TOKEN:
+        required: true
+
+env:
+  NPM_AUTH_TOKEN: ${{ secrets.GPR_AUTH_TOKEN }}
+
+jobs:
+  preview-changelog:
+    name: Preview changelog
+    runs-on: ubuntu-latest
+    steps:
+      - uses: aenetworks/actions/preview-changelog@release
+        with:
+          token: ${{ secrets.token }}
