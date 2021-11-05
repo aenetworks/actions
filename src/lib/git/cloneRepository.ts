@@ -40,18 +40,15 @@ export default class CloneRepository implements Command {
   private _fetchRepository = (repository: string): void => {
     core.info('fetching');
 
-    const cmd = 'git fetch';
+    const cmd = 'git fetch origin';
     const errorMessage = `Cannot fetch repository '${repository}'`;
 
     execShellCommand({ cmd, errorMessage });
-    execShellCommand({
-      cmd: 'ls .git/refs/heads',
-    });
   };
 
   private _switchBranchToRef = (ref: string): void => {
     try {
-      const cmd = `git checkout ${ref}`;
+      const cmd = `git checkout -t origin/${ref}`;
 
       execShellCommand({ cmd });
     } catch (e) {

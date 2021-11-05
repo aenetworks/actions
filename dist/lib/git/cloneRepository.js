@@ -53,16 +53,13 @@ class CloneRepository {
         };
         this._fetchRepository = (repository) => {
             core.info('fetching');
-            const cmd = 'git fetch';
+            const cmd = 'git fetch origin';
             const errorMessage = `Cannot fetch repository '${repository}'`;
             (0, execShellCommand_1.default)({ cmd, errorMessage });
-            (0, execShellCommand_1.default)({
-                cmd: 'ls .git/refs/heads',
-            });
         };
         this._switchBranchToRef = (ref) => {
             try {
-                const cmd = `git checkout ${ref}`;
+                const cmd = `git checkout -t origin/${ref}`;
                 (0, execShellCommand_1.default)({ cmd });
             }
             catch (e) {
