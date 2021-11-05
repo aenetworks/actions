@@ -35,7 +35,7 @@ export default class CloneRepository implements Command {
   };
 
   private _fetchRepository = (repository: string): void => {
-    const cmd = `git fetch`;
+    const cmd = 'git fetch';
     const errorMessage = `Cannot fetch repository '${repository}'`;
 
     execShellCommand({ cmd, errorMessage });
@@ -43,11 +43,11 @@ export default class CloneRepository implements Command {
 
   private _switchBranchToRef = (ref: string): void => {
     try {
-      const cmd = `git checkout -c ${ref}`;
+      const cmd = `git checkout ${ref}`;
 
       execShellCommand({ cmd });
     } catch (e) {
-      const cmd = `git switch ${ref}`;
+      const cmd = `git switch -c ${ref}`;
       const errorMessage = `Cannot switch to branch '${ref}'`;
 
       execShellCommand({ cmd, errorMessage });

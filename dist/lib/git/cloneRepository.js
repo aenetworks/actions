@@ -55,11 +55,11 @@ class CloneRepository {
         };
         this._switchBranchToRef = (ref) => {
             try {
-                const cmd = `git checkout -c ${ref}`;
+                const cmd = `git checkout ${ref}`;
                 (0, execShellCommand_1.default)({ cmd });
             }
             catch (e) {
-                const cmd = `git switch ${ref}`;
+                const cmd = `git switch -c ${ref}`;
                 const errorMessage = `Cannot switch to branch '${ref}'`;
                 (0, execShellCommand_1.default)({ cmd, errorMessage });
             }
