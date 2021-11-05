@@ -42,7 +42,6 @@ class CloneRepository {
     constructor(repository, token, ref) {
         this.repository = repository;
         this.token = token;
-        this.ref = ref;
         this._cloneRepository = (repository, token) => {
             const cmd = `git clone https://bot:${token}@github.com/${repository}.git .`;
             const errorMessage = `Cannot clone repository '${repository}'`;
@@ -54,11 +53,19 @@ class CloneRepository {
                 (0, execShellCommand_1.default)({ cmd });
             }
             catch (e) {
+                // @ts-ignore
+                core.info(e.message || '');
                 const cmd = `git switch -c ${ref}`;
                 const errorMessage = `Cannot switch to branch '${ref}'`;
                 (0, execShellCommand_1.default)({ cmd, errorMessage });
             }
         };
+        if (ref.toUpperCase().startsWith('REFS/HEADS/')) {
+            this.ref = ref.substring('refs/heads/'.length);
+        }
+        else {
+            this.ref = ref;
+        }
     }
     /**
      * Run command.

@@ -5,6 +5,7 @@ import execShellCommand from '../execShellCommand';
 import { Command } from '../seedWorks';
 
 export default class CloneRepository implements Command {
+  private readonly ref: string;
   /**
    * Construct CloneRepository command.
    *
@@ -12,7 +13,13 @@ export default class CloneRepository implements Command {
    * @param {string} token - GitHub token.
    * @param {string} ref - Git ref name (branch, tag).
    */
-  constructor(private readonly repository: string, private readonly token: string, private readonly ref: string) {}
+  constructor(private readonly repository: string, private readonly token: string, ref: string) {
+    if (ref.toUpperCase().startsWith('REFS/HEADS/')) {
+      this.ref = ref.substring('refs/heads/'.length);
+    } else {
+      this.ref = ref;
+    }
+  }
 
   /**
    * Run command.
@@ -39,6 +46,9 @@ export default class CloneRepository implements Command {
 
       execShellCommand({ cmd });
     } catch (e) {
+      // @ts-ignore
+      core.info(e.message || '');
+
       const cmd = `git switch -c ${ref}`;
       const errorMessage = `Cannot switch to branch '${ref}'`;
 
