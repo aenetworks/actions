@@ -39,7 +39,7 @@ export default class CloneRepository implements Command {
 
       execShellCommand({ cmd });
     } catch (e) {
-      const cmd = `git switch -c ${ref}`;
+      const cmd = `git switch ${ref}`;
       const errorMessage = `Cannot switch to branch '${ref}'`;
 
       execShellCommand({ cmd, errorMessage });
