@@ -88,6 +88,11 @@ export default class VersionBase {
 
   protected _ensureRightVersionIsDescribed(currentVersion: Version): void {
     const filePath = path.join(process.cwd(), 'package.json');
+
+    if (!fs.existsSync(filePath)) {
+      fs.writeFileSync(filePath, JSON.stringify({}, null, 2));
+    }
+
     const packageJson = require(filePath);
 
     packageJson.version = currentVersion.asStringWithoutPrefix();

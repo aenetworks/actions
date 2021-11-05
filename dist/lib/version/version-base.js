@@ -76,6 +76,9 @@ class VersionBase {
     }
     _ensureRightVersionIsDescribed(currentVersion) {
         const filePath = path_1.default.join(process.cwd(), 'package.json');
+        if (!fs_1.default.existsSync(filePath)) {
+            fs_1.default.writeFileSync(filePath, JSON.stringify({}, null, 2));
+        }
         const packageJson = require(filePath);
         packageJson.version = currentVersion.asStringWithoutPrefix();
         fs_1.default.writeFileSync(filePath, JSON.stringify(packageJson, null, 2));
