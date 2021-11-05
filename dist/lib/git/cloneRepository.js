@@ -48,17 +48,9 @@ class CloneRepository {
             (0, execShellCommand_1.default)({ cmd, errorMessage });
         };
         this._switchBranchToRef = (ref) => {
-            try {
-                const cmd = `git checkout ${ref}`;
-                (0, execShellCommand_1.default)({ cmd });
-            }
-            catch (e) {
-                // @ts-ignore
-                core.info(e.message || '');
-                const cmd = `git switch -c ${ref}`;
-                const errorMessage = `Cannot switch to branch '${ref}'`;
-                (0, execShellCommand_1.default)({ cmd, errorMessage });
-            }
+            const cmd = `git checkout ${ref}`;
+            const errorMessage = `Cannot switch to '${ref}'`;
+            (0, execShellCommand_1.default)({ cmd, errorMessage });
         };
         if (ref.toUpperCase().startsWith('REFS/HEADS/')) {
             this.ref = ref.substring('refs/heads/'.length);
