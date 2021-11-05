@@ -38,9 +38,6 @@ export default class CloneRepository implements Command {
     const errorMessage = `Cannot clone repository '${repository}'`;
 
     execShellCommand({ cmd, errorMessage });
-    execShellCommand({
-      cmd: 'ls .git/refs/heads',
-    });
   };
 
   private _switchBranchToRef = (ref: string): void => {
