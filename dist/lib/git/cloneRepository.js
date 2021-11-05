@@ -42,7 +42,6 @@ class CloneRepository {
     constructor(repository, token, ref) {
         this.repository = repository;
         this.token = token;
-        this.ref = ref;
         this._cloneRepository = (repository, token) => {
             const cmd = `git clone https://bot:${token}@github.com/${repository}.git .`;
             const errorMessage = `Cannot clone repository '${repository}'`;
@@ -51,15 +50,9 @@ class CloneRepository {
                 cmd: 'ls .git/refs/heads',
             });
         };
-        this._fetchRepository = (repository) => {
-            core.info('fetching');
-            const cmd = 'git fetch origin';
-            const errorMessage = `Cannot fetch repository '${repository}'`;
-            (0, execShellCommand_1.default)({ cmd, errorMessage });
-        };
         this._switchBranchToRef = (ref) => {
             try {
-                const cmd = `git checkout -t origin/${ref}`;
+                const cmd = `git checkout ${ref}`;
                 (0, execShellCommand_1.default)({ cmd });
             }
             catch (e) {
@@ -70,6 +63,12 @@ class CloneRepository {
                 (0, execShellCommand_1.default)({ cmd, errorMessage });
             }
         };
+        if (ref.toUpperCase().startsWith('REFS/HEADS/')) {
+            this.ref = ref.substring('refs/heads/'.length);
+        }
+        else {
+            this.ref = ref;
+        }
     }
     /**
      * Run command.
@@ -79,7 +78,6 @@ class CloneRepository {
     run() {
         core.info(`Cloning repository ${this.repository}`);
         this._cloneRepository(this.repository, this.token);
-        this._fetchRepository(this.repository);
         this._switchBranchToRef(this.ref);
     }
 }
