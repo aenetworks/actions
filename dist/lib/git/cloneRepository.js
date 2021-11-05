@@ -47,11 +47,18 @@ class CloneRepository {
             const cmd = `git clone https://bot:${token}@github.com/${repository}.git .`;
             const errorMessage = `Cannot clone repository '${repository}'`;
             (0, execShellCommand_1.default)({ cmd, errorMessage });
+            (0, execShellCommand_1.default)({
+                cmd: 'ls .git/refs/heads',
+            });
         };
         this._fetchRepository = (repository) => {
-            const cmd = `git fetch`;
+            core.info('fetching');
+            const cmd = 'git fetch';
             const errorMessage = `Cannot fetch repository '${repository}'`;
             (0, execShellCommand_1.default)({ cmd, errorMessage });
+            (0, execShellCommand_1.default)({
+                cmd: 'ls .git/refs/heads',
+            });
         };
         this._switchBranchToRef = (ref) => {
             try {
@@ -59,6 +66,8 @@ class CloneRepository {
                 (0, execShellCommand_1.default)({ cmd });
             }
             catch (e) {
+                // @ts-ignore
+                core.info(e.message || '');
                 const cmd = `git switch -c ${ref}`;
                 const errorMessage = `Cannot switch to branch '${ref}'`;
                 (0, execShellCommand_1.default)({ cmd, errorMessage });
