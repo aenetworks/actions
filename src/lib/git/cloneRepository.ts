@@ -23,6 +23,7 @@ export default class CloneRepository implements Command {
   public run(): void {
     core.info(`Cloning repository ${this.repository}`);
     this._cloneRepository(this.repository, this.token);
+    this._fetchRepository(this.repository);
     this._switchBranchToRef(this.ref);
   }
 
@@ -33,9 +34,16 @@ export default class CloneRepository implements Command {
     execShellCommand({ cmd, errorMessage });
   };
 
+  private _fetchRepository = (repository: string): void => {
+    const cmd = `git fetch`;
+    const errorMessage = `Cannot fetch repository '${repository}'`;
+
+    execShellCommand({ cmd, errorMessage });
+  };
+
   private _switchBranchToRef = (ref: string): void => {
     try {
-      const cmd = `git checkout ${ref}`;
+      const cmd = `git checkout -c ${ref}`;
 
       execShellCommand({ cmd });
     } catch (e) {

@@ -48,9 +48,14 @@ class CloneRepository {
             const errorMessage = `Cannot clone repository '${repository}'`;
             (0, execShellCommand_1.default)({ cmd, errorMessage });
         };
+        this._fetchRepository = (repository) => {
+            const cmd = `git fetch`;
+            const errorMessage = `Cannot fetch repository '${repository}'`;
+            (0, execShellCommand_1.default)({ cmd, errorMessage });
+        };
         this._switchBranchToRef = (ref) => {
             try {
-                const cmd = `git checkout ${ref}`;
+                const cmd = `git checkout -c ${ref}`;
                 (0, execShellCommand_1.default)({ cmd });
             }
             catch (e) {
@@ -68,6 +73,7 @@ class CloneRepository {
     run() {
         core.info(`Cloning repository ${this.repository}`);
         this._cloneRepository(this.repository, this.token);
+        this._fetchRepository(this.repository);
         this._switchBranchToRef(this.ref);
     }
 }
