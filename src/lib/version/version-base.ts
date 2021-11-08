@@ -108,7 +108,7 @@ export default class VersionBase {
     return changelogLines
       .slice(2, changelogLines.length - 3)
       .join('\n')
-      .replaceAll(/\(\[#\d+]\(.*?\)\)/, '')
+      .replace(/\(\[#\d+]\(.*?\)\)/g, '')
       .replace(/^#{1,3}/, '##');
   }
 
