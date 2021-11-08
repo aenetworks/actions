@@ -87,8 +87,11 @@ class VersionBase {
         const cmd = `npx standard-version --dry-run --silent ${this._getReleaseTypeParam()}`;
         const rawChangelog = (0, execShellCommand_1.default)({ cmd, silent: true });
         const changelogLines = rawChangelog.split('\n');
-        const changelog = changelogLines.slice(2, changelogLines.length - 3).join('\n');
-        return changelog.replace(/^#{1,3}/, '##');
+        return changelogLines
+            .slice(2, changelogLines.length - 3)
+            .join('\n')
+            .replace(/\(\[#\d+]\(.*?\)\)/g, '')
+            .replace(/^#{1,3}/, '##');
     }
     _getReleaseTypeParam() {
         if (this.releaseType !== releaseType_1.default.PROD) {
