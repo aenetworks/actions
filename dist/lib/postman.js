@@ -24,15 +24,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const newman = __importStar(require("newman"));
 const decorators_1 = require("./decorators");
@@ -64,25 +55,21 @@ class Postman {
     /**
      * Run command.
      */
-    run() {
-        return __awaiter(this, void 0, void 0, function* () {
-            const options = {
-                collection: this._getCollectionUrl(),
-                environment: this._getEnvironmentUrl(),
-                reporters: 'cli',
-            };
-            yield this._newmanRun(options);
-        });
+    async run() {
+        const options = {
+            collection: this._getCollectionUrl(),
+            environment: this._getEnvironmentUrl(),
+            reporters: 'cli',
+        };
+        await this._newmanRun(options);
     }
-    _newmanRun(options) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return new Promise((resolve, reject) => {
-                newman.run(options, (err) => {
-                    if (err) {
-                        reject(this._handleError(err));
-                    }
-                    resolve(Done);
-                });
+    async _newmanRun(options) {
+        return new Promise((resolve, reject) => {
+            newman.run(options, (err) => {
+                if (err) {
+                    reject(this._handleError(err));
+                }
+                resolve(Done);
             });
         });
     }
