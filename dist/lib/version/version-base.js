@@ -114,9 +114,10 @@ class VersionBase {
         const getVer = (v) => {
             return v.replace(/^\D+/, '');
         };
+        const filePath = path_1.default.join(process.cwd(), 'package.json');
         const old = (0, execShellCommand_1.default)({ cmd: `git show ${tag}:package.json` });
         const oldDeps = JSON.parse(old).dependencies;
-        const newDeps = require('./package.json').dependencies;
+        const newDeps = require(filePath).dependencies;
         const added = [];
         const upgraded = [];
         const deleted = [];

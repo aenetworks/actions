@@ -140,10 +140,11 @@ export default class VersionBase {
       return v.replace(/^\D+/, '');
     };
 
+    const filePath = path.join(process.cwd(), 'package.json');
     const old = execShellCommand({ cmd: `git show ${tag}:package.json` });
 
     const oldDeps = JSON.parse(old).dependencies;
-    const newDeps = require('./package.json').dependencies;
+    const newDeps = require(filePath).dependencies;
 
     const added = [];
     const upgraded = [];
