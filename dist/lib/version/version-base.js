@@ -92,12 +92,11 @@ class VersionBase {
             .join('\n')
             .replace(/\(\[#\d+]\(.*?\)\)/g, '')
             .replace(/^#{1,3}/, '##');
-        try {
-            return changelog + this._getDependenciesSection(currentVersion.toString());
-        }
-        catch (e) {
-            return changelog;
-        }
+        // try {
+        return changelog + this._getDependenciesSection(currentVersion.toString());
+        // } catch (e) {
+        //   return changelog;
+        // }
     }
     _getReleaseTypeParam() {
         if (this.releaseType !== releaseType_1.default.PROD) {
