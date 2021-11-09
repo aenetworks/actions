@@ -80,7 +80,7 @@ class VersionBase {
             fs_1.default.writeFileSync(filePath, JSON.stringify({}, null, 2));
         }
         const packageJson = require(filePath);
-        packageJson.version = currentVersion.asStringWithoutPrefix();
+        packageJson.version = currentVersion;
         fs_1.default.writeFileSync(filePath, JSON.stringify(packageJson, null, 2));
     }
     _getChangelogEntry(currentVersion, raw) {
@@ -92,11 +92,12 @@ class VersionBase {
             .join('\n')
             .replace(/\(\[#\d+]\(.*?\)\)/g, '')
             .replace(/^#{1,3}/, '##');
-        // try {
-        return changelog + this._getDependenciesSection(currentVersion.asString(), raw);
-        // } catch (e) {
-        //   return changelog;
-        // }
+        try {
+            return changelog + this._getDependenciesSection(currentVersion.asString(), raw) + '\n';
+        }
+        catch (e) {
+            return changelog + '\n';
+        }
     }
     _getReleaseTypeParam() {
         if (this.releaseType !== releaseType_1.default.PROD) {
@@ -145,9 +146,9 @@ class VersionBase {
             return '';
         }
         let response = '';
-        response += '\n\n\n### Dependencies\n';
+        response += '\n\n\n### Dependencies\n\n';
         if (!raw) {
-            response += '\n<details>\n';
+            response += '<details>\n';
             response += '<summary>';
         }
         let summary = [];
@@ -170,9 +171,9 @@ class VersionBase {
         const sumText = summary.join(',');
         response += sumText.charAt(0).toUpperCase() + sumText.slice(1) + ' packages';
         if (!raw) {
-            response += '</summary>\n';
+            response += '</summary>';
         }
-        response += body;
+        response += '\n' + body;
         if (!raw) {
             response += '\n\n</details>';
         }

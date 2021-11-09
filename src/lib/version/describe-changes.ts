@@ -15,7 +15,9 @@ export default class DescribeChanges extends VersionBase implements Command {
   public run(raw: boolean = false): string {
     const currentVersion = this._getLatestVersion();
 
-    this._ensureRightVersionIsDescribed(currentVersion);
+    if (currentVersion) {
+      this._ensureRightVersionIsDescribed(currentVersion);
+    }
 
     return this._getChangelogEntry(currentVersion, raw);
   }

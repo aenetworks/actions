@@ -95,7 +95,7 @@ export default class VersionBase {
 
     const packageJson = require(filePath);
 
-    packageJson.version = currentVersion.asStringWithoutPrefix();
+    packageJson.version = currentVersion;
     fs.writeFileSync(filePath, JSON.stringify(packageJson, null, 2));
   }
 
@@ -111,11 +111,11 @@ export default class VersionBase {
       .replace(/\(\[#\d+]\(.*?\)\)/g, '')
       .replace(/^#{1,3}/, '##');
 
-    // try {
-    return changelog + this._getDependenciesSection(currentVersion.asString(), raw);
-    // } catch (e) {
-    //   return changelog;
-    // }
+    try {
+      return changelog + this._getDependenciesSection(currentVersion.asString(), raw) + '\n';
+    } catch (e) {
+      return changelog + '\n';
+    }
   }
 
   protected _getReleaseTypeParam(): string {
@@ -178,10 +178,10 @@ export default class VersionBase {
 
     let response = '';
 
-    response += '\n\n\n### Dependencies\n';
+    response += '\n\n\n### Dependencies\n\n';
 
     if (!raw) {
-      response += '\n<details>\n';
+      response += '<details>\n';
       response += '<summary>';
     }
 
@@ -211,10 +211,10 @@ export default class VersionBase {
     response += sumText.charAt(0).toUpperCase() + sumText.slice(1) + ' packages';
 
     if (!raw) {
-      response += '</summary>\n';
+      response += '</summary>';
     }
 
-    response += body;
+    response += '\n' + body;
 
     if (!raw) {
       response += '\n\n</details>';
