@@ -41,7 +41,7 @@ class DescribeChanges extends version_base_1.default {
     run(raw = false) {
         const currentVersion = this._getLatestVersion();
         if (currentVersion) {
-            this._ensureRightVersionIsDescribed(currentVersion);
+            this._ensureRightVersionIsDescribed(currentVersion.asStringWithoutPrefix());
         }
         return this._getChangelogEntry(currentVersion, raw);
     }

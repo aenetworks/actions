@@ -86,7 +86,7 @@ export default class VersionBase {
     return tags[0];
   };
 
-  protected _ensureRightVersionIsDescribed(currentVersion: Version): void {
+  protected _ensureRightVersionIsDescribed(currentVersion: string): void {
     const filePath = path.join(process.cwd(), 'package.json');
 
     if (!fs.existsSync(filePath)) {
