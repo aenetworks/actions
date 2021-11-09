@@ -12,17 +12,19 @@ export default class DescribeChanges extends VersionBase implements Command {
    * Run command.
    */
   @logGroup('Describe changes')
-  public run(): string {
+  public run(raw: boolean = false): string {
     const currentVersion = this._getLatestVersion();
 
-    this._ensureRightVersionIsDescribed(currentVersion);
+    if (currentVersion) {
+      this._ensureRightVersionIsDescribed(currentVersion.asStringWithoutPrefix());
+    }
 
-    return this._getChangelogEntry();
+    return this._getChangelogEntry(currentVersion, raw);
   }
 
   @logGroup('Preview changelog')
   public previewChangelog(): void {
-    const changelog = this.run();
+    const changelog = this.run(true);
     const tempChangelog = changelog.replace(/compare\/(.*?)\.\.\.(.*?)\)/, 'compare/$1...master)');
 
     core.notice(tempChangelog);
