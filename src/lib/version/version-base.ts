@@ -185,23 +185,36 @@ export default class VersionBase {
       response += '<summary>';
     }
 
-    response += `Bump: ${upgraded.length}, add: ${added.length}, remove ${removed.length} packages.`;
+    let summary = [];
+    let body = '';
+
+    if (added.length) {
+      // @ts-ignore
+      summary.push(`add: ${added.length}`);
+      body += '\n' + added.join('\n');
+    }
+
+    if (upgraded.length) {
+      // @ts-ignore
+      summary.push(`bump: ${upgraded.length}`);
+      body += '\n' + upgraded.join('\n');
+    }
+
+    if (removed.length) {
+      // @ts-ignore
+      summary.push(`remove: ${removed.length}`);
+      body += '\n' + removed.join('\n');
+    }
+
+    const sumText = summary.join(',');
+
+    response += sumText.charAt(0).toUpperCase() + sumText.slice(1);
 
     if (!raw) {
       response += '</summary>\n';
     }
 
-    if (upgraded.length) {
-      response += '\n' + upgraded.join('\n');
-    }
-
-    if (added.length) {
-      response += '\n' + added.join('\n');
-    }
-
-    if (removed.length) {
-      response += '\n' + removed.join('\n');
-    }
+    response += body;
 
     if (!raw) {
       response += '\n\n</details>';
