@@ -157,18 +157,18 @@ export default class VersionBase {
 
         if (vNew !== vOld) {
           // @ts-ignore
-          upgraded.push(`* bumped \`${key}\` to ${vNew}`);
+          upgraded.push(`* bump \`${key}\` to ${vNew}`);
         }
       } else if (!(key in oldDeps)) {
         // @ts-ignore
-        added.push(`* added \`${key}\`@${getVer(newDeps[key])}`);
+        added.push(`* add \`${key}\`@${getVer(newDeps[key])}`);
       }
     }
 
     for (key in oldDeps) {
       if (!(key in newDeps)) {
         // @ts-ignore
-        removed.push(`* removed \`${key}\``);
+        removed.push(`* remove \`${key}\``);
       }
     }
 
@@ -181,14 +181,14 @@ export default class VersionBase {
     response += '\n\n\n### Dependencies\n';
 
     if (!raw) {
-      response += '<details>\n';
+      response += '\n<details>\n';
       response += '<summary>';
     }
 
-    response += `Bumped: ${upgraded.length}, added: ${added.length}, removed ${removed.length} packages.`;
+    response += `Bump: ${upgraded.length}, add: ${added.length}, remove ${removed.length} packages.`;
 
     if (!raw) {
-      response += '</summary>\n\n';
+      response += '</summary>\n';
     }
 
     if (upgraded.length) {
