@@ -17,7 +17,7 @@ export default class DescribeChanges extends VersionBase implements Command {
 
     this._ensureRightVersionIsDescribed(currentVersion);
 
-    return this._getChangelogEntry();
+    return this._getChangelogEntry(currentVersion);
   }
 
   @logGroup('Preview changelog')

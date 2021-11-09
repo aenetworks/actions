@@ -83,15 +83,21 @@ class VersionBase {
         packageJson.version = currentVersion.asStringWithoutPrefix();
         fs_1.default.writeFileSync(filePath, JSON.stringify(packageJson, null, 2));
     }
-    _getChangelogEntry() {
+    _getChangelogEntry(currentVersion) {
         const cmd = `npx standard-version --dry-run --silent ${this._getReleaseTypeParam()}`;
         const rawChangelog = (0, execShellCommand_1.default)({ cmd, silent: true });
         const changelogLines = rawChangelog.split('\n');
-        return changelogLines
+        const changelog = changelogLines
             .slice(2, changelogLines.length - 3)
             .join('\n')
             .replace(/\(\[#\d+]\(.*?\)\)/g, '')
             .replace(/^#{1,3}/, '##');
+        try {
+            return changelog + this._getDependenciesSection(currentVersion.toString());
+        }
+        catch (e) {
+            return changelog;
+        }
     }
     _getReleaseTypeParam() {
         if (this.releaseType !== releaseType_1.default.PROD) {
@@ -103,6 +109,53 @@ class VersionBase {
         const skipCommitParam = skipCommit ? '--skip.commit' : '';
         const cmd = `npx standard-version --silent --skip.changelog ${skipCommitParam} ${this._getReleaseTypeParam()}`;
         (0, execShellCommand_1.default)({ cmd, silent: true });
+    }
+    _getDependenciesSection(tag) {
+        let key;
+        const getVer = (v) => {
+            return v.replace(/^\D+/, '');
+        };
+        const old = (0, execShellCommand_1.default)({ cmd: `git show ${tag}:package.json` });
+        const oldDeps = JSON.parse(old).dependencies;
+        const newDeps = require('./package.json').dependencies;
+        const added = [];
+        const upgraded = [];
+        const deleted = [];
+        for (key in newDeps) {
+            if (key in oldDeps) {
+                const vNew = getVer(newDeps[key]);
+                const vOld = getVer(oldDeps[key]);
+                if (vNew !== vOld) {
+                    // @ts-ignore
+                    upgraded.push(`* upgraded \`${key}\` to ${vNew}`);
+                }
+            }
+            else if (!(key in oldDeps)) {
+                // @ts-ignore
+                added.push(`* added \`${key}\`@${getVer(newDeps[key])}`);
+            }
+        }
+        for (key in oldDeps) {
+            if (!(key in newDeps)) {
+                // @ts-ignore
+                deleted.push(`* deleted \`${key}\``);
+            }
+        }
+        if (!added.length && !upgraded.length && !deleted.length) {
+            return '';
+        }
+        let response = '';
+        response += '\n\n\n### Dependencies\n';
+        if (upgraded.length) {
+            response += '\n' + upgraded.join('\n');
+        }
+        if (added.length) {
+            response += '\n' + added.join('\n');
+        }
+        if (deleted.length) {
+            response += '\n' + deleted.join('\n');
+        }
+        return response;
     }
 }
 exports.default = VersionBase;

@@ -99,7 +99,7 @@ export default class VersionBase {
     fs.writeFileSync(filePath, JSON.stringify(packageJson, null, 2));
   }
 
-  protected _getChangelogEntry(): string {
+  protected _getChangelogEntry(currentVersion): string {
     const cmd = `npx standard-version --dry-run --silent ${this._getReleaseTypeParam()}`;
 
     const rawChangelog = execShellCommand({ cmd, silent: true });
@@ -111,7 +111,11 @@ export default class VersionBase {
       .replace(/\(\[#\d+]\(.*?\)\)/g, '')
       .replace(/^#{1,3}/, '##');
 
-    return changelog;
+    try {
+      return changelog + this._getDependenciesSection(currentVersion.toString())
+    } catch (e) {
+      return changelog;
+    }
   }
 
   protected _getReleaseTypeParam(): string {

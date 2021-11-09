@@ -41,7 +41,7 @@ class DescribeChanges extends version_base_1.default {
     run() {
         const currentVersion = this._getLatestVersion();
         this._ensureRightVersionIsDescribed(currentVersion);
-        return this._getChangelogEntry();
+        return this._getChangelogEntry(currentVersion);
     }
     previewChangelog() {
         const changelog = this.run();
