@@ -1,6 +1,6 @@
 FROM node:14
 
-RUN apt-get install git
+RUN apt-get install git libnss3
 
 COPY . /action
 
