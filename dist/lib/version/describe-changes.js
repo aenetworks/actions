@@ -38,13 +38,13 @@ class DescribeChanges extends version_base_1.default {
     /**
      * Run command.
      */
-    run() {
+    run(raw = false) {
         const currentVersion = this._getLatestVersion();
         this._ensureRightVersionIsDescribed(currentVersion);
-        return this._getChangelogEntry(currentVersion);
+        return this._getChangelogEntry(currentVersion, raw);
     }
     previewChangelog() {
-        const changelog = this.run();
+        const changelog = this.run(true);
         const tempChangelog = changelog.replace(/compare\/(.*?)\.\.\.(.*?)\)/, 'compare/$1...master)');
         core.notice(tempChangelog);
     }

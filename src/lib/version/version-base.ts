@@ -99,7 +99,7 @@ export default class VersionBase {
     fs.writeFileSync(filePath, JSON.stringify(packageJson, null, 2));
   }
 
-  protected _getChangelogEntry(currentVersion): string {
+  protected _getChangelogEntry(currentVersion: Version, raw: boolean): string {
     const cmd = `npx standard-version --dry-run --silent ${this._getReleaseTypeParam()}`;
 
     const rawChangelog = execShellCommand({ cmd, silent: true });
@@ -112,7 +112,7 @@ export default class VersionBase {
       .replace(/^#{1,3}/, '##');
 
     // try {
-    return changelog + this._getDependenciesSection(currentVersion.asString());
+    return changelog + this._getDependenciesSection(currentVersion.asString(), false);
     // } catch (e) {
     //   return changelog;
     // }
@@ -134,7 +134,7 @@ export default class VersionBase {
     execShellCommand({ cmd, silent: true });
   }
 
-  private _getDependenciesSection(tag): string {
+  private _getDependenciesSection(tag: string, raw: boolean): string {
     let key;
     const getVer = (v) => {
       return v.replace(/^\D+/, '');
@@ -148,7 +148,7 @@ export default class VersionBase {
 
     const added = [];
     const upgraded = [];
-    const deleted = [];
+    const removed = [];
 
     for (key in newDeps) {
       if (key in oldDeps) {
@@ -157,7 +157,7 @@ export default class VersionBase {
 
         if (vNew !== vOld) {
           // @ts-ignore
-          upgraded.push(`* upgraded \`${key}\` to ${vNew}`);
+          upgraded.push(`* bumped \`${key}\` to ${vNew}`);
         }
       } else if (!(key in oldDeps)) {
         // @ts-ignore
@@ -168,17 +168,28 @@ export default class VersionBase {
     for (key in oldDeps) {
       if (!(key in newDeps)) {
         // @ts-ignore
-        deleted.push(`* deleted \`${key}\``);
+        removed.push(`* removed \`${key}\``);
       }
     }
 
-    if (!added.length && !upgraded.length && !deleted.length) {
+    if (!added.length && !upgraded.length && !removed.length) {
       return '';
     }
 
     let response = '';
 
     response += '\n\n\n### Dependencies\n';
+
+    if (!raw) {
+      response += '<details>\n';
+      response += '<summary>';
+    }
+
+    response += `Bumped: ${upgraded.length}, added: ${added.length}, removed ${removed.length} packages.`;
+
+    if (!raw) {
+      response += '</summary>\n\n';
+    }
 
     if (upgraded.length) {
       response += '\n' + upgraded.join('\n');
@@ -188,8 +199,12 @@ export default class VersionBase {
       response += '\n' + added.join('\n');
     }
 
-    if (deleted.length) {
-      response += '\n' + deleted.join('\n');
+    if (removed.length) {
+      response += '\n' + removed.join('\n');
+    }
+
+    if (!raw) {
+      response += '\n\n</details>';
     }
 
     return response;

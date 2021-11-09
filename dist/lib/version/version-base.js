@@ -83,7 +83,7 @@ class VersionBase {
         packageJson.version = currentVersion.asStringWithoutPrefix();
         fs_1.default.writeFileSync(filePath, JSON.stringify(packageJson, null, 2));
     }
-    _getChangelogEntry(currentVersion) {
+    _getChangelogEntry(currentVersion, raw) {
         const cmd = `npx standard-version --dry-run --silent ${this._getReleaseTypeParam()}`;
         const rawChangelog = (0, execShellCommand_1.default)({ cmd, silent: true });
         const changelogLines = rawChangelog.split('\n');
@@ -93,7 +93,7 @@ class VersionBase {
             .replace(/\(\[#\d+]\(.*?\)\)/g, '')
             .replace(/^#{1,3}/, '##');
         // try {
-        return changelog + this._getDependenciesSection(currentVersion.asString());
+        return changelog + this._getDependenciesSection(currentVersion.asString(), false);
         // } catch (e) {
         //   return changelog;
         // }
@@ -109,7 +109,7 @@ class VersionBase {
         const cmd = `npx standard-version --silent --skip.changelog ${skipCommitParam} ${this._getReleaseTypeParam()}`;
         (0, execShellCommand_1.default)({ cmd, silent: true });
     }
-    _getDependenciesSection(tag) {
+    _getDependenciesSection(tag, raw) {
         let key;
         const getVer = (v) => {
             return v.replace(/^\D+/, '');
@@ -120,14 +120,14 @@ class VersionBase {
         const newDeps = require(filePath).dependencies;
         const added = [];
         const upgraded = [];
-        const deleted = [];
+        const removed = [];
         for (key in newDeps) {
             if (key in oldDeps) {
                 const vNew = getVer(newDeps[key]);
                 const vOld = getVer(oldDeps[key]);
                 if (vNew !== vOld) {
                     // @ts-ignore
-                    upgraded.push(`* upgraded \`${key}\` to ${vNew}`);
+                    upgraded.push(`* bumped \`${key}\` to ${vNew}`);
                 }
             }
             else if (!(key in oldDeps)) {
@@ -138,22 +138,33 @@ class VersionBase {
         for (key in oldDeps) {
             if (!(key in newDeps)) {
                 // @ts-ignore
-                deleted.push(`* deleted \`${key}\``);
+                removed.push(`* removed \`${key}\``);
             }
         }
-        if (!added.length && !upgraded.length && !deleted.length) {
+        if (!added.length && !upgraded.length && !removed.length) {
             return '';
         }
         let response = '';
         response += '\n\n\n### Dependencies\n';
+        if (!raw) {
+            response += '<details>\n';
+            response += '<summary>';
+        }
+        response += `Bumped: ${upgraded.length}, added: ${added.length}, removed ${removed.length} packages.`;
+        if (!raw) {
+            response += '</summary>\n\n';
+        }
         if (upgraded.length) {
             response += '\n' + upgraded.join('\n');
         }
         if (added.length) {
             response += '\n' + added.join('\n');
         }
-        if (deleted.length) {
-            response += '\n' + deleted.join('\n');
+        if (removed.length) {
+            response += '\n' + removed.join('\n');
+        }
+        if (!raw) {
+            response += '\n\n</details>';
         }
         return response;
     }
