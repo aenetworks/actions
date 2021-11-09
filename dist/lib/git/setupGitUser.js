@@ -1,0 +1,74 @@
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const core = __importStar(require("@actions/core"));
+const decorators_1 = require("../decorators");
+const execShellCommand_1 = __importDefault(require("../execShellCommand"));
+class SetupGitUser {
+    /**
+     * Create SetupGitUser command.
+     *
+     * @param {string} name - User name.
+     * @param {string} email - User email.
+     */
+    constructor(name, email) {
+        this.name = name;
+        this.email = email;
+        this._setGitUserName = (name) => {
+            core.debug(`Name: ${name}`);
+            const cmd = `git config user.name "${name}"`;
+            const errorMessage = `Cannot set git user.name=${name}`;
+            (0, execShellCommand_1.default)({
+                cmd,
+                errorMessage,
+            });
+        };
+        this._setGitUserEmail = (email) => {
+            core.debug(`Email: ${email}`);
+            const cmd = `git config user.email "<${email}>"`;
+            const errorMessage = `Cannot set git user.email=${email}`;
+            (0, execShellCommand_1.default)({ cmd, errorMessage });
+        };
+    }
+    /**
+     * Run command.
+     *
+     * @throws {ShellCommandExecutionError}
+     */
+    run() {
+        core.info(`Setup git user ${this.name}`);
+        this._setGitUserName(this.name);
+        this._setGitUserEmail(this.email);
+    }
+}
+__decorate([
+    (0, decorators_1.logGroup)('Setup bot user')
+], SetupGitUser.prototype, "run", null);
+exports.default = SetupGitUser;
