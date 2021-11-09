@@ -141,7 +141,7 @@ export default class VersionBase {
     };
 
     const filePath = path.join(process.cwd(), 'package.json');
-    const old = execShellCommand({ cmd: `git show ${tag}:package.json` });
+    const old = execShellCommand({ cmd: `git show ${tag}:${filePath}` });
 
     const oldDeps = JSON.parse(old).dependencies;
     const newDeps = require(filePath).dependencies;
