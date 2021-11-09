@@ -93,7 +93,7 @@ class VersionBase {
             .replace(/\(\[#\d+]\(.*?\)\)/g, '')
             .replace(/^#{1,3}/, '##');
         // try {
-        return changelog + this._getDependenciesSection(currentVersion.asString(), false);
+        return changelog + this._getDependenciesSection(currentVersion.asString(), raw);
         // } catch (e) {
         //   return changelog;
         // }
@@ -168,7 +168,7 @@ class VersionBase {
             body += '\n' + removed.join('\n');
         }
         const sumText = summary.join(',');
-        response += sumText.charAt(0).toUpperCase() + sumText.slice(1);
+        response += sumText.charAt(0).toUpperCase() + sumText.slice(1) + ' packages';
         if (!raw) {
             response += '</summary>\n';
         }

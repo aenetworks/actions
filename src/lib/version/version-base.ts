@@ -112,7 +112,7 @@ export default class VersionBase {
       .replace(/^#{1,3}/, '##');
 
     // try {
-    return changelog + this._getDependenciesSection(currentVersion.asString(), false);
+    return changelog + this._getDependenciesSection(currentVersion.asString(), raw);
     // } catch (e) {
     //   return changelog;
     // }
@@ -208,7 +208,7 @@ export default class VersionBase {
 
     const sumText = summary.join(',');
 
-    response += sumText.charAt(0).toUpperCase() + sumText.slice(1);
+    response += sumText.charAt(0).toUpperCase() + sumText.slice(1) + ' packages';
 
     if (!raw) {
       response += '</summary>\n';
