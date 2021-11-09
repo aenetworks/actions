@@ -112,7 +112,7 @@ export default class VersionBase {
       .replace(/^#{1,3}/, '##');
 
     // try {
-    return changelog + this._getDependenciesSection(currentVersion.toString())
+    return changelog + this._getDependenciesSection(currentVersion.asString());
     // } catch (e) {
     //   return changelog;
     // }
@@ -141,7 +141,7 @@ export default class VersionBase {
     };
 
     const filePath = path.join(process.cwd(), 'package.json');
-    const old = execShellCommand({ cmd: `git show ${tag}:${filePath}` });
+    const old = execShellCommand({ cmd: `git show ${tag}:./package.json` });
 
     const oldDeps = JSON.parse(old).dependencies;
     const newDeps = require(filePath).dependencies;

@@ -93,7 +93,7 @@ class VersionBase {
             .replace(/\(\[#\d+]\(.*?\)\)/g, '')
             .replace(/^#{1,3}/, '##');
         // try {
-        return changelog + this._getDependenciesSection(currentVersion.toString());
+        return changelog + this._getDependenciesSection(currentVersion.asString());
         // } catch (e) {
         //   return changelog;
         // }
@@ -115,7 +115,7 @@ class VersionBase {
             return v.replace(/^\D+/, '');
         };
         const filePath = path_1.default.join(process.cwd(), 'package.json');
-        const old = (0, execShellCommand_1.default)({ cmd: `git show ${tag}:${filePath}` });
+        const old = (0, execShellCommand_1.default)({ cmd: `git show ${tag}:./package.json` });
         const oldDeps = JSON.parse(old).dependencies;
         const newDeps = require(filePath).dependencies;
         const added = [];
