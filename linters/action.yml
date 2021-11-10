@@ -14,6 +14,6 @@ inputs:
     required: false
 runs:
   using: 'docker'
-  image: '../Dockerfile'
+  image: 'docker://ghcr.io/aenetworks/actions:latest'
   args: ['node', '/action/dist/linters.js']
 
