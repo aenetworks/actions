@@ -3,6 +3,6 @@ description: 'test'
 author: 'Pawel Drozd'
 runs:
   using: 'docker'
-  image: '../../Dockerfile'
+  image: 'docker://ghcr.io/aenetworks/actions:latest'
   args: ['node', '/action/dist/scraps/install-dependencies.js']
 
