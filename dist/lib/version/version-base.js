@@ -3,56 +3,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Version = void 0;
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 const execShellCommand_1 = __importDefault(require("../execShellCommand"));
 const releaseType_1 = __importDefault(require("../releaseType"));
-class Version {
-    constructor(major = 0, minor = 0, patch = 0, original = '') {
-        this.major = major;
-        this.minor = minor;
-        this.patch = patch;
-        this.original = original;
-    }
-    static parse(versionString) {
-        const match = versionString.match(Version.validVersionRegex);
-        if (!match) {
-            // todo error
-            throw new Error('invalid version');
-        }
-        const { major, minor, patch } = match.groups;
-        return new Version(Number(major), Number(minor), Number(patch), versionString);
-    }
-    static isValidVersion(versionString) {
-        return Version.validVersionRegex.test(versionString);
-    }
-    static sortAsc(first, second) {
-        const comparedMajor = first.major - second.major;
-        if (comparedMajor !== 0) {
-            return comparedMajor;
-        }
-        const comparedMinor = first.minor - second.minor;
-        if (comparedMinor !== 0) {
-            return comparedMinor;
-        }
-        return first.patch - second.patch;
-    }
-    static sortDesc(first, second) {
-        return -1 * Version.sortAsc(first, second);
-    }
-    asString() {
-        if (this.original) {
-            return this.original;
-        }
-        return `v${this.major}.${this.minor}.${this.patch}`;
-    }
-    asStringWithoutPrefix() {
-        return this.asString().slice(1);
-    }
-}
-exports.Version = Version;
-Version.validVersionRegex = /v(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)/;
+const version_1 = __importDefault(require("./version"));
 class VersionBase {
     /**
      * Constructs VersionBase.
@@ -68,9 +23,9 @@ class VersionBase {
             const tags = tagsList
                 .split('\n')
                 .map((tag) => tag.trim())
-                .filter((tag) => Version.isValidVersion(tag))
-                .map((tag) => Version.parse(tag))
-                .sort(Version.sortDesc);
+                .filter((tag) => version_1.default.isValidVersion(tag))
+                .map((tag) => version_1.default.parse(tag))
+                .sort(version_1.default.sortDesc);
             return tags[0];
         };
     }
