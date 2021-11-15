@@ -19,10 +19,14 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.shouldUseYarn = void 0;
+exports.isLernaRepo = exports.shouldUseYarn = void 0;
 const fs = __importStar(require("fs"));
 const path = __importStar(require("path"));
 const shouldUseYarn = () => {
     return fs.existsSync(path.resolve(process.cwd(), 'yarn.lock'));
 };
 exports.shouldUseYarn = shouldUseYarn;
+const isLernaRepo = () => {
+    return fs.existsSync(path.resolve(process.cwd(), 'lerna.json'));
+};
+exports.isLernaRepo = isLernaRepo;
