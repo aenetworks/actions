@@ -65,6 +65,14 @@ class InstallNpmDependencies {
         else {
             this._npmInstall();
         }
+        if (utils.isLernaRepo()) {
+            this._bootstrapLerna();
+        }
+    }
+    _bootstrapLerna() {
+        core.info('Bootstrapping lerna');
+        const cmd = 'npx lerna bootstrap';
+        (0, execShellCommand_1.default)({ cmd, errorMessage });
     }
 }
 __decorate([

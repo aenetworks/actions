@@ -28,6 +28,10 @@ export default class InstallNpmDependencies implements Command {
     } else {
       this._npmInstall();
     }
+
+    if (utils.isLernaRepo()) {
+      this._bootstrapLerna();
+    }
   }
 
   private _yarnInstall = () => {
@@ -45,4 +49,12 @@ export default class InstallNpmDependencies implements Command {
 
     execShellCommand({ cmd, errorMessage });
   };
+
+  private _bootstrapLerna() {
+    core.info('Bootstrapping lerna');
+
+    const cmd = 'npx lerna bootstrap';
+
+    execShellCommand({ cmd, errorMessage });
+  }
 }

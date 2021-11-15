@@ -25,6 +25,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const core = __importStar(require("@actions/core"));
 const path = __importStar(require("path"));
 const execShellCommand_1 = __importDefault(require("../execShellCommand"));
+const utils = __importStar(require("./utils"));
 /**
  * Run npm script command.
  *
@@ -40,7 +41,7 @@ class RunNpmScript {
     constructor(script, useStdout = false) {
         this.script = script;
         this.useStdout = useStdout;
-        this.cmd = `npm run ${script}`;
+        this.cmd = utils.isLernaRepo() ? `npx lerna run ${script}` : `npm run ${script}`;
     }
     /**
      * Run command.
