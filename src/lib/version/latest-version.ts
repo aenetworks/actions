@@ -1,6 +1,7 @@
 import ReleaseType from '../releaseType';
 import { Command } from '../seedWorks';
-import VersionBase, { Version } from './version-base';
+import Version from './version';
+import VersionBase from './version-base';
 
 /**
  * Describe changes based on Conventional Commits.
