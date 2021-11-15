@@ -17,8 +17,6 @@ export default class VersionVo {
 
     const { major, minor, patch } = match.groups as { major: string; minor: string; patch: string };
 
-    console.log(major, minor, patch);
-
     return new VersionVo(Number(major), Number(minor), Number(patch), versionString);
   }
 

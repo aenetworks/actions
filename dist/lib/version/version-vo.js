@@ -14,7 +14,6 @@ class VersionVo {
             throw new Error('invalid version');
         }
         const { major, minor, patch } = match.groups;
-        console.log(major, minor, patch);
         return new VersionVo(Number(major), Number(minor), Number(patch), versionString);
     }
     static isValidVersion(versionString) {

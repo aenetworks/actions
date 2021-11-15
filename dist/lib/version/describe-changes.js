@@ -40,6 +40,7 @@ class DescribeChanges extends version_base_1.default {
      */
     run(raw = false) {
         const currentVersion = this._getLatestVersion();
+        console.log(currentVersion.asString());
         if (currentVersion) {
             this._ensureRightVersionIsDescribed(currentVersion.asStringWithoutPrefix());
         }
@@ -47,8 +48,12 @@ class DescribeChanges extends version_base_1.default {
     }
     previewChangelog() {
         const changelog = this.run(true);
-        const tempChangelog = changelog.replace(/compare\/(.*?)\.\.\.(.*?)\)/, 'compare/$1...master)');
-        core.notice(tempChangelog);
+        console.log(changelog);
+        try {
+            const tempChangelog = changelog.replace(/compare\/(.*?)\.\.\.(.*?)\)/, 'compare/$1...master)');
+            core.notice(tempChangelog);
+        }
+        catch (e) { }
     }
 }
 __decorate([
