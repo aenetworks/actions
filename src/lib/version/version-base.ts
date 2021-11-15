@@ -3,7 +3,7 @@ import path from 'path';
 
 import execShellCommand from '../execShellCommand';
 import ReleaseType from '../releaseType';
-import Version from './version';
+import VersionVo from './version-vo';
 
 export default class VersionBase {
   /**
@@ -13,7 +13,7 @@ export default class VersionBase {
    */
   constructor(private readonly releaseType: ReleaseType) {}
 
-  protected _getLatestVersion = (): Version => {
+  protected _getLatestVersion = (): VersionVo => {
     const cmd = 'git tag -l';
     const errorMessage = 'Cannot get current version';
 
@@ -21,9 +21,9 @@ export default class VersionBase {
     const tags = tagsList
       .split('\n')
       .map((tag) => tag.trim())
-      .filter((tag) => Version.isValidVersion(tag))
-      .map((tag) => Version.parse(tag))
-      .sort(Version.sortDesc);
+      .filter((tag) => VersionVo.isValidVersion(tag))
+      .map((tag) => VersionVo.parse(tag))
+      .sort(VersionVo.sortDesc);
 
     return tags[0];
   };
@@ -41,7 +41,7 @@ export default class VersionBase {
     fs.writeFileSync(filePath, JSON.stringify(packageJson, null, 2));
   }
 
-  protected _getChangelogEntry(currentVersion: Version, raw: boolean): string {
+  protected _getChangelogEntry(currentVersion: VersionVo, raw: boolean): string {
     const cmd = `npx standard-version --dry-run --silent ${this._getReleaseTypeParam()}`;
 
     const rawChangelog = execShellCommand({ cmd, silent: true });

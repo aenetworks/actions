@@ -1,4 +1,4 @@
-export default class Version {
+export default class VersionVo {
   static readonly validVersionRegex = /v?(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)/;
   constructor(
     public readonly major: number = 0,
@@ -7,8 +7,8 @@ export default class Version {
     public readonly original: string = ''
   ) {}
 
-  static parse(versionString: string): Version {
-    const match = versionString.match(Version.validVersionRegex);
+  static parse(versionString: string): VersionVo {
+    const match = versionString.match(VersionVo.validVersionRegex);
 
     if (!match) {
       // todo error
@@ -17,14 +17,16 @@ export default class Version {
 
     const { major, minor, patch } = match.groups as { major: string; minor: string; patch: string };
 
-    return new Version(Number(major), Number(minor), Number(patch), versionString);
+    console.log(major, minor, patch);
+
+    return new VersionVo(Number(major), Number(minor), Number(patch), versionString);
   }
 
   static isValidVersion(versionString: string): boolean {
-    return Version.validVersionRegex.test(versionString);
+    return VersionVo.validVersionRegex.test(versionString);
   }
 
-  static sortAsc(first: Version, second: Version): number {
+  static sortAsc(first: VersionVo, second: VersionVo): number {
     const comparedMajor = first.major - second.major;
 
     if (comparedMajor !== 0) {
@@ -41,7 +43,7 @@ export default class Version {
   }
 
   static sortDesc(first, second): number {
-    return -1 * Version.sortAsc(first, second);
+    return -1 * VersionVo.sortAsc(first, second);
   }
 
   asString(): string {

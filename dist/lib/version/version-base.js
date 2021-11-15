@@ -7,7 +7,7 @@ const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 const execShellCommand_1 = __importDefault(require("../execShellCommand"));
 const releaseType_1 = __importDefault(require("../releaseType"));
-const version_1 = __importDefault(require("./version"));
+const version_vo_1 = __importDefault(require("./version-vo"));
 class VersionBase {
     /**
      * Constructs VersionBase.
@@ -23,9 +23,9 @@ class VersionBase {
             const tags = tagsList
                 .split('\n')
                 .map((tag) => tag.trim())
-                .filter((tag) => version_1.default.isValidVersion(tag))
-                .map((tag) => version_1.default.parse(tag))
-                .sort(version_1.default.sortDesc);
+                .filter((tag) => version_vo_1.default.isValidVersion(tag))
+                .map((tag) => version_vo_1.default.parse(tag))
+                .sort(version_vo_1.default.sortDesc);
             return tags[0];
         };
     }

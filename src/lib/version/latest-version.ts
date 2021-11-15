@@ -1,7 +1,7 @@
 import ReleaseType from '../releaseType';
 import { Command } from '../seedWorks';
-import Version from './version';
 import VersionBase from './version-base';
+import VersionVo from './version-vo';
 
 /**
  * Describe changes based on Conventional Commits.
@@ -14,7 +14,7 @@ export default class LatestVersion extends VersionBase implements Command {
   /**
    * Run command.
    */
-  public run(): Version {
+  public run(): VersionVo {
     return this._getLatestVersion();
   }
 }

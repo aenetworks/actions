@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-class Version {
+class VersionVo {
     constructor(major = 0, minor = 0, patch = 0, original = '') {
         this.major = major;
         this.minor = minor;
@@ -8,16 +8,17 @@ class Version {
         this.original = original;
     }
     static parse(versionString) {
-        const match = versionString.match(Version.validVersionRegex);
+        const match = versionString.match(VersionVo.validVersionRegex);
         if (!match) {
             // todo error
             throw new Error('invalid version');
         }
         const { major, minor, patch } = match.groups;
-        return new Version(Number(major), Number(minor), Number(patch), versionString);
+        console.log(major, minor, patch);
+        return new VersionVo(Number(major), Number(minor), Number(patch), versionString);
     }
     static isValidVersion(versionString) {
-        return Version.validVersionRegex.test(versionString);
+        return VersionVo.validVersionRegex.test(versionString);
     }
     static sortAsc(first, second) {
         const comparedMajor = first.major - second.major;
@@ -31,7 +32,7 @@ class Version {
         return first.patch - second.patch;
     }
     static sortDesc(first, second) {
-        return -1 * Version.sortAsc(first, second);
+        return -1 * VersionVo.sortAsc(first, second);
     }
     asString() {
         if (this.original) {
@@ -43,5 +44,5 @@ class Version {
         return this.asString().slice(1);
     }
 }
-exports.default = Version;
-Version.validVersionRegex = /v?(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)/;
+exports.default = VersionVo;
+VersionVo.validVersionRegex = /v?(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)/;
