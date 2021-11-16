@@ -53,7 +53,7 @@ export default class InstallNpmDependencies implements Command {
   private _bootstrapLerna() {
     core.info('Bootstrapping lerna');
 
-    const cmd = 'npx lerna bootstrap';
+    const cmd = 'npx lerna bootstrap --hoist';
 
     execShellCommand({ cmd, errorMessage });
   }
