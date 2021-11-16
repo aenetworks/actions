@@ -20,7 +20,7 @@ export default class RunNpmScript implements Command {
    * @param {boolean} [useStdout=false] - Should include Stdout as error description..
    */
   constructor(private readonly script: string, private readonly useStdout: boolean = false) {
-    this.cmd = utils.isLernaRepo() ? `npx lerna run ${script}` : `npm run ${script}`;
+    this.cmd = utils.isLernaRepo() ? `npx lerna run ${script} --parallel --no-bail` : `npm run ${script}`;
   }
 
   /**
