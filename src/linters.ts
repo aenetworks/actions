@@ -13,16 +13,27 @@ async function run() {
     const ref = inputs.getRef();
     const npmAuthToken = inputs.getNpmAuthToken();
 
-    const lintersCommand = new RunNpmScript('lint', true);
+    const preLintCommand = new RunNpmScript('prelint', true);
+    const lintCommand = new RunNpmScript('lint', true);
+    const postLintCommand = new RunNpmScript('postlint', true);
 
     new CloneRepository(repository, githubToken, ref).run();
 
-    if (!lintersCommand.hasScript()) {
+    if (!lintCommand.hasScript()) {
       core.notice('Linters job skipped, because script "lint" does not exists in package.json');
     } else {
       new SetupNpmRegistry(npmAuthToken).run();
       new InstallDependencies().run();
-      lintersCommand.run();
+
+      if (preLintCommand.hasScript()) {
+        preLintCommand.run();
+      }
+
+      lintCommand.run();
+
+      if (postLintCommand.hasScript()) {
+        postLintCommand.run();
+      }
     }
   } catch (error) {
     // @ts-ignore

@@ -3,7 +3,6 @@ import * as path from 'path';
 
 import execShellCommand from '../execShellCommand';
 import { Command } from '../seedWorks';
-import * as utils from './utils';
 
 /**
  * Run npm script command.
@@ -20,7 +19,7 @@ export default class RunNpmScript implements Command {
    * @param {boolean} [useStdout=false] - Should include Stdout as error description..
    */
   constructor(private readonly script: string, private readonly useStdout: boolean = false) {
-    this.cmd = utils.isLernaRepo() ? `npx lerna run ${script} --parallel --no-bail` : `npm run ${script}`;
+    this.cmd = `npm run ${script}`;
   }
 
   /**
@@ -29,15 +28,11 @@ export default class RunNpmScript implements Command {
    * @throws {ShellCommandExecutionError}
    */
   public run(): void {
-    core.info(`Running: '${this.cmd}'`);
+    core.info(`Running: '${this.script}'`);
     execShellCommand({ cmd: this.cmd, useStdout: this.useStdout });
   }
 
   public hasScript(): boolean {
-    if (utils.isLernaRepo()) {
-      return true;
-    }
-
     const { scripts } = require(path.join(process.cwd(), 'package.json'));
 
     return Object.keys(scripts).includes(this.script);

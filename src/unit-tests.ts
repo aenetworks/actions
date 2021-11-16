@@ -13,7 +13,9 @@ async function run() {
     const ref = inputs.getRef();
     const npmAuthToken = inputs.getNpmAuthToken();
 
+    const preUnitTestsCommand = new RunNpmScript('pretest');
     const unitTestsCommand = new RunNpmScript('test');
+    const postUnitTestsCommand = new RunNpmScript('posttest');
 
     new CloneRepository(repository, githubToken, ref).run();
 
@@ -22,7 +24,16 @@ async function run() {
     } else {
       new SetupNpmRegistry(npmAuthToken).run();
       new InstallDependencies().run();
+
+      if (preUnitTestsCommand.hasScript()) {
+        preUnitTestsCommand.run();
+      }
+
       unitTestsCommand.run();
+
+      if (postUnitTestsCommand.hasScript()) {
+        postUnitTestsCommand.run();
+      }
     }
   } catch (error) {
     // @ts-ignore
