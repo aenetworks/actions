@@ -34,6 +34,10 @@ export default class RunNpmScript implements Command {
   }
 
   public hasScript(): boolean {
+    if (utils.isLernaRepo()) {
+      return true;
+    }
+
     const { scripts } = require(path.join(process.cwd(), 'package.json'));
 
     return Object.keys(scripts).includes(this.script);
