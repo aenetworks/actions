@@ -32,6 +32,8 @@ jobs:
           password: ${{ secrets.GPR_AUTH_TOKEN }}
       - name: Build docker image
         run: |
+          yarn install --frozen-lockfile
+          yarn build
           docker build -t ghcr.io/aenetworks/actions:latest .
           docker push ghcr.io/aenetworks/actions:latest
 
