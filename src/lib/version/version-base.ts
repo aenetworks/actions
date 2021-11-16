@@ -44,18 +44,39 @@ export default class VersionBase {
   protected _getChangelogEntry(currentVersion: VersionVo, raw: boolean): string {
     const cmd = `npx standard-version --dry-run --silent ${this._getReleaseTypeParam()}`;
 
-    const rawChangelog = execShellCommand({ cmd, silent: true });
-    const changelogLines = rawChangelog.split('\n');
-
-    const changelog = changelogLines
-      .slice(2, changelogLines.length - 3)
-      .join('\n')
-      .replace(/\(\[#\d+]\(.*?\)\)/g, '')
-      .replace(/^#{1,3}/, '##');
+    let rawChangelog = '';
 
     try {
+      rawChangelog = execShellCommand({ cmd, silent: true });
+    } catch (e) {
+      // @ts-ignore
+      console.error('standard version error' + e.message);
+    }
+
+    const changelogLines = rawChangelog.split('\n');
+
+    let changelog = '';
+
+    try {
+      console.log('generating changelog');
+      changelog = changelogLines
+        .slice(2, changelogLines.length - 3)
+        .join('\n')
+        .replace(/\(\[#\d+]\(.*?\)\)/g, '')
+        .replace(/^#{1,3}/, '##');
+    } catch (e) {
+      // @ts-ignore
+      console.warn('Generate changelog error' + e.message);
+    }
+
+    try {
+      console.log('generating dependencies');
+
       return changelog + this._getDependenciesSection(currentVersion.asString(), raw) + '\n';
     } catch (e) {
+      // @ts-ignore
+      console.warn('describe dependencies error' + e.message);
+
       return changelog + '\n';
     }
   }
