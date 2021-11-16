@@ -29,7 +29,7 @@ export default class RunNpmScript implements Command {
    * @throws {ShellCommandExecutionError}
    */
   public run(): void {
-    core.info(`Running npm script: '${this.script}'`);
+    core.info(`Running: '${this.cmd}'`);
     execShellCommand({ cmd: this.cmd, useStdout: this.useStdout });
   }
 
