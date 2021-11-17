@@ -6,8 +6,9 @@
   "scripts": {
     "clear": "rimraf dist/*",
     "build": "npm run clear && tsc",
-    "lint": "eslint . && tsc --noEmit",
-    "lint:fix": "eslint --fix . && tsc --noEmit"
+    "lint": "npx eslint . && tsc --noEmit",
+    "lint:fix": "npx eslint --fix . && tsc --noEmit",
+    "test": "npx jest"
   },
   "repository": {
     "type": "git",
@@ -46,6 +47,7 @@
   },
   "prettier": "@aenetworks/eslint-plugin/prettier",
   "jest": {
-    "preset": "ts-jest"
+    "preset": "ts-jest",
+    "testRegex": "(/__tests__/(?!__data__).*|(\\.|/)(test|spec))\\.[jt]sx?$"
   }
 }

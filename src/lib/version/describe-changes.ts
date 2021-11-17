@@ -35,12 +35,6 @@ export default class DescribeChanges extends VersionBase implements Command {
       this._ensureThereIsLatestPrefixedTag(currentVersion);
     }
 
-    console.log(
-      currentVersion?.original,
-      currentVersion?.asStringWithtPrefix(),
-      currentVersion?.asStringWithoutPrefix()
-    );
-
     return this._getChangelogEntry(currentVersion, raw);
   }
 }

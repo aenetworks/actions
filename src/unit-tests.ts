@@ -1,5 +1,6 @@
 import * as core from '@actions/core';
 
+import { FailedJestTestsHandler } from './lib/errorHandlers';
 import { CloneRepository } from './lib/git';
 import Inputs from './lib/inputs';
 import { InstallDependencies, RunNpmScript, SetupNpmRegistry } from './lib/node';
@@ -36,8 +37,12 @@ async function run() {
       }
     }
   } catch (error) {
+    const failedJestTests = FailedJestTestsHandler.handle(error as Error);
+
+    const errorToReport = failedJestTests ? failedJestTests : error;
+
     // @ts-ignore
-    core.setFailed(error);
+    core.setFailed(errorToReport);
   }
 }
 
