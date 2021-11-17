@@ -49,10 +49,14 @@ export default class VersionVo {
       return this.original;
     }
 
+    return this.asStringWithtPrefix();
+  }
+
+  asStringWithtPrefix(): string {
     return `v${this.major}.${this.minor}.${this.patch}`;
   }
 
   asStringWithoutPrefix(): string {
-    return this.asString().slice(1);
+    return `${this.major}.${this.minor}.${this.patch}`;
   }
 }
