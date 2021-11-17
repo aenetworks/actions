@@ -1,5 +1,6 @@
 import * as core from '@actions/core';
 
+import { FailedEslintChecksHandler } from './lib/errorHandlers';
 import { CloneRepository } from './lib/git';
 import Inputs from './lib/inputs';
 import { InstallDependencies, RunNpmScript, SetupNpmRegistry } from './lib/node';
@@ -36,8 +37,12 @@ async function run() {
       }
     }
   } catch (error) {
+    const failedEslintChecks = FailedEslintChecksHandler.handle(error as Error);
+
+    const errorToReport = failedEslintChecks ? failedEslintChecks : error;
+
     // @ts-ignore
-    core.setFailed(error);
+    core.setFailed(errorToReport);
   }
 }
 

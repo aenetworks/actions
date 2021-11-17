@@ -1,6 +1,41 @@
 import { ShellCommandExecutionError } from '../../../execShellCommand';
 
-export const MONOREPO_FAILED = {
+export const SINGLE = {
+  error: new ShellCommandExecutionError(`FAIL src/lib/errorHandlers/__tests__/__data__/failedJestTestHandler.data.ts
+  ● Test suite failed to run
+
+    Your test suite must contain at least one test.
+
+      at onResult (node_modules/@jest/core/build/TestScheduler.js:175:18)
+      at node_modules/@jest/core/build/TestScheduler.js:316:17
+      at node_modules/emittery/index.js:260:13
+          at Array.map (<anonymous>)
+      at Emittery.emit (node_modules/emittery/index.js:258:23)
+
+PASS src/lib/version/__tests__/version.test.ts
+PASS src/lib/errorHandlers/__tests__/failedJestTestsHandler.test.ts
+
+Test Suites: 1 failed, 2 passed, 3 total
+Tests:       23 passed, 23 total
+Snapshots:   0 total
+Time:        3.083 s
+Ran all test suites.
+npm ERR! code ELIFECYCLE
+npm ERR! errno 1
+npm ERR! test-runner@0.0.0 test: \`npx jest\`
+npm ERR! Exit status 1
+npm ERR!
+npm ERR! Failed at the test-runner@0.0.0 test script.
+npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
+
+npm ERR! A complete log of this run can be found in:
+npm ERR!     /github/home/.npm/_logs/2021-11-17T20_58_53_415Z-debug.log`),
+  message: `Test Suites: 1 failed, 2 passed, 3 total
+Tests:       23 passed, 23 total
+Snapshots:   0 total`,
+};
+
+export const MONOREPO = {
   error: new ShellCommandExecutionError(`lerna notice cli v4.0.0
 lerna info ci enabled
 lerna notice filter including "ctv-shared"
@@ -238,39 +273,4 @@ ctv-tve: Snapshots:   2 failed, 2 total
 ctv-svod: Test Suites: 3 failed, 2 passed, 5 total
 ctv-svod: Tests:       3 failed, 13 passed, 16 total
 ctv-svod: Snapshots:   2 failed, 2 total`,
-};
-
-export const SINGLE_REPO_FAILED = {
-  error: new ShellCommandExecutionError(`FAIL src/lib/errorHandlers/__tests__/__data__/failedJestTestHandler.data.ts
-  ● Test suite failed to run
-
-    Your test suite must contain at least one test.
-
-      at onResult (node_modules/@jest/core/build/TestScheduler.js:175:18)
-      at node_modules/@jest/core/build/TestScheduler.js:316:17
-      at node_modules/emittery/index.js:260:13
-          at Array.map (<anonymous>)
-      at Emittery.emit (node_modules/emittery/index.js:258:23)
-
-PASS src/lib/version/__tests__/version.test.ts
-PASS src/lib/errorHandlers/__tests__/failedJestTestsHandler.test.ts
-
-Test Suites: 1 failed, 2 passed, 3 total
-Tests:       23 passed, 23 total
-Snapshots:   0 total
-Time:        3.083 s
-Ran all test suites.
-npm ERR! code ELIFECYCLE
-npm ERR! errno 1
-npm ERR! test-runner@0.0.0 test: \`npx jest\`
-npm ERR! Exit status 1
-npm ERR!
-npm ERR! Failed at the test-runner@0.0.0 test script.
-npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
-
-npm ERR! A complete log of this run can be found in:
-npm ERR!     /github/home/.npm/_logs/2021-11-17T20_58_53_415Z-debug.log`),
-  message: `Test Suites: 1 failed, 2 passed, 3 total
-Tests:       23 passed, 23 total
-Snapshots:   0 total`,
 };
