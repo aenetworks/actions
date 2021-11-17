@@ -63,7 +63,7 @@ export default class VersionBase {
     ].join(' ');
 
     const rawChangelog = execShellCommand({ cmd, silent: true });
-    console.log(rawChangelog)
+
     const changelogLines = rawChangelog.split('\n');
     let changelog = changelogLines
       .slice(2, changelogLines.length - 3)
@@ -94,7 +94,7 @@ export default class VersionBase {
   }
 
   protected _getFirstReleaseParam(hasCurrentVersion: boolean): string {
-    if (hasCurrentVersion) {
+    if (!hasCurrentVersion) {
       return '--first-release';
     }
 
