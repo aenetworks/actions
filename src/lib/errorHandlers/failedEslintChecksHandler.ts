@@ -7,10 +7,9 @@ export class FailedEslintChecksHandler {
 
   public handle(error: Error): Error | false {
     const msg = error.message;
-    const reports = msg.matchAll(this.re);
-    const result = Array.from(reports)
-      .map((match) => match[0].trim().replace('✖ ', ''))
-      .join('\n');
+    const reports = Array.from(msg.matchAll(this.re));
+    const header = reports.length > 1 ? 'Some checks did not pass\n\n' : '';
+    const result = header + reports.map((match) => match[0].trim().replace('✖ ', '')).join('\n');
 
     if (result) {
       return new EslintChecksFailed(result);

@@ -30,7 +30,9 @@ npm ERR! This is probably not a problem with npm. There is likely additional log
 
 npm ERR! A complete log of this run can be found in:
 npm ERR!     /github/home/.npm/_logs/2021-11-17T20_58_53_415Z-debug.log`),
-  message: `Test Suites: 1 failed, 2 passed, 3 total
+  message: `Some tests did not pass
+
+Test Suites: 1 failed, 2 passed, 3 total
 Tests:       23 passed, 23 total
 Snapshots:   0 total`,
 };
@@ -266,7 +268,9 @@ npm ERR! This is probably not a problem with npm. There is likely additional log
 npm ERR! A complete log of this run can be found in:
 npm ERR!     /github/home/.npm/_logs/2021-11-17T19_28_31_806Z-debug.log
 `),
-  message: `ctv-tve: Test Suites: 2 failed, 2 passed, 4 total
+  message: `Some tests did not pass
+
+ctv-tve: Test Suites: 2 failed, 2 passed, 4 total
 ctv-tve: Tests:       2 failed, 13 passed, 15 total
 ctv-tve: Snapshots:   2 failed, 2 total
 

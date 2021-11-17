@@ -8,9 +8,11 @@ export class FailedJestTestsHandler {
   public handle(error: Error): Error | false {
     const msg = error.message;
     const reports = msg.matchAll(this.re);
-    const result = Array.from(reports)
-      .map((match) => match[0].trim())
-      .join('\n\n');
+    const result =
+      'Some tests did not pass\n\n' +
+      Array.from(reports)
+        .map((match) => match[0].trim())
+        .join('\n\n');
 
     if (result) {
       return new JestTestsFailed(result);

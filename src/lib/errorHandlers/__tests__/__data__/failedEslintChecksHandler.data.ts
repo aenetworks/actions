@@ -97,7 +97,9 @@ npm ERR! This is probably not a problem with npm. There is likely additional log
 
 npm ERR! A complete log of this run can be found in:
 npm ERR!     /github/home/.npm/_logs/2021-11-17T19_30_18_706Z-debug.log`),
-  message: `ctv-shared: 4 problems (0 errors, 4 warnings)
+  message: `Some checks did not pass
+
+ctv-shared: 4 problems (0 errors, 4 warnings)
 ctv-tve: 405 problems (11 errors, 394 warnings)
 ctv-svod: 436 problems (58 errors, 378 warnings)`,
 };
