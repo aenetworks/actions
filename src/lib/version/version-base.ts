@@ -62,7 +62,7 @@ export default class VersionBase {
       this._getReleaseTypeParam(),
     ].join(' ');
 
-    const rawChangelog = execShellCommand({ cmd });
+    const rawChangelog = execShellCommand({ cmd, silent: true });
     const changelogLines = rawChangelog.split('\n');
     let changelog = changelogLines
       .slice(2, changelogLines.length - 3)
@@ -75,7 +75,7 @@ export default class VersionBase {
         changelog += this._getDependenciesSection(currentVersion.asString(), raw);
       } catch (e) {
         // @ts-ignore
-        console.warn('describe dependencies error' + e.message);
+        core.warn('describe dependencies error' + e.message);
       }
     }
 
@@ -115,7 +115,7 @@ export default class VersionBase {
     };
 
     const filePath = path.join(process.cwd(), 'package.json');
-    const old = execShellCommand({ cmd: `git show ${tag}:./package.json` });
+    const old = execShellCommand({ cmd: `git show ${tag}:./package.json`, silent: true });
 
     const oldDeps = JSON.parse(old).dependencies;
     const newDeps = require(filePath).dependencies;

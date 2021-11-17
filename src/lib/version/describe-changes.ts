@@ -13,6 +13,21 @@ export default class DescribeChanges extends VersionBase implements Command {
    */
   @logGroup('Describe changes')
   public run(raw: boolean = false): string {
+    return this.getChangelog(raw);
+  }
+
+  @logGroup('Preview changelog')
+  public previewChangelog(): void {
+    const changelog = this.getChangelog(true);
+
+    try {
+      const tempChangelog = changelog.replace(/compare\/(.*?)\.\.\.(.*?)\)/, 'compare/$1...master)');
+
+      core.notice(tempChangelog);
+    } catch (e) {}
+  }
+
+  protected getChangelog(raw: boolean = false) {
     const currentVersion = this._getLatestVersion();
 
     if (currentVersion) {
@@ -20,17 +35,12 @@ export default class DescribeChanges extends VersionBase implements Command {
       this._ensureThereIsLatestPrefixedTag(currentVersion);
     }
 
+    console.log(
+      currentVersion?.original,
+      currentVersion?.asStringWithtPrefix(),
+      currentVersion?.asStringWithoutPrefix()
+    );
+
     return this._getChangelogEntry(currentVersion, raw);
-  }
-
-  @logGroup('Preview changelog')
-  public previewChangelog(): void {
-    const changelog = this.run(true);
-
-    try {
-      const tempChangelog = changelog.replace(/compare\/(.*?)\.\.\.(.*?)\)/, 'compare/$1...master)');
-
-      core.notice(tempChangelog);
-    } catch (e) {}
   }
 }
