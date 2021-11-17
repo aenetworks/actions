@@ -31,7 +31,7 @@ const execShellCommand = ({
   useStdout = false,
   silent = false,
 }: ExecShellCommandProps): string => {
-  core.debug(`Running command: \`${cmd}\``);
+  core.info(`Running command: \`${cmd}\``);
 
   const res = shell.exec(cmd, { silent });
 

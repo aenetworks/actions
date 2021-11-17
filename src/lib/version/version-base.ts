@@ -63,6 +63,7 @@ export default class VersionBase {
     ].join(' ');
 
     const rawChangelog = execShellCommand({ cmd, silent: true });
+    console.log(rawChangelog)
     const changelogLines = rawChangelog.split('\n');
     let changelog = changelogLines
       .slice(2, changelogLines.length - 3)
