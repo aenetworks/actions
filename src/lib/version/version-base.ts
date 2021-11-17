@@ -13,7 +13,7 @@ export default class VersionBase {
    */
   constructor(private readonly releaseType: ReleaseType) {}
 
-  protected _getLatestVersion = (): VersionVo => {
+  protected _getLatestVersion = (): VersionVo | null => {
     const cmd = 'git tag -l';
     const errorMessage = 'Cannot get current version';
 
@@ -25,10 +25,14 @@ export default class VersionBase {
       .map((tag) => VersionVo.parse(tag))
       .sort(VersionVo.sortDesc);
 
+    if (!tags.length) {
+      return null;
+    }
+
     return tags[0];
   };
 
-  protected _ensureRightVersionIsDescribed(currentVersion: string): void {
+  protected _ensureRightVersionIsDescribed(currentVersion: VersionVo): void {
     const filePath = path.join(process.cwd(), 'package.json');
 
     if (!fs.existsSync(filePath)) {
@@ -37,53 +41,60 @@ export default class VersionBase {
 
     const packageJson = require(filePath);
 
-    packageJson.version = currentVersion;
+    packageJson.version = currentVersion.asStringWithoutPrefix();
     fs.writeFileSync(filePath, JSON.stringify(packageJson, null, 2));
   }
 
-  protected _getChangelogEntry(currentVersion: VersionVo, raw: boolean): string {
-    const cmd = `npx standard-version --dry-run --silent ${this._getReleaseTypeParam()}`;
+  protected _ensureThereIsLatestPrefixedTag(currentVersion: VersionVo): void {
+    const tagExists = currentVersion.original === currentVersion.asStringWithtPrefix();
 
-    let rawChangelog = '';
-
-    try {
-      rawChangelog = execShellCommand({ cmd });
-    } catch (e) {
-      // @ts-ignore
-      console.error('standard version error ' + e.message);
+    if (!tagExists) {
+      execShellCommand({ cmd: `git tag ${currentVersion.asStringWithtPrefix()} ${currentVersion.original}` });
     }
+  }
 
+  protected _getChangelogEntry(currentVersion: VersionVo | null, raw: boolean): string {
+    const cmd = [
+      'npx standard-version',
+      '--dry-run',
+      '--silent',
+      this._getFirstReleaseParam(!!currentVersion),
+      this._getReleaseTypeParam(),
+    ].join(' ');
+
+    const rawChangelog = execShellCommand({ cmd });
     const changelogLines = rawChangelog.split('\n');
+    let changelog = changelogLines
+      .slice(2, changelogLines.length - 3)
+      .join('\n')
+      .replace(/\(\[#\d+]\(.*?\)\)/g, '')
+      .replace(/^#{1,3}/, '##');
 
-    let changelog = '';
-
-    try {
-      console.log('generating changelog');
-      changelog = changelogLines
-        .slice(2, changelogLines.length - 3)
-        .join('\n')
-        .replace(/\(\[#\d+]\(.*?\)\)/g, '')
-        .replace(/^#{1,3}/, '##');
-    } catch (e) {
-      // @ts-ignore
-      console.warn('Generate changelog error' + e.message);
+    if (currentVersion) {
+      try {
+        changelog += this._getDependenciesSection(currentVersion.asString(), raw);
+      } catch (e) {
+        // @ts-ignore
+        console.warn('describe dependencies error' + e.message);
+      }
     }
 
-    try {
-      console.log('generating dependencies');
+    changelog += '\n';
 
-      return changelog + this._getDependenciesSection(currentVersion.asString(), raw) + '\n';
-    } catch (e) {
-      // @ts-ignore
-      console.warn('describe dependencies error' + e.message);
-
-      return changelog + '\n';
-    }
+    return changelog;
   }
 
   protected _getReleaseTypeParam(): string {
     if (this.releaseType !== ReleaseType.PROD) {
       return `-p ${this.releaseType}`;
+    }
+
+    return '';
+  }
+
+  protected _getFirstReleaseParam(hasCurrentVersion: boolean): string {
+    if (hasCurrentVersion) {
+      return '--first-release';
     }
 
     return '';

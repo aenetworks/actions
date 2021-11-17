@@ -20,7 +20,9 @@ export default class MergeBranches implements Command {
    */
   constructor(private readonly targetRef: string, sourceRef: string, private readonly force: boolean = false) {
     if (sourceRef === MergeBranches.LAST_TAG) {
-      this.sourceRef = new LatestVersion().run().asString();
+      const latestVersion = new LatestVersion().run();
+
+      this.sourceRef = latestVersion ? latestVersion.asString() : 'master';
     } else {
       this.sourceRef = sourceRef;
     }

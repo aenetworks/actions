@@ -15,11 +15,9 @@ export default class DescribeChanges extends VersionBase implements Command {
   public run(raw: boolean = false): string {
     const currentVersion = this._getLatestVersion();
 
-    console.log(currentVersion.asString());
-    console.log(currentVersion.asStringWithoutPrefix());
-
     if (currentVersion) {
-      this._ensureRightVersionIsDescribed(currentVersion.asStringWithoutPrefix());
+      this._ensureRightVersionIsDescribed(currentVersion);
+      this._ensureThereIsLatestPrefixedTag(currentVersion);
     }
 
     return this._getChangelogEntry(currentVersion, raw);
@@ -28,8 +26,6 @@ export default class DescribeChanges extends VersionBase implements Command {
   @logGroup('Preview changelog')
   public previewChangelog(): void {
     const changelog = this.run(true);
-
-    console.log(changelog);
 
     try {
       const tempChangelog = changelog.replace(/compare\/(.*?)\.\.\.(.*?)\)/, 'compare/$1...master)');

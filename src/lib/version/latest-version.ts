@@ -14,7 +14,7 @@ export default class LatestVersion extends VersionBase implements Command {
   /**
    * Run command.
    */
-  public run(): VersionVo {
+  public run(): VersionVo | null {
     return this._getLatestVersion();
   }
 }
