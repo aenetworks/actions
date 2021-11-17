@@ -47,10 +47,10 @@ export default class VersionBase {
     let rawChangelog = '';
 
     try {
-      rawChangelog = execShellCommand({ cmd, silent: true });
+      rawChangelog = execShellCommand({ cmd });
     } catch (e) {
       // @ts-ignore
-      console.error('standard version error' + e.message);
+      console.error('standard version error ' + e.message);
     }
 
     const changelogLines = rawChangelog.split('\n');
