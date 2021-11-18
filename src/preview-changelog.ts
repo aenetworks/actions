@@ -14,7 +14,7 @@ async function run() {
     const ref = inputs.getRef();
 
     new CloneRepository(repository, githubToken, ref).run();
-    new DescribeChanges(ReleaseType.PROD).previewChangelog();
+    new DescribeChanges(ReleaseType.PROD, ref).previewChangelog();
   } catch (error) {
     // @ts-ignore
     core.setFailed(error);

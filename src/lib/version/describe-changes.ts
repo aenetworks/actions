@@ -1,6 +1,7 @@
 import * as core from '@actions/core';
 
 import { logGroup } from '../decorators';
+import ReleaseType from '../releaseType';
 import { Command } from '../seedWorks';
 import VersionBase from './version-base';
 
@@ -8,6 +9,24 @@ import VersionBase from './version-base';
  * Describe changes based on Conventional Commits.
  */
 export default class DescribeChanges extends VersionBase implements Command {
+  private readonly ref: string;
+
+  /**
+   * Constructs DescribeChanges command..
+   *
+   * @param {ReleaseType} releaseType - Release type.
+   * @param {string} ref - Branch name or ref.
+   */
+  constructor(releaseType: ReleaseType, ref: string) {
+    super(releaseType);
+
+    if (ref.toUpperCase().startsWith('REFS/HEADS/')) {
+      this.ref = ref.substring('refs/heads/'.length);
+    } else {
+      this.ref = ref;
+    }
+  }
+
   /**
    * Run command.
    */
@@ -21,7 +40,7 @@ export default class DescribeChanges extends VersionBase implements Command {
     const changelog = this.getChangelog(true);
 
     try {
-      const tempChangelog = changelog.replace(/compare\/(.*?)\.\.\.(.*?)\)/, 'compare/$1...master)');
+      const tempChangelog = changelog.replace(/compare\/(.*?)\.\.\.(.*?)\)/, `compare/$1...${this.ref})`);
 
       core.notice(tempChangelog);
     } catch (e) {}

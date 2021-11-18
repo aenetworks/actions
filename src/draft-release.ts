@@ -24,7 +24,7 @@ async function run() {
     new SetupGitUser(botUsername, botEmail).run();
     new SetupNpmRegistry(npmAuthToken).run();
 
-    const changelog = new DescribeChanges(releaseType).run();
+    const changelog = new DescribeChanges(releaseType, ref).run();
     const version = new BumpVersion(releaseType, skipCommit).run();
 
     new Push(skipCommit).run();
