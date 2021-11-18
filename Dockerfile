@@ -1,6 +1,7 @@
 FROM node:14
 
 LABEL org.opencontainers.image.source=https://github.com/aenetworks/actions
+LABEL org.opencontainers.image.version="latest"
 
 RUN apt-get update \
     && apt-get install -y wget gnupg \
