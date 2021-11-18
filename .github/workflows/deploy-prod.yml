@@ -40,7 +40,8 @@ jobs:
       - name: Build docker image
         run: |
           TAG=$(git describe --tags --abbrev=0)
-          sed -i 's/org.opencontainers.image.version=\"latest\"/org.opencontainers.image.version=\"$TAG\"/g' Dockerfile
           docker build -t ghcr.io/aenetworks/actions:latest .
+          docker build -t ghcr.io/aenetworks/actions:$TAG .
           docker push ghcr.io/aenetworks/actions:latest
+          docker push ghcr.io/aenetworks/actions:$TAG
 
