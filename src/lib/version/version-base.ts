@@ -1,3 +1,4 @@
+import * as core from '@actions/core';
 import fs from 'fs';
 import path from 'path';
 
@@ -49,7 +50,11 @@ export default class VersionBase {
     const tagExists = currentVersion.original === currentVersion.asStringWithtPrefix();
 
     if (!tagExists) {
-      execShellCommand({ cmd: `git tag ${currentVersion.asStringWithtPrefix()} ${currentVersion.original}` });
+      try {
+        execShellCommand({ cmd: `git tag ${currentVersion.asStringWithtPrefix()} ${currentVersion.original}` });
+      } catch (e) {
+        core.info((e as Error).message);
+      }
     }
   }
 
