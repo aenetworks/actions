@@ -74,10 +74,7 @@ export default class VersionBase {
     if (currentVersion) {
       try {
         changelog += this._getDependenciesSection(currentVersion.asString(), raw);
-      } catch (e) {
-        // @ts-ignore
-        core.warn('describe dependencies error' + e.message);
-      }
+      } catch (e) {}
     }
 
     changelog += '\n';
