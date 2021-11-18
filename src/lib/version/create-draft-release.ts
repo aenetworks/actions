@@ -28,6 +28,6 @@ export default class CreateDraftRelease implements Command {
       prerelease: this.isPrerelease,
     });
 
-    core.notice(`Draft release: ${res.data.html_url}`);
+    core.notice(`Draft release: ${res.data.html_url.replace('releases/tag/', 'releases/edit/')}`);
   }
 }
