@@ -83,7 +83,7 @@ export default class MergeBranches implements Command {
   };
 
   private _isTagRef = (): boolean => {
-    const out = execShellCommand({ cmd: `git tag --list "${this.sourceRef}"` });
+    const out = execShellCommand({ cmd: `git tag --list "${this.sourceRef}"`, silent: true });
 
     return !!out.length;
   };
