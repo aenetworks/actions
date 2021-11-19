@@ -35,8 +35,6 @@ const execShellCommand = ({
 
   const res = shell.exec(cmd, { silent });
 
-  core.info('Command exit code: ' + res.code);
-
   if (res.code !== 0) {
     const message = errorMessage ? errorMessage.trim() + '\n' : '';
     const description = useStdout ? res.stdout.trim() : res.stderr.trim();

@@ -72,7 +72,11 @@ export default class MergeBranches implements Command {
   };
 
   private _pushTargetBranch = (targetRef: string, isForce: boolean): void => {
-    const cmd = `git push --set-upstream origin ${targetRef}${isForce ? ' --force' : ''}`;
+    const setUpstream = `git branch -u origin/${targetRef}`;
+
+    execShellCommand({ cmd: setUpstream });
+
+    const cmd = `git push ${isForce ? ' --force' : ''}`;
     const errorMessage = `Cannot push '${targetRef}'`;
 
     execShellCommand({ cmd, errorMessage });
