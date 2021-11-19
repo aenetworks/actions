@@ -4,6 +4,7 @@ import { logGroup } from '../decorators';
 import ReleaseType from '../releaseType';
 import { Command } from '../seedWorks';
 import VersionBase from './version-base';
+import VersionVo from './version-vo';
 
 /**
  * Describe changes based on Conventional Commits.
@@ -32,23 +33,27 @@ export default class DescribeChanges extends VersionBase implements Command {
    */
   @logGroup('Describe changes')
   public run(raw: boolean = false): string {
-    return this.getChangelog(raw);
+    const currentVersion = this._getLatestVersion();
+
+    return this.getChangelog(raw, currentVersion);
   }
 
   @logGroup('Preview changelog')
   public previewChangelog(): void {
-    const changelog = this.getChangelog(true);
+    const currentVersion = this._getLatestVersion();
+    const changelog = this.getChangelog(true, currentVersion);
 
     try {
-      const tempChangelog = changelog.replace(/compare\/(.*?)\.\.\.(.*?)\)/, `compare/$1...${this.ref})`);
+      const tempChangelog = changelog.replace(
+        /compare\/(.*?)\.\.\.(.*?)\)/,
+        `compare/${currentVersion?.original}...${this.ref})`
+      );
 
       core.notice(tempChangelog);
     } catch (e) {}
   }
 
-  protected getChangelog(raw: boolean = false) {
-    const currentVersion = this._getLatestVersion();
-
+  protected getChangelog(raw: boolean = false, currentVersion: VersionVo | null) {
     if (currentVersion) {
       this._ensureRightVersionIsDescribed(currentVersion);
       this._ensureThereIsLatestPrefixedTag(currentVersion);
