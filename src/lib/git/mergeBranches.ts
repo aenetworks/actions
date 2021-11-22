@@ -51,7 +51,7 @@ export default class MergeBranches implements Command {
   }
 
   private _checkout = (targetRef: string): void => {
-    const cmd = `git switch ${targetRef}`;
+    const cmd = `git checkout -b ${targetRef}`;
     const errorMessage = `Cannot checkout to '${targetRef}'`;
 
     execShellCommand({ cmd, errorMessage });
