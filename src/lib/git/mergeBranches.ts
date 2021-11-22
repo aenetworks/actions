@@ -51,7 +51,7 @@ export default class MergeBranches implements Command {
   }
 
   private _checkout = (targetRef: string): void => {
-    const cmd = `git checkout ${targetRef}`;
+    const cmd = `git switch ${targetRef}`;
     const errorMessage = `Cannot checkout to '${targetRef}'`;
 
     execShellCommand({ cmd, errorMessage });
@@ -72,11 +72,7 @@ export default class MergeBranches implements Command {
   };
 
   private _pushTargetBranch = (targetRef: string, isForce: boolean): void => {
-    const setUpstream = `git branch -u origin/${targetRef}`;
-
-    execShellCommand({ cmd: setUpstream });
-
-    const cmd = `git push ${isForce ? ' --force' : ''}`;
+    const cmd = `git push --set-upstream origin ${targetRef} ${isForce ? ' --force' : ''}`;
     const errorMessage = `Cannot push '${targetRef}'`;
 
     execShellCommand({ cmd, errorMessage });
