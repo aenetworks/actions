@@ -40,8 +40,8 @@ export default class MergeBranches implements Command {
     core.info(`Merging '${this.sourceRef}' into '${this.targetRef}'`);
 
     if (this.force) {
-      this._checkout(this.targetRef);
-      this._resetTargetBranch(this.sourceRef, this.targetRef, this.isTag);
+      this._checkout(this.sourceRef);
+      // this._resetTargetBranch(this.sourceRef, this.targetRef, this.isTag);
       this._pushTargetBranch(this.targetRef, true);
     } else {
       this._checkout(this.targetRef);
@@ -51,7 +51,7 @@ export default class MergeBranches implements Command {
   }
 
   private _checkout = (targetRef: string): void => {
-    const cmd = `git checkout -b ${targetRef}`;
+    const cmd = `git checkout -b ${targetRef} || git checkout ${targetRef}`;
     const errorMessage = `Cannot checkout to '${targetRef}'`;
 
     execShellCommand({ cmd, errorMessage });
