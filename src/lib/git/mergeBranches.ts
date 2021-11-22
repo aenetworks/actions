@@ -40,8 +40,8 @@ export default class MergeBranches implements Command {
     core.info(`Merging '${this.sourceRef}' into '${this.targetRef}'`);
 
     if (this.force) {
-      this._checkout(this.sourceRef);
-      // this._resetTargetBranch(this.sourceRef, this.targetRef, this.isTag);
+      this._checkout(this.targetRef);
+      this._resetTargetBranch(this.sourceRef, this.targetRef, this.isTag);
       this._pushTargetBranch(this.targetRef, true);
     } else {
       this._checkout(this.targetRef);
@@ -72,7 +72,7 @@ export default class MergeBranches implements Command {
   };
 
   private _pushTargetBranch = (targetRef: string, isForce: boolean): void => {
-    const cmd = `git push ${isForce ? ' --force' : ''} origin ${targetRef}`;
+    const cmd = `git push --set-upstream origin ${targetRef} ${isForce ? ' --force' : ''}`;
     const errorMessage = `Cannot push '${targetRef}'`;
 
     execShellCommand({ cmd, errorMessage });
