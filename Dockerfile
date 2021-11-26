@@ -2,6 +2,9 @@ FROM node:14
 
 LABEL org.opencontainers.image.source=https://github.com/aenetworks/actions
 
+RUN useradd -r -u 1001 -g runner runner
+USER runner
+
 RUN apt-get update \
     && apt-get install -y wget gnupg \
     && wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
