@@ -4,7 +4,6 @@ LABEL org.opencontainers.image.source=https://github.com/aenetworks/actions
 
 RUN groupadd --gid 121 docker \
   && useradd --uid 1001 --gid docker --shell /bin/bash runner
-USER runner
 
 RUN apt-get update \
     && apt-get install -y wget gnupg \
@@ -15,6 +14,8 @@ RUN apt-get update \
       --no-install-recommends \
     && rm -rf /var/lib/apt/lists/* \
     && npm i -g standard-version@9.3.2
+
+USER runner
 
 COPY . /action
 
