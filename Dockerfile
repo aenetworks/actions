@@ -2,7 +2,8 @@ FROM node:14
 
 LABEL org.opencontainers.image.source=https://github.com/aenetworks/actions
 
-RUN useradd -r -u 1001 runner
+RUN groupadd --gid 121 docker \
+  && useradd --uid 1001 --gid docker --shell /bin/bash runner
 USER runner
 
 RUN apt-get update \
