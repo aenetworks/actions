@@ -2,7 +2,7 @@ FROM node:14
 
 LABEL org.opencontainers.image.source=https://github.com/aenetworks/actions
 
-RUN useradd -r -u 1001 -g runner runner
+RUN useradd -r -u 1001 runner
 USER runner
 
 RUN apt-get update \
