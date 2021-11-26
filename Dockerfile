@@ -15,8 +15,8 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/* \
     && npm i -g standard-version@9.3.2
 
-USER runner
-
 COPY . /action
 
 RUN cd /action && npm ci --production
+
+USER runner
