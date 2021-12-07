@@ -55,7 +55,25 @@ export default class VersionVo {
       return comparedMinor;
     }
 
-    return first.patch - second.patch;
+    const comparedPath = first.patch - second.patch;
+
+    if (comparedPath !== 0) {
+      return comparedPath;
+    }
+
+    const comparedIsPrerelease = Number(second.isPrerelease) - Number(first.isPrerelease);
+
+    if (comparedIsPrerelease !== 0) {
+      return comparedIsPrerelease;
+    }
+
+    const comparedPrerelease = first.getPrerelaseAsNumber() - second.getPrerelaseAsNumber();
+
+    if (comparedPrerelease !== 0) {
+      return comparedPrerelease;
+    }
+
+    return (first.preV || 0) - (second.preV || 0);
   }
 
   static sortDesc(first, second): number {
@@ -88,5 +106,18 @@ export default class VersionVo {
 
   get isPrerelease(): boolean {
     return Boolean(this.pre);
+  }
+
+  getPrerelaseAsNumber(): number {
+    switch (this.pre) {
+      case Pre.ALPHA:
+        return 1;
+      case Pre.BETA:
+        return 2;
+      case Pre.RC:
+        return 3;
+      default:
+        return 0;
+    }
   }
 }
