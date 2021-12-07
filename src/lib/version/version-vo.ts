@@ -1,9 +1,18 @@
+export enum Pre {
+  ALPHA = 'alpha',
+  BETA = 'beta',
+  RC = 'rc',
+}
+
 export default class VersionVo {
-  static readonly validVersionRegex = /v?(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)/;
+  static readonly validVersionRegex =
+    /v?(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)(-(?<pre>alpha|beta|rc)\.(?<preV>\d))?$/;
   constructor(
     public readonly major: number = 0,
     public readonly minor: number = 0,
     public readonly patch: number = 0,
+    public readonly pre: Pre | null = null,
+    public readonly preV: number | null = null,
     public readonly original: string = ''
   ) {}
 
@@ -15,9 +24,18 @@ export default class VersionVo {
       throw new Error('invalid version');
     }
 
-    const { major, minor, patch } = match.groups as { major: string; minor: string; patch: string };
+    const { major, minor, patch, pre, preV } = match.groups as {
+      major: string;
+      minor: string;
+      patch: string;
+      pre: string | undefined;
+      preV: string | undefined;
+    };
 
-    return new VersionVo(Number(major), Number(minor), Number(patch), versionString);
+    const parsedPre = pre ? Pre[pre.toUpperCase()] : null;
+    const parsedPreV = preV ? Number(preV) : null;
+
+    return new VersionVo(Number(major), Number(minor), Number(patch), parsedPre, parsedPreV, versionString);
   }
 
   static isValidVersion(versionString: string): boolean {
@@ -37,7 +55,25 @@ export default class VersionVo {
       return comparedMinor;
     }
 
-    return first.patch - second.patch;
+    const comparedPath = first.patch - second.patch;
+
+    if (comparedPath !== 0) {
+      return comparedPath;
+    }
+
+    const comparedIsPrerelease = Number(second.isPrerelease) - Number(first.isPrerelease);
+
+    if (comparedIsPrerelease !== 0) {
+      return comparedIsPrerelease;
+    }
+
+    const comparedPrerelease = first.getPrerelaseAsNumber() - second.getPrerelaseAsNumber();
+
+    if (comparedPrerelease !== 0) {
+      return comparedPrerelease;
+    }
+
+    return (first.preV || 0) - (second.preV || 0);
   }
 
   static sortDesc(first, second): number {
@@ -52,11 +88,36 @@ export default class VersionVo {
     return this.asStringWithtPrefix();
   }
 
+  _prereleaseSuffix(): string {
+    if (this.isPrerelease) {
+      return `-${this.pre}.${this.preV}`;
+    }
+
+    return '';
+  }
+
   asStringWithtPrefix(): string {
-    return `v${this.major}.${this.minor}.${this.patch}`;
+    return `v${this.major}.${this.minor}.${this.patch}${this._prereleaseSuffix()}`;
   }
 
   asStringWithoutPrefix(): string {
-    return `${this.major}.${this.minor}.${this.patch}`;
+    return `${this.major}.${this.minor}.${this.patch}${this._prereleaseSuffix()}`;
+  }
+
+  get isPrerelease(): boolean {
+    return Boolean(this.pre);
+  }
+
+  getPrerelaseAsNumber(): number {
+    switch (this.pre) {
+      case Pre.ALPHA:
+        return 1;
+      case Pre.BETA:
+        return 2;
+      case Pre.RC:
+        return 3;
+      default:
+        return 0;
+    }
   }
 }
