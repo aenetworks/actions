@@ -6,7 +6,7 @@ export enum Pre {
 
 export default class VersionVo {
   static readonly validVersionRegex =
-    /v?(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)(-(?<pre>alpha|beta|rc)\.(?<preV>\d))?$/;
+    /^v?(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)(-(?<pre>alpha|beta|rc)\.(?<preV>\d))?$/;
   constructor(
     public readonly major: number = 0,
     public readonly minor: number = 0,

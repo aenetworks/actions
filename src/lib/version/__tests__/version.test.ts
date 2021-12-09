@@ -16,7 +16,7 @@ const testVersions = [
 
 const testVersionsWithPrefix = testVersions.map((version) => `v${version}`);
 
-const invalidVersions = ['a', 'some-string', '0.1', 'v0.1', '1', 'v1', '1.1.2-pre.1'];
+const invalidVersions = ['a', 'some-string', '0.1', 'v0.1', '1', 'v1', '1.1.2-pre.1', 'v3.32.3.1'];
 
 describe('Version', function () {
   describe('version regex', () => {
