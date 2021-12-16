@@ -1,6 +1,6 @@
 {
   "name": "test-runner",
-  "version": "0.0.0",
+  "version": "0.2.16",
   "description": "Container template action using actions/toolkit",
   "main": "lib/main.js",
   "scripts": {

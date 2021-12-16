@@ -3,6 +3,7 @@ import * as core from '@actions/core';
 import { logGroup } from '../decorators';
 import execShellCommand from '../execShellCommand';
 import { Command } from '../seedWorks';
+import * as utils from './utils';
 
 const errorMessage = 'Error while publishing package.';
 
@@ -34,15 +35,47 @@ export default class Publish implements Command {
   }
 
   private _publishPrerelease() {
-    core.info('Publishing prerelease.');
+    if (utils.isLernaRepo()) {
+      this._publishPrereleaseLerna();
+    } else {
+      this._publishPrereleaseRegular();
+    }
+  }
+
+  private _publishPrereleaseRegular() {
+    core.info('Publishing prerelease package.');
 
     const cmd = 'npm publish --tag next';
 
     execShellCommand({ cmd, errorMessage });
   }
 
+  private _publishPrereleaseLerna() {
+    core.info('Publishing lerna packages as prerelease.');
+
+    const cmd = 'npx lerna exec -- npm publish --tag next';
+
+    execShellCommand({ cmd, errorMessage });
+  }
+
   private _publishRelease() {
-    core.info('Publishing release.');
+    if (utils.isLernaRepo()) {
+      this._publishReleaseLerna();
+    } else {
+      this._publishReleaseRegular();
+    }
+  }
+
+  private _publishReleaseLerna() {
+    core.info('Publishing lerna packages.');
+
+    const cmd = 'npx lerna exec -- npm publish';
+
+    execShellCommand({ cmd, errorMessage });
+  }
+
+  private _publishReleaseRegular() {
+    core.info('Publishing package.');
 
     const cmd = 'npm publish';
 
