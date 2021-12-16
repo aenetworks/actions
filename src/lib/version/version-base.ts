@@ -3,6 +3,7 @@ import fs from 'fs';
 import path from 'path';
 
 import execShellCommand from '../execShellCommand';
+import * as utils from '../node/utils';
 import ReleaseType from '../releaseType';
 import VersionVo from './version-vo';
 
@@ -41,10 +42,15 @@ export default class VersionBase {
       fs.writeFileSync(filePath, JSON.stringify({}, null, 2));
     }
 
-    const packageJson = require(filePath);
+    execShellCommand({
+      cmd: `npm version ${currentVersion.asStringWithtPrefix()} --no-git-tag-version --allow-same-version`,
+    });
 
-    packageJson.version = currentVersion.asStringWithoutPrefix();
-    fs.writeFileSync(filePath, JSON.stringify(packageJson, null, 2));
+    if (utils.isLernaRepo()) {
+      execShellCommand({
+        cmd: `npx lerna exec -- npm version ${currentVersion.asStringWithtPrefix()} --no-git-tag-version --allow-same-version`,
+      });
+    }
   }
 
   protected _ensureThereIsLatestPrefixedTag(currentVersion: VersionVo): void {
