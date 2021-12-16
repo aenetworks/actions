@@ -30,7 +30,10 @@ export default class BumpVersion extends VersionBase implements Command {
     if (latestVersion) {
       this._ensureRightVersionIsDescribed(latestVersion);
       execShellCommand({
-        cmd: 'git commit -a --amend',
+        cmd: 'git commit -a --amend -n --no-edit',
+      });
+      execShellCommand({
+        cmd: `git tag -d ${latestVersion.asStringWithtPrefix()} && git tag ${latestVersion.asStringWithtPrefix()}`,
       });
     }
 

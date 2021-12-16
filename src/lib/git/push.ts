@@ -18,7 +18,7 @@ export default class Push implements Command {
   }
 
   private _pushTagsOnly = (): void => {
-    const cmd = 'git push --tags';
+    const cmd = 'git push --tags --no-verify';
 
     execShellCommand({
       cmd,
@@ -26,7 +26,7 @@ export default class Push implements Command {
   };
 
   private _pushWithTags = (): void => {
-    const cmd = 'git push --follow-tags';
+    const cmd = 'git push --follow-tags --no-verify';
 
     execShellCommand({
       cmd,
