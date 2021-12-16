@@ -1,6 +1,7 @@
 import * as core from '@actions/core';
 
 import { logGroup } from '../decorators';
+import execShellCommand from '../execShellCommand';
 import ReleaseType from '../releaseType';
 import { Command } from '../seedWorks';
 import VersionBase from './version-base';
@@ -25,6 +26,13 @@ export default class BumpVersion extends VersionBase implements Command {
 
     const latestVersion = this._getLatestVersion();
     const version = latestVersion ? latestVersion.asString() : '0.0.0';
+
+    if (latestVersion) {
+      this._ensureRightVersionIsDescribed(latestVersion);
+      execShellCommand({
+        cmd: 'git commit -a --amend',
+      });
+    }
 
     core.info(`New version: ${version}`);
 
