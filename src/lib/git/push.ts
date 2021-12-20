@@ -26,10 +26,12 @@ export default class Push implements Command {
   };
 
   private _pushWithTags = (): void => {
-    const cmd = 'git push --follow-tags --no-verify';
+    const cmd = 'git push --no-verify';
 
     execShellCommand({
       cmd,
     });
+
+    this._pushTagsOnly();
   };
 }
