@@ -2,6 +2,7 @@ import * as core from '@actions/core';
 
 import { logGroup } from '../decorators';
 import execShellCommand from '../execShellCommand';
+import { isLernaRepo } from '../node/utils';
 import ReleaseType from '../releaseType';
 import { Command } from '../seedWorks';
 import VersionBase from './version-base';
@@ -27,7 +28,7 @@ export default class BumpVersion extends VersionBase implements Command {
     const latestVersion = this._getLatestVersion();
     const version = latestVersion ? latestVersion.asString() : '0.0.0';
 
-    if (latestVersion && !this.skipCommit) {
+    if (latestVersion && isLernaRepo() && !this.skipCommit) {
       this._ensureRightVersionIsDescribed(latestVersion);
       execShellCommand({
         cmd: 'git commit -a --amend -n --no-edit',
