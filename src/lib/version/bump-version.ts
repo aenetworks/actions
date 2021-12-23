@@ -28,18 +28,22 @@ export default class BumpVersion extends VersionBase implements Command {
     const latestVersion = this._getLatestVersion();
     const version = latestVersion ? latestVersion.asStringWithtPrefix() : 'v0.0.0';
 
-    if (latestVersion && isLernaRepo() && !this.skipCommit) {
-      this._ensureRightVersionIsDescribed(latestVersion);
-    }
-
     if (!this.skipCommit) {
       execShellCommand({
         cmd: `git commit -am "chore(release): ${version}"`,
       });
     }
 
+    if (latestVersion && isLernaRepo() && !this.skipCommit) {
+      this._ensureRightVersionIsDescribed(latestVersion);
+
+      execShellCommand({
+        cmd: 'git commit -a --amend -n --no-edit',
+      });
+    }
+
     execShellCommand({
-      cmd: `git tag v${version}`,
+      cmd: `git tag ${version}`,
     });
 
     core.info(`New version: ${version}`);
