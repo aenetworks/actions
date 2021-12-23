@@ -45,10 +45,12 @@ export default class VersionBase {
     if (utils.isLernaRepo()) {
       execShellCommand({
         cmd: `npx lerna version --exact --no-push --no-git-tag-version -y ${currentVersion.asStringWithtPrefix()}`,
+        silent: true,
       });
     } else {
       execShellCommand({
         cmd: `npm version ${currentVersion.asStringWithtPrefix()} --no-git-tag-version --allow-same-version`,
+        silent: true,
       });
     }
   }
