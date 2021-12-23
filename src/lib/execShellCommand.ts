@@ -1,7 +1,7 @@
 import * as core from '@actions/core';
-import chalk from 'chalk';
 import * as shell from 'shelljs';
 
+import * as colors from './colors';
 import { ErrorBase } from './seedWorks';
 
 /**
@@ -32,9 +32,13 @@ const execShellCommand = ({
   useStdout = false,
   silent = false,
 }: ExecShellCommandProps): string => {
-  core.info(chalk.gray(`$ ${cmd}`));
+  core.info(`${colors.grey}$ ${cmd}${colors.reset}`);
+
+  core.info(colors.greenBright);
 
   const res = shell.exec(cmd, { silent });
+
+  core.info(colors.reset);
 
   if (res.code !== 0) {
     const message = errorMessage ? errorMessage.trim() + '\n' : '';
