@@ -39,7 +39,7 @@ export default class BumpVersion extends VersionBase implements Command {
     }
 
     execShellCommand({
-      cmd: `git tag v${version}"`,
+      cmd: `git tag v${version}`,
     });
 
     core.info(`New version: ${version}`);
