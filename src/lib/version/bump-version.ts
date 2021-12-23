@@ -30,10 +30,6 @@ export default class BumpVersion extends VersionBase implements Command {
 
     if (latestVersion && isLernaRepo() && !this.skipCommit) {
       this._ensureRightVersionIsDescribed(latestVersion);
-
-      execShellCommand({
-        cmd: 'git commit -a --amend -n --no-edit',
-      });
     }
 
     if (!this.skipCommit) {
