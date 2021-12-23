@@ -29,7 +29,7 @@ export default class BumpVersion extends VersionBase implements Command {
     const version = latestVersion ? latestVersion.asStringWithtPrefix() : 'v0.0.0';
 
     execShellCommand({
-      cmd: `git tag -l ${version}`,
+      cmd: `git tag -d ${version} || true`,
     });
 
     if (!this.skipCommit) {
@@ -43,10 +43,6 @@ export default class BumpVersion extends VersionBase implements Command {
 
       execShellCommand({
         cmd: 'git commit -a --amend -n --no-edit',
-      });
-
-      execShellCommand({
-        cmd: `git tag -l ${version}`,
       });
     }
 
