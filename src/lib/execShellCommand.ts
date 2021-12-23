@@ -37,7 +37,9 @@ const execShellCommand = ({
   const res = shell.exec(cmd, { silent: true });
 
   if (!silent) {
-    core.info(`${colors.green}${res.stdout}${colors.reset}`);
+    res.stdout.split('\n').forEach((line) => {
+      core.info(`${colors.blue}${res.stdout}${colors.reset}`);
+    });
   }
 
   if (res.code !== 0) {
