@@ -32,7 +32,7 @@ const execShellCommand = ({
   useStdout = false,
   silent = false,
 }: ExecShellCommandProps): string => {
-  core.info(chalk.gray(`$ ${cmd}\u001b[0m`));
+  core.info(chalk.gray(`$ ${cmd}`));
 
   const res = shell.exec(cmd, { silent });
 
