@@ -42,13 +42,13 @@ export default class VersionBase {
       fs.writeFileSync(filePath, JSON.stringify({}, null, 2));
     }
 
-    execShellCommand({
-      cmd: `npm version ${currentVersion.asStringWithtPrefix()} --no-git-tag-version --allow-same-version`,
-    });
-
     if (utils.isLernaRepo()) {
       execShellCommand({
-        cmd: `npx lerna exec -- npm version ${currentVersion.asStringWithtPrefix()} --no-git-tag-version --allow-same-version`,
+        cmd: `npx lerna version --exact --no-push --no-git-tag-version -y ${currentVersion.asStringWithtPrefix()}`,
+      });
+    } else {
+      execShellCommand({
+        cmd: `npm version ${currentVersion.asStringWithtPrefix()} --no-git-tag-version --allow-same-version`,
       });
     }
   }
