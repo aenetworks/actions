@@ -1,5 +1,6 @@
 import * as core from '@actions/core';
 
+import * as colors from './lib/colors';
 import { CloneRepository, Push, SetupGitUser } from './lib/git';
 import Inputs from './lib/inputs';
 import { SetupNpmRegistry } from './lib/node';
@@ -29,6 +30,7 @@ async function run() {
 
     new Push(skipCommit).run();
     await new CreateDraftRelease(githubToken, version, isPrerelease, changelog).run();
+    core.info(`${colors.green}Success${colors.reset}`);
   } catch (error) {
     // @ts-ignore
     core.setFailed(error);

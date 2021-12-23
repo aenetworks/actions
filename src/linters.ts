@@ -1,5 +1,6 @@
 import * as core from '@actions/core';
 
+import * as colors from './lib/colors';
 import { FailedEslintChecksHandler } from './lib/errorHandlers';
 import { CloneRepository } from './lib/git';
 import Inputs from './lib/inputs';
@@ -36,6 +37,8 @@ async function run() {
         postLintCommand.run();
       }
     }
+
+    core.info(`${colors.green}Success${colors.reset}`);
   } catch (error) {
     const failedEslintChecks = FailedEslintChecksHandler.handle(error as Error);
 

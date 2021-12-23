@@ -1,5 +1,6 @@
 import * as core from '@actions/core';
 
+import * as colors from './lib/colors';
 import { CloneRepository, MergeBranches } from './lib/git';
 import Inputs from './lib/inputs';
 
@@ -14,6 +15,7 @@ async function run() {
 
     new CloneRepository(repository, githubToken, 'master').run();
     new MergeBranches(targetRef, MergeBranches.LAST_TAG, force).run();
+    core.info(`${colors.green}Success${colors.reset}`);
   } catch (error) {
     // @ts-ignore
     core.setFailed(error);

@@ -1,5 +1,6 @@
 import * as core from '@actions/core';
 
+import * as colors from './lib/colors';
 import { CloneRepository } from './lib/git';
 import Inputs from './lib/inputs';
 import { Build, InstallDependencies, Publish, SetupNpmRegistry } from './lib/node';
@@ -19,6 +20,8 @@ async function run() {
     new InstallDependencies().run();
     new Build().run();
     new Publish(isPrerelease).run();
+
+    core.info(`${colors.green}Success${colors.reset}`);
   } catch (error) {
     // @ts-ignore
     core.setFailed(error);
