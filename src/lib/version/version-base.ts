@@ -110,10 +110,8 @@ export default class VersionBase {
     return '';
   }
 
-  protected _bumpVersion(skipCommit: boolean = false): void {
-    const skipCommitParam = skipCommit ? '--skip.commit' : '';
-
-    const cmd = `npx standard-version --silent --skip.changelog ${skipCommitParam} ${this._getReleaseTypeParam()}`;
+  protected _bumpVersion(): void {
+    const cmd = `npx standard-version --silent --skip.changelog --skip.commit ${this._getReleaseTypeParam()}`;
 
     execShellCommand({ cmd, silent: true });
   }
