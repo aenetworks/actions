@@ -34,11 +34,11 @@ const execShellCommand = ({
 }: ExecShellCommandProps): string => {
   core.info(`${colors.grey}$ ${cmd}${colors.reset}`);
 
-  core.info(colors.greenBright);
+  const res = shell.exec(cmd, { silent: true });
 
-  const res = shell.exec(cmd, { silent });
-
-  core.info(colors.reset);
+  if (!silent) {
+    core.info(`${colors.green}${res.stdout}${colors.reset}`);
+  }
 
   if (res.code !== 0) {
     const message = errorMessage ? errorMessage.trim() + '\n' : '';
