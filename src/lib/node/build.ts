@@ -20,6 +20,7 @@ export default class Build implements Command {
    */
   @logGroup('Build')
   public run(): void {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
     const { scripts } = require(path.join(process.cwd(), 'package.json'));
 
     if (Object.keys(scripts).includes('build')) {

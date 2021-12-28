@@ -1,5 +1,5 @@
-export default abstract class ErrorBase<T = any> extends Error {
-  public message: string = '';
+export default abstract class ErrorBase<T = unknown> extends Error {
+  public message = '';
 
   constructor(args?: T) {
     super();

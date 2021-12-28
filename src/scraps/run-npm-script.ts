@@ -10,6 +10,7 @@ async function run() {
 
     new RunNpmScript(script).run();
   } catch (error) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     core.setFailed(error.message);
   }

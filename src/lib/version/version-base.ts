@@ -88,7 +88,9 @@ export default class VersionBase {
     if (currentVersion) {
       try {
         changelog += this._getDependenciesSection(currentVersion.asString(), raw);
-      } catch (e) {}
+      } catch (e) {
+        // suppressed
+      }
     }
 
     changelog += '\n';
@@ -128,11 +130,12 @@ export default class VersionBase {
     const old = execShellCommand({ cmd: `git show ${tag}:./package.json`, silent: true });
 
     const oldDeps = JSON.parse(old).dependencies;
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
     const newDeps = require(filePath).dependencies;
 
-    const added = [];
-    const upgraded = [];
-    const removed = [];
+    const added: string[] = [];
+    const upgraded: string[] = [];
+    const removed: string[] = [];
 
     for (key in newDeps) {
       if (key in oldDeps) {
@@ -140,18 +143,15 @@ export default class VersionBase {
         const vOld = getVer(oldDeps[key]);
 
         if (vNew !== vOld) {
-          // @ts-ignore
           upgraded.push(`* bump \`${key}\` to ${vNew}`);
         }
       } else if (!(key in oldDeps)) {
-        // @ts-ignore
         added.push(`* add \`${key}\`@${getVer(newDeps[key])}`);
       }
     }
 
     for (key in oldDeps) {
       if (!(key in newDeps)) {
-        // @ts-ignore
         removed.push(`* remove \`${key}\``);
       }
     }
@@ -169,23 +169,20 @@ export default class VersionBase {
       response += '<summary>';
     }
 
-    let summary = [];
+    const summary: Array<string> = [];
     let body = '';
 
     if (added.length) {
-      // @ts-ignore
       summary.push(`add: ${added.length}`);
       body += '\n' + added.join('\n');
     }
 
     if (upgraded.length) {
-      // @ts-ignore
       summary.push(`bump: ${upgraded.length}`);
       body += '\n' + upgraded.join('\n');
     }
 
     if (removed.length) {
-      // @ts-ignore
       summary.push(`remove: ${removed.length}`);
       body += '\n' + removed.join('\n');
     }

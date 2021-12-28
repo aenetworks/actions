@@ -10,8 +10,9 @@ async function run() {
 
     new SetupNpmRegistry(npmAuthToken).run();
   } catch (error) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    core.setFailed(error.message);
+    core.setFailed(error.message as string);
   }
 }
 

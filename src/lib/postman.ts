@@ -50,7 +50,7 @@ export default class Postman implements Command {
     await this._newmanRun(options);
   }
 
-  private async _newmanRun(options: NewmanOptions): Promise<any> {
+  private async _newmanRun(options: NewmanOptions): Promise<string> {
     return new Promise((resolve, reject) => {
       newman.run(options, (err) => {
         if (err) {
