@@ -33,6 +33,7 @@ export default class RunNpmScript implements Command {
   }
 
   public hasScript(): boolean {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
     const { scripts } = require(path.join(process.cwd(), 'package.json'));
 
     return Object.keys(scripts).includes(this.script);

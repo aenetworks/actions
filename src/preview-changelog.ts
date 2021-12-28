@@ -16,6 +16,7 @@ async function run() {
     new CloneRepository(repository, githubToken, ref).run();
     new DescribeChanges(ReleaseType.PROD, ref).previewChangelog();
   } catch (error) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     core.setFailed(error);
   }

@@ -32,7 +32,7 @@ export default class DescribeChanges extends VersionBase implements Command {
    * Run command.
    */
   @logGroup('Describe changes')
-  public run(raw: boolean = false): string {
+  public run(raw = false): string {
     const currentVersion = this._getLatestVersion();
 
     return this.getChangelog(raw, currentVersion);
@@ -50,10 +50,12 @@ export default class DescribeChanges extends VersionBase implements Command {
       );
 
       core.notice(tempChangelog);
-    } catch (e) {}
+    } catch (e) {
+      // suppressed
+    }
   }
 
-  protected getChangelog(raw: boolean = false, currentVersion: VersionVo | null) {
+  protected getChangelog(raw = false, currentVersion: VersionVo | null) {
     if (currentVersion) {
       this._ensureRightVersionIsDescribed(currentVersion);
       this._ensureThereIsLatestPrefixedTag(currentVersion);

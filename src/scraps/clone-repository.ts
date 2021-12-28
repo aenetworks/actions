@@ -13,6 +13,7 @@ async function run() {
 
     new CloneRepository(repository, token, ref).run();
   } catch (error) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     core.setFailed(error.message);
   }

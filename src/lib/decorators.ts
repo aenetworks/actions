@@ -1,7 +1,7 @@
 import * as core from '@actions/core';
 
 export function logGroup(name: string) {
-  return function (target: Object, propertyKey: string, descriptor: PropertyDescriptor) {
+  return function (target: unknown, propertyKey: string, descriptor: PropertyDescriptor) {
     const originalMethod = descriptor.value;
 
     descriptor.value = function (...args) {
@@ -9,8 +9,6 @@ export function logGroup(name: string) {
         core.startGroup(name);
 
         return originalMethod.apply(this, args);
-      } catch (e) {
-        throw e;
       } finally {
         core.endGroup();
       }

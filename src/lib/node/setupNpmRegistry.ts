@@ -105,6 +105,7 @@ class NpmrcFile {
       fs.writeFileSync(this._getLocation(), this.content);
       core.exportVariable('NPM_CONFIG_USERCONFIG', this._getLocation());
     } catch (e) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       throw new NpmrcFileError('Cannot save .npmrc file: ' + e.message);
     }

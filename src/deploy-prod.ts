@@ -17,6 +17,7 @@ async function run() {
     new MergeBranches(targetRef, MergeBranches.LAST_TAG, force).run();
     core.info(`${colors.green}Success${colors.reset}`);
   } catch (error) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     core.setFailed(error);
   }
