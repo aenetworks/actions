@@ -25,7 +25,6 @@ export default class VersionBase {
       .map((tag) => tag.trim())
       .filter((tag) => VersionVo.isValidVersion(tag))
       .map((tag) => VersionVo.parse(tag))
-      .filter((version) => (this.releaseType === ReleaseType.PROD ? !version.isPrerelease : true))
       .sort(VersionVo.sortDesc);
 
     if (!tags.length) {
