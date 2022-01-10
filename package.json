@@ -32,12 +32,12 @@
     "@actions/io": "^1.1.1",
     "@actions/tool-cache": "^1.7.1",
     "newman": "^5.3.0",
-    "shelljs": "^0.8.4"
+    "shelljs": "^0.8.5"
   },
   "devDependencies": {
     "@aenetworks/eslint-config-typescript": "^2.0.0",
     "@types/jest": "^27.0.3",
-    "@types/node": "^17.0.5",
+    "@types/node": "^17.0.8",
     "@types/shelljs": "^0.8.10",
     "eslint": "^8.5.0",
     "jest": "^27.4.5",
