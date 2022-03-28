@@ -14,7 +14,7 @@ RUN apt-get update \
       --no-install-recommends \
     && rm -rf /var/lib/apt/lists/* \
     && npm i -g standard-version@9.3.2 \
-    && npm i -d hub
+    && npm i -g hub
 
 COPY . /action
 
