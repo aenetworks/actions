@@ -41,9 +41,9 @@ export default class SearchDockerImagesRepository implements Command {
    * @throws {ShellCommandExecutionError}
    */
   @logGroup('SearchDockerImages')
-  public run(): void {
+  public async run(): Promise<void> {
     core.info('Searching...');
-    Promise.resolve(this.checkRequiredDependencies())
+    return Promise.resolve(this.checkRequiredDependencies())
       .then(() => this.execCommand(listTagCommand))
       .then((tags) => this.replace(tags, noLineBreakRegex, empty))
       .then((tags) => this.replace(tags, noWhiteSpaceRegex, empty))
@@ -244,6 +244,10 @@ export default class SearchDockerImagesRepository implements Command {
   }
 
   private getDockerfileContent(relativeFilePath): string {
-    return fs.readFileSync(`${rootDir}/${relativeFilePath}`, { encoding: 'utf-8' });
+    const filePath = `${rootDir}/${relativeFilePath}`;
+    const content = fs.readFileSync(filePath, { encoding: 'utf-8' });
+    core.info('reading data from docker file => ' + filePath);
+    core.info(content);
+    return content;
   }
 }
