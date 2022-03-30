@@ -105,7 +105,7 @@ export default class SearchDockerImagesRepository implements Command {
     const imagesWithTags = images.filter((image) => image.tags.length > 0);
     const tags: string[] = [];
 
-    const fileContent = this.getReadLineStream(dockerfileName);
+    const fileContent = this.getDockerfileContent(dockerfileName);
     const searchableKeyword = 'FROM';
 
     let prefixTagName;
@@ -206,7 +206,7 @@ export default class SearchDockerImagesRepository implements Command {
     this.configureGitUser();
     this.resetBranchToDevelop();
 
-    const fileContent = this.getReadLineStream(dockerfileName);
+    const fileContent = this.getDockerfileContent(dockerfileName);
     const searchableKeyword = 'FROM';
 
     if (fileContent.trim().startsWith(searchableKeyword)) {
@@ -243,7 +243,7 @@ export default class SearchDockerImagesRepository implements Command {
     core.info('Search tags completed!');
   }
 
-  private getReadLineStream(relativeFilePath): string {
+  private getDockerfileContent(relativeFilePath): string {
     return fs.readFileSync(`${rootDir}/${relativeFilePath}`, { encoding: 'utf-8' });
   }
 }
