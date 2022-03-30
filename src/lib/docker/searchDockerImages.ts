@@ -1,7 +1,6 @@
 import * as core from '@actions/core';
 import * as fs from 'fs';
 import * as path from 'path';
-import * as readline from 'readline';
 import * as shell from 'shelljs';
 
 import { logGroup } from '../decorators';
@@ -101,30 +100,26 @@ export default class SearchDockerImagesRepository implements Command {
     return JSON.parse(`[${result}]`);
   }
 
-  private async processImageTags(images: Tag[]) {
+  private processImageTags(images: Tag[]) {
     core.info('Processing image tags');
     const imagesWithTags = images.filter((image) => image.tags.length > 0);
     const tags: string[] = [];
 
-    const stream = this.getReadLineStream(dockerfileName);
+    const fileContent = this.getReadLineStream(dockerfileName);
     const searchableKeyword = 'FROM';
 
     let prefixTagName;
 
-    for await (const line of stream) {
-      if (line.trim().startsWith(searchableKeyword)) {
-        const matches = line.match(prefixVersionNameRegex);
-        if (matches && matches.length > 0) {
-          prefixTagName = matches[0];
+    if (fileContent.trim().startsWith(searchableKeyword)) {
+      const matches = fileContent.match(prefixVersionNameRegex);
+      if (matches && matches.length > 0) {
+        prefixTagName = matches[0];
 
-          imagesWithTags.forEach((image) => {
-            tags.push(
-              ...image.tags.filter((tag) => fullVersionNameRegex.test(tag.trim()) && tag.startsWith(prefixTagName))
-            );
-          });
-          stream.close();
-          break;
-        }
+        imagesWithTags.forEach((image) => {
+          tags.push(
+            ...image.tags.filter((tag) => fullVersionNameRegex.test(tag.trim()) && tag.startsWith(prefixTagName))
+          );
+        });
       }
     }
 
@@ -206,46 +201,41 @@ export default class SearchDockerImagesRepository implements Command {
     this.execCommand(pushBranchCommand);
   }
 
-  private async processLocalVerification(tags): Promise<void> {
+  private processLocalVerification(tags): void {
     core.info('Checking local version agains remote docker tags.');
     this.configureGitUser();
     this.resetBranchToDevelop();
 
-    const stream = this.getReadLineStream(dockerfileName);
+    const fileContent = this.getReadLineStream(dockerfileName);
     const searchableKeyword = 'FROM';
 
-    for await (const line of stream) {
-      if (line.trim().startsWith(searchableKeyword)) {
-        const fullVersionNameMatches = line.match(fullVersionNameRegex);
-        const prefixVersionMatches = line.match(prefixVersionNameRegex);
+    if (fileContent.trim().startsWith(searchableKeyword)) {
+      const fullVersionNameMatches = fileContent.match(fullVersionNameRegex);
+      const prefixVersionMatches = fileContent.match(prefixVersionNameRegex);
 
-        if (
-          fullVersionNameMatches &&
-          fullVersionNameMatches.length > 0 &&
-          prefixVersionMatches &&
-          prefixVersionMatches.length > 0
-        ) {
-          const fullTagName = fullVersionNameMatches[0];
-          const prefixTagName = prefixVersionMatches[0];
+      if (
+        fullVersionNameMatches &&
+        fullVersionNameMatches.length > 0 &&
+        prefixVersionMatches &&
+        prefixVersionMatches.length > 0
+      ) {
+        const fullTagName = fullVersionNameMatches[0];
+        const prefixTagName = prefixVersionMatches[0];
 
-          const versionMatches = fullTagName.match(versionRegex);
-          if (versionMatches && versionMatches.length > 0) {
-            const localVersion = parseFloat(versionMatches[0]);
-            const remoteVersion = parseFloat(tags[tags.length - 1]);
+        const versionMatches = fullTagName.match(versionRegex);
+        if (versionMatches && versionMatches.length > 0) {
+          const localVersion = parseFloat(versionMatches[0]);
+          const remoteVersion = parseFloat(tags[tags.length - 1]);
 
-            if (remoteVersion > localVersion) {
-              const branchName = this.checkoutBranch(dockerImageName, prefixTagName, remoteVersion, localVersion);
+          if (remoteVersion > localVersion) {
+            const branchName = this.checkoutBranch(dockerImageName, prefixTagName, remoteVersion, localVersion);
 
-              this.replaceTags(dockerImageName, prefixTagName, dockerfileName, remoteVersion, localVersion);
-              this.commitChanges(dockerImageName, prefixTagName, remoteVersion);
-              this.pushBranchToRemote(branchName);
-              this.createPullRequest(dockerImageName, prefixTagName, remoteVersion);
-            } else {
-              shell.echo('Your branch is up to date!');
-            }
-
-            stream.close();
-            break;
+            this.replaceTags(dockerImageName, prefixTagName, dockerfileName, remoteVersion, localVersion);
+            this.commitChanges(dockerImageName, prefixTagName, remoteVersion);
+            this.pushBranchToRemote(branchName);
+            this.createPullRequest(dockerImageName, prefixTagName, remoteVersion);
+          } else {
+            shell.echo('Your branch is up to date!');
           }
         }
       }
@@ -253,12 +243,7 @@ export default class SearchDockerImagesRepository implements Command {
     core.info('Search tags completed!');
   }
 
-  private getReadLineStream(relativeFilePath): readline.Interface {
-    const fileStream = fs.createReadStream(`${rootDir}/${relativeFilePath}`, { encoding: 'utf-8' });
-
-    return readline.createInterface({
-      input: fileStream,
-      crlfDelay: Infinity,
-    });
+  private getReadLineStream(relativeFilePath): string {
+    return fs.readFileSync(`${rootDir}/${relativeFilePath}`, { encoding: 'utf-8' });
   }
 }
