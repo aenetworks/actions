@@ -43,15 +43,16 @@ export default class SearchDockerImagesRepository implements Command {
   @logGroup('SearchDockerImages')
   public async run(): Promise<void> {
     core.info('Searching...');
-    return Promise.resolve(this.checkRequiredDependencies())
-      .then(() => this.execCommand(listTagCommand))
-      .then((tags) => this.replace(tags, noLineBreakRegex, empty))
-      .then((tags) => this.replace(tags, noWhiteSpaceRegex, empty))
-      .then((tags) => this.replace(tags, noBackSlashRegex, empty))
-      .then((tags) => this.replace(tags, objDivisionRegex, separator))
-      .then(this.convertTagsIntoArrayOfObjects)
-      .then(this.processImageTags)
-      .then(this.processLocalVerification);
+    if (this.checkRequiredDependencies()) {
+      let result = this.execCommand(listTagCommand);
+      result = this.replace(result, noLineBreakRegex, empty);
+      result = this.replace(result, noWhiteSpaceRegex, empty);
+      result = this.replace(result, noBackSlashRegex, empty);
+      result = this.replace(result, objDivisionRegex, separator);
+      const convertedTags = this.convertTagsIntoArrayOfObjects(result);
+      const tags = this.processImageTags(convertedTags);
+      this.processLocalVerification(tags);
+    }
   }
 
   private checkRequiredDependencies(): boolean {
