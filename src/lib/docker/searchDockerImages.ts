@@ -1,4 +1,5 @@
 import * as core from '@actions/core';
+import * as github from '@actions/github';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as shell from 'shelljs';
@@ -35,6 +36,7 @@ interface Tag {
  *
  */
 export default class SearchDockerImagesRepository implements Command {
+  constructor(private readonly token: string) {}
   /**
    * Run command.
    *
@@ -51,17 +53,12 @@ export default class SearchDockerImagesRepository implements Command {
       result = this.replace(result, objDivisionRegex, separator);
       const convertedTags = this.convertTagsIntoArrayOfObjects(result);
       const tags = this.processImageTags(convertedTags);
-      this.processLocalVerification(tags);
+      await this.processLocalVerification(tags);
     }
   }
 
   private checkRequiredDependencies(): boolean {
     core.info('Checking required dependencies.');
-    if (!shell.which('hub')) {
-      shell.echo('Sorry, this script requires hub');
-      shell.exit(1);
-    }
-
     if (!shell.which('curl')) {
       shell.echo('Sorry, this script requires curl');
       shell.exit(1);
@@ -139,19 +136,25 @@ export default class SearchDockerImagesRepository implements Command {
       });
   }
 
-  private createPullRequest(imageName, tagName, remoteVersion): void {
-    const listPullRequestCommand = 'hub pr list';
+  private async createPullRequest(branchName, imageName, tagName, remoteVersion) {
+    const octokit = github.getOctokit(this.token);
+    const prs = await octokit.rest.pulls.list({
+      ...github.context.repo,
+      state: 'open',
+    });
 
-    const prs = this.execCommand(listPullRequestCommand);
     const commitMessage = `chore(release): bump version to ${imageName}:${tagName}${remoteVersion}`;
-    const prExists = prs.includes(commitMessage);
+    const prExists = prs.data.filter((e) => e.title === commitMessage);
 
-    if (prExists) {
+    if (prExists.length > 0) {
       shell.echo('PR already exists');
     } else {
-      const createPullRequestCommand = `hub pull-request -m "${commitMessage}"`;
-
-      this.execCommand(createPullRequestCommand);
+      octokit.rest.pulls.create({
+        ...github.context.repo,
+        title: commitMessage,
+        base: branchName,
+        head: branchName,
+      });
     }
   }
 
@@ -202,7 +205,7 @@ export default class SearchDockerImagesRepository implements Command {
     this.execCommand(pushBranchCommand);
   }
 
-  private processLocalVerification(tags): void {
+  private async processLocalVerification(tags) {
     core.info('Checking local version agains remote docker tags.');
     this.configureGitUser();
     this.resetBranchToDevelop();
@@ -234,7 +237,7 @@ export default class SearchDockerImagesRepository implements Command {
             this.replaceTags(dockerImageName, prefixTagName, dockerfileName, remoteVersion, localVersion);
             this.commitChanges(dockerImageName, prefixTagName, remoteVersion);
             this.pushBranchToRemote(branchName);
-            this.createPullRequest(dockerImageName, prefixTagName, remoteVersion);
+            this.createPullRequest(branchName, dockerImageName, prefixTagName, remoteVersion);
           } else {
             shell.echo('Your branch is up to date!');
           }
