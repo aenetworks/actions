@@ -19,7 +19,7 @@ async function run() {
 
     new SetupNpmRegistry(npmAuthToken).run();
     new InstallDependencies().run();
-    await new SearchDockerImagesRepository().run();
+    await new SearchDockerImagesRepository(githubToken).run();
 
     core.info(`${colors.green}Success${colors.reset}`);
   } catch (error) {
