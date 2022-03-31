@@ -152,7 +152,7 @@ export default class SearchDockerImagesRepository implements Command {
       octokit.rest.pulls.create({
         ...github.context.repo,
         title: commitMessage,
-        base: branchName,
+        base: 'develop',
         head: branchName,
       });
     }
