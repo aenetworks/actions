@@ -5,6 +5,7 @@ import * as path from 'path';
 import * as shell from 'shelljs';
 
 import { logGroup } from '../decorators';
+import Inputs from '../inputs';
 import { Command } from '../seedWorks';
 
 const rootDir = path.resolve('./');
@@ -56,20 +57,12 @@ export default class SearchDockerImagesRepository implements Command {
 
       const convertedTags = this.convertTagsIntoArrayOfObjects(result);
       const tags = this.processImageTags(convertedTags);
-<<<<<<< HEAD
-=======
-
->>>>>>> c5f6f447b2a3f1e58756d07c3cb986e3a797689e
       await this.processLocalVerification(tags);
     }
   }
 
   private checkRequiredDependencies(): boolean {
     core.info('Checking required dependencies.');
-<<<<<<< HEAD
-=======
-
->>>>>>> c5f6f447b2a3f1e58756d07c3cb986e3a797689e
     if (!shell.which('curl')) {
       shell.echo('Sorry, this script requires curl');
       shell.exit(1);
@@ -180,8 +173,12 @@ export default class SearchDockerImagesRepository implements Command {
   }
 
   private configureGitUser(): void {
-    const userEmailCommand = 'git config --global user.email "watchtech@aenetworks.com"';
-    const userNameCommand = 'git config --global user.name "Platform Engineering"';
+    const inputs = new Inputs();
+    const botUsername = inputs.getBotUsername();
+    const botEmail = inputs.getBotEmail();
+
+    const userEmailCommand = `git config --global user.email "${botEmail}"`;
+    const userNameCommand = `git config --global user.name "${botUsername}"`;
 
     this.execCommand(userEmailCommand);
     this.execCommand(userNameCommand);
