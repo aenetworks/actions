@@ -45,20 +45,31 @@ export default class SearchDockerImagesRepository implements Command {
   @logGroup('SearchDockerImages')
   public async run(): Promise<void> {
     core.info('Searching...');
+
     if (this.checkRequiredDependencies()) {
       let result = this.execCommand(listTagCommand);
+
       result = this.replace(result, noLineBreakRegex, empty);
       result = this.replace(result, noWhiteSpaceRegex, empty);
       result = this.replace(result, noBackSlashRegex, empty);
       result = this.replace(result, objDivisionRegex, separator);
+
       const convertedTags = this.convertTagsIntoArrayOfObjects(result);
       const tags = this.processImageTags(convertedTags);
+<<<<<<< HEAD
+=======
+
+>>>>>>> c5f6f447b2a3f1e58756d07c3cb986e3a797689e
       await this.processLocalVerification(tags);
     }
   }
 
   private checkRequiredDependencies(): boolean {
     core.info('Checking required dependencies.');
+<<<<<<< HEAD
+=======
+
+>>>>>>> c5f6f447b2a3f1e58756d07c3cb986e3a797689e
     if (!shell.which('curl')) {
       shell.echo('Sorry, this script requires curl');
       shell.exit(1);
@@ -79,6 +90,7 @@ export default class SearchDockerImagesRepository implements Command {
 
   private execCommand(command): string {
     core.info(`Executing command : ${command}`);
+
     const result = shell.exec(command);
 
     if (result.code !== 0) {
@@ -95,11 +107,13 @@ export default class SearchDockerImagesRepository implements Command {
 
   private convertTagsIntoArrayOfObjects(result): Tag[] {
     core.info('Converting tags');
+
     return JSON.parse(`[${result}]`);
   }
 
   private processImageTags(images: Tag[]) {
     core.info('Processing image tags');
+
     const imagesWithTags = images.filter((image) => image.tags.length > 0);
     const tags: string[] = [];
 
@@ -110,6 +124,7 @@ export default class SearchDockerImagesRepository implements Command {
 
     if (fileContent.trim().startsWith(searchableKeyword)) {
       const matches = fileContent.match(prefixVersionNameRegex);
+
       if (matches && matches.length > 0) {
         prefixTagName = matches[0];
 
@@ -227,6 +242,7 @@ export default class SearchDockerImagesRepository implements Command {
         const prefixTagName = prefixVersionMatches[0];
 
         const versionMatches = fullTagName.match(versionRegex);
+
         if (versionMatches && versionMatches.length > 0) {
           const localVersion = parseFloat(versionMatches[0]);
           const remoteVersion = parseFloat(tags[tags.length - 1]);
@@ -244,14 +260,17 @@ export default class SearchDockerImagesRepository implements Command {
         }
       }
     }
+
     core.info('Search tags completed!');
   }
 
   private getDockerfileContent(relativeFilePath): string {
     const filePath = `${rootDir}/${relativeFilePath}`;
     const content = fs.readFileSync(filePath, { encoding: 'utf-8' });
+
     core.info('reading data from docker file => ' + filePath);
     core.info(content);
+
     return content;
   }
 }

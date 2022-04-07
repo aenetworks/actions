@@ -1,0 +1,26 @@
+name: 'Bump Version'
+description: 'Bump version based on conventional commits and last tag.'
+inputs:
+  ref:
+    description: 'Ref'
+    default: 'master'
+    required: false
+  token:
+    description: 'GitHub Token'
+    default: ${{ github.token }}
+    required: false
+  npmAuthToken:
+    description: 'NPM Auth Token or env variable NPM_AUTH_TOKEN'
+    required: false
+  botUsername:
+    description: 'GitHub bot username or env variable GH_ACTION_BOT_NAME'
+    default: 'GitHub Actions Bot'
+    required: false
+  botEmail:
+    description: 'Github bot email or env variable GH_ACTION_BOT_EMAIL'
+    required: false
+runs:
+  using: 'docker'
+  image: 'docker://ghcr.io/aenetworks/actions:latest'
+  args: ['node', '/action/dist/bump-version.js']
+
