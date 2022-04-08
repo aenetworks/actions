@@ -57,12 +57,14 @@ export default class SearchDockerImagesRepository implements Command {
 
       const convertedTags = this.convertTagsIntoArrayOfObjects(result);
       const tags = this.processImageTags(convertedTags);
+
       await this.processLocalVerification(tags);
     }
   }
 
   private checkRequiredDependencies(): boolean {
     core.info('Checking required dependencies.');
+
     if (!shell.which('curl')) {
       shell.echo('Sorry, this script requires curl');
       shell.exit(1);
