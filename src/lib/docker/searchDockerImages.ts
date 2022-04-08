@@ -56,12 +56,14 @@ export default class SearchDockerImagesRepository implements Command {
 
       const convertedTags = this.convertTagsIntoArrayOfObjects(result);
       const tags = this.processImageTags(convertedTags);
+
       await this.processLocalVerification(tags);
     }
   }
 
   private checkRequiredDependencies(): boolean {
     core.info('Checking required dependencies.');
+
     if (!shell.which('curl')) {
       shell.echo('Sorry, this script requires curl');
       shell.exit(1);
@@ -258,6 +260,7 @@ export default class SearchDockerImagesRepository implements Command {
 
   private getDockerfileContent(relativeFilePath): string {
     const filePath = `${rootDir}/${relativeFilePath}`;
+
     return fs.readFileSync(filePath, { encoding: 'utf-8' });
   }
 }
