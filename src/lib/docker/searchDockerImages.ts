@@ -5,6 +5,7 @@ import * as path from 'path';
 import * as shell from 'shelljs';
 
 import { logGroup } from '../decorators';
+import Inputs from '../inputs';
 import { Command } from '../seedWorks';
 
 const rootDir = path.resolve('./');
@@ -174,8 +175,12 @@ export default class SearchDockerImagesRepository implements Command {
   }
 
   private configureGitUser(): void {
-    const userEmailCommand = 'git config --global user.email "watchtech@aenetworks.com"';
-    const userNameCommand = 'git config --global user.name "Platform Engineering"';
+    const inputs = new Inputs();
+    const botUsername = inputs.getBotUsername();
+    const botEmail = inputs.getBotEmail();
+
+    const userEmailCommand = `git config --global user.email "${botEmail}"`;
+    const userNameCommand = `git config --global user.name "${botUsername}"`;
 
     this.execCommand(userEmailCommand);
     this.execCommand(userNameCommand);
