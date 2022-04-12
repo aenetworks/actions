@@ -56,20 +56,14 @@ export default class SearchDockerImagesRepository implements Command {
 
       const convertedTags = this.convertTagsIntoArrayOfObjects(result);
       const tags = this.processImageTags(convertedTags);
-<<<<<<< HEAD
-=======
 
->>>>>>> c5f6f447b2a3f1e58756d07c3cb986e3a797689e
       await this.processLocalVerification(tags);
     }
   }
 
   private checkRequiredDependencies(): boolean {
     core.info('Checking required dependencies.');
-<<<<<<< HEAD
-=======
 
->>>>>>> c5f6f447b2a3f1e58756d07c3cb986e3a797689e
     if (!shell.which('curl')) {
       shell.echo('Sorry, this script requires curl');
       shell.exit(1);
@@ -158,7 +152,7 @@ export default class SearchDockerImagesRepository implements Command {
       state: 'open',
     });
 
-    const commitMessage = `chore(release): bump version to ${imageName}:${tagName}${remoteVersion}`;
+    const commitMessage = `chore(release): :whale: upgrade node alpine to ${imageName}:${tagName}${remoteVersion}`;
     const prExists = prs.data.filter((e) => e.title === commitMessage);
 
     if (prExists.length > 0) {
@@ -206,7 +200,7 @@ export default class SearchDockerImagesRepository implements Command {
   }
 
   private commitChanges(imageName, tagName, remoteVersion): void {
-    const commitMessage = `chore(release): bump version to ${imageName}:${tagName}${remoteVersion}`;
+    const commitMessage = `chore(release): :whale: upgrade node alpine to ${imageName}:${tagName}${remoteVersion}`;
     const addCommand = 'git add .';
     const commitCommand = `git commit -m "${commitMessage}"`;
 
@@ -266,11 +260,7 @@ export default class SearchDockerImagesRepository implements Command {
 
   private getDockerfileContent(relativeFilePath): string {
     const filePath = `${rootDir}/${relativeFilePath}`;
-    const content = fs.readFileSync(filePath, { encoding: 'utf-8' });
 
-    core.info('reading data from docker file => ' + filePath);
-    core.info(content);
-
-    return content;
+    return fs.readFileSync(filePath, { encoding: 'utf-8' });
   }
 }
