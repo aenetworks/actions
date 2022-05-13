@@ -195,13 +195,10 @@ export default class SearchDockerImagesRepository implements Command {
     this.execCommand(checkoutBranchCommand);
   }
 
-  private checkoutBranch(imageName, tagName, remoteVersion, localVersion): string {
-    const branchName = `chore_${imageName}${tagName}_from_${localVersion}_to_${remoteVersion}`;
+  private checkoutBranch(branchName) {
     const checkoutBranchCommand = `git checkout -b ${branchName}`;
 
     this.execCommand(checkoutBranchCommand);
-
-    return branchName;
   }
 
   private commitChanges(imageName, tagName, remoteVersion): void {
@@ -247,12 +244,19 @@ export default class SearchDockerImagesRepository implements Command {
           const remoteVersion = parseFloat(tags[tags.length - 1]);
 
           if (remoteVersion > localVersion) {
-            const branchName = this.checkoutBranch(dockerImageName, prefixTagName, remoteVersion, localVersion);
+            const branchName = `chore_${dockerImageName}${prefixTagName}_from_${localVersion}_to_${remoteVersion}`;
 
-            this.replaceTags(dockerImageName, prefixTagName, dockerfileName, remoteVersion, localVersion);
-            this.commitChanges(dockerImageName, prefixTagName, remoteVersion);
-            this.pushBranchToRemote(branchName);
-            this.createPullRequest(branchName, dockerImageName, prefixTagName, remoteVersion);
+            const remoteBranchResult = shell.exec(`git ls-remote --heads origin ${branchName}`)[0];
+            if (remoteBranchResult?.trim()?.length > 0) {
+              shell.echo('Your branch is up to date!');
+            } else {
+              this.checkoutBranch(branchName);
+
+              this.replaceTags(dockerImageName, prefixTagName, dockerfileName, remoteVersion, localVersion);
+              this.commitChanges(dockerImageName, prefixTagName, remoteVersion);
+              this.pushBranchToRemote(branchName);
+              this.createPullRequest(branchName, dockerImageName, prefixTagName, remoteVersion);
+            }
           } else {
             shell.echo('Your branch is up to date!');
           }
