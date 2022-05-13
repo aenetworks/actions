@@ -247,6 +247,7 @@ export default class SearchDockerImagesRepository implements Command {
             const branchName = `chore_${dockerImageName}${prefixTagName}_from_${localVersion}_to_${remoteVersion}`;
 
             const remoteBranchResult = shell.exec(`git ls-remote --heads origin ${branchName}`)[0];
+
             if (remoteBranchResult?.trim()?.length > 0) {
               shell.echo('Your branch is up to date!');
             } else {
