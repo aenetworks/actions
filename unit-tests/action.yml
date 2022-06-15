@@ -14,7 +14,7 @@ inputs:
     required: false
   timeout:
     description: 'Action run timeout.'
-    default: 10m
+    default: 1ms
     required: false
 
 runs:

@@ -56,7 +56,7 @@ async function run() {
     // @ts-ignore
     core.setFailed(errorToReport);
   } finally {
-    clearTimeout(timeout)
+    clearTimeout(timeout);
   }
 }
 
