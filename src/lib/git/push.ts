@@ -3,7 +3,11 @@ import execShellCommand from '../execShellCommand';
 import { Command } from '../seedWorks';
 
 export default class Push implements Command {
-  constructor(private readonly onlyTags: boolean = false) {}
+  private readonly timeout: number;
+
+  constructor(private readonly onlyTags: boolean = false) {
+    this.timeout = 30_000;
+  }
 
   /**
    * Run command.
@@ -22,6 +26,7 @@ export default class Push implements Command {
 
     execShellCommand({
       cmd,
+      timeout: this.timeout,
     });
   };
 
@@ -30,6 +35,7 @@ export default class Push implements Command {
 
     execShellCommand({
       cmd,
+      timeout: this.timeout,
     });
 
     this._pushTagsOnly();

@@ -13,6 +13,11 @@ const errorMessage = 'Error while run build script.';
  * Skipped if script 'build' does not exists.
  */
 export default class Build implements Command {
+  private readonly timeout: number;
+
+  constructor(timeout = 60_000) {
+    this.timeout = timeout;
+  }
   /**
    * Run command.
    *
@@ -35,7 +40,7 @@ export default class Build implements Command {
 
     const cmd = 'npm run build';
 
-    execShellCommand({ cmd, errorMessage });
+    execShellCommand({ cmd, errorMessage, timeout: this.timeout });
   }
 
   private _skipBuild() {

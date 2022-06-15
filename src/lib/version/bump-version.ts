@@ -30,11 +30,13 @@ export default class BumpVersion extends VersionBase implements Command {
 
     execShellCommand({
       cmd: `git tag -d ${version} || true`,
+      timeout: this.timeout,
     });
 
     if (!this.skipCommit) {
       execShellCommand({
-        cmd: `git commit -am "chore(release): ${version}"`,
+        cmd: `git commit -anm "chore(release): ${version}"`,
+        timeout: this.timeout,
       });
     }
 
@@ -42,12 +44,14 @@ export default class BumpVersion extends VersionBase implements Command {
       this._ensureRightVersionIsDescribed(latestVersion);
 
       execShellCommand({
-        cmd: 'git commit -a --amend -n --no-edit',
+        cmd: 'git commit -an --amend --no-edit',
+        timeout: this.timeout,
       });
     }
 
     execShellCommand({
       cmd: `git tag ${version}`,
+      timeout: this.timeout,
     });
 
     core.info(`New version: ${version}`);

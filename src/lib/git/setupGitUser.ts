@@ -5,13 +5,16 @@ import execShellCommand from '../execShellCommand';
 import { Command } from '../seedWorks';
 
 export default class SetupGitUser implements Command {
+  private readonly timeout: number;
   /**
    * Create SetupGitUser command.
    *
    * @param {string} name - User name.
    * @param {string} email - User email.
    */
-  constructor(private readonly name: string, private readonly email: string) {}
+  constructor(private readonly name: string, private readonly email: string) {
+    this.timeout = 30_000;
+  }
 
   /**
    * Run command.
@@ -34,6 +37,7 @@ export default class SetupGitUser implements Command {
     execShellCommand({
       cmd,
       errorMessage,
+      timeout: this.timeout,
     });
   };
 
@@ -43,6 +47,6 @@ export default class SetupGitUser implements Command {
     const cmd = `git config user.email "<${email}>"`;
     const errorMessage = `Cannot set git user.email=${email}`;
 
-    execShellCommand({ cmd, errorMessage });
+    execShellCommand({ cmd, errorMessage, timeout: this.timeout });
   };
 }

@@ -14,10 +14,11 @@ async function run() {
     const githubToken = inputs.getGithubToken();
     const ref = inputs.getRef();
     const npmAuthToken = inputs.getNpmAuthToken();
+    const timeout = inputs.getTimeout();
 
-    const preUnitTestsCommand = new RunNpmScript('pretest');
-    const unitTestsCommand = new RunNpmScript('test');
-    const postUnitTestsCommand = new RunNpmScript('posttest');
+    const preUnitTestsCommand = new RunNpmScript('pretest', false, timeout);
+    const unitTestsCommand = new RunNpmScript('test', false, timeout);
+    const postUnitTestsCommand = new RunNpmScript('posttest', false, timeout);
 
     new CloneRepository(repository, githubToken, ref).run();
 

@@ -6,6 +6,7 @@ import { Command } from '../seedWorks';
 
 export default class CloneRepository implements Command {
   private readonly ref: string;
+  private readonly timeout: number;
   /**
    * Construct CloneRepository command.
    *
@@ -14,6 +15,8 @@ export default class CloneRepository implements Command {
    * @param {string} ref - Git ref name (branch, tag).
    */
   constructor(private readonly repository: string, private readonly token: string, ref: string) {
+    this.timeout = 30_000;
+
     if (ref.toUpperCase().startsWith('REFS/HEADS/')) {
       this.ref = ref.substring('refs/heads/'.length);
     } else {
@@ -37,13 +40,13 @@ export default class CloneRepository implements Command {
     const cmd = `git clone https://bot:${token}@github.com/${repository}.git .`;
     const errorMessage = `Cannot clone repository '${repository}'`;
 
-    execShellCommand({ cmd, errorMessage });
+    execShellCommand({ cmd, errorMessage, timeout: this.timeout });
   };
 
   private _switchBranchToRef = (ref: string): void => {
     const cmd = `git checkout ${ref}`;
     const errorMessage = `Cannot switch to '${ref}'`;
 
-    execShellCommand({ cmd, errorMessage });
+    execShellCommand({ cmd, errorMessage, timeout: this.timeout });
   };
 }

@@ -3,5 +3,5 @@
  * @abstract
  */
 export default abstract class Command {
-  abstract run(): void;
+  public abstract run(): void;
 }

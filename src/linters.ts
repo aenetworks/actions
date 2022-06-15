@@ -14,10 +14,11 @@ async function run() {
     const githubToken = inputs.getGithubToken();
     const ref = inputs.getRef();
     const npmAuthToken = inputs.getNpmAuthToken();
+    const timeout = inputs.getTimeout();
 
-    const preLintCommand = new RunNpmScript('prelint', true);
-    const lintCommand = new RunNpmScript('lint', true);
-    const postLintCommand = new RunNpmScript('postlint', true);
+    const preLintCommand = new RunNpmScript('prelint', true, timeout);
+    const lintCommand = new RunNpmScript('lint', true, timeout);
+    const postLintCommand = new RunNpmScript('postlint', true, timeout);
 
     new CloneRepository(repository, githubToken, ref).run();
 
@@ -40,6 +41,8 @@ async function run() {
 
     core.info(`${colors.green}Success${colors.reset}`);
   } catch (error) {
+    console.log('on error');
+
     const failedEslintChecks = FailedEslintChecksHandler.handle(error as Error);
 
     const errorToReport = failedEslintChecks ? failedEslintChecks : error;

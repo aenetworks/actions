@@ -14,6 +14,11 @@ const errorMessage = 'Error while installing packages';
  * If both, yarn takes precedence over npm..
  */
 export default class InstallNpmDependencies implements Command {
+  private readonly timeout: number;
+
+  constructor() {
+    this.timeout = 90_000;
+  }
   /**
    * Run command.
    *
@@ -39,7 +44,7 @@ export default class InstallNpmDependencies implements Command {
 
     const cmd = 'yarn install --frozen-lockfile';
 
-    execShellCommand({ cmd, errorMessage });
+    execShellCommand({ cmd, errorMessage, timeout: this.timeout });
   };
 
   private _npmInstall = () => {
@@ -47,7 +52,7 @@ export default class InstallNpmDependencies implements Command {
 
     const cmd = 'npm ci';
 
-    execShellCommand({ cmd, errorMessage });
+    execShellCommand({ cmd, errorMessage, timeout: this.timeout });
   };
 
   private _bootstrapLerna() {
@@ -58,6 +63,6 @@ export default class InstallNpmDependencies implements Command {
 
     const cmd = utils.shouldUseYarn() ? yarnCmd : npmCmd;
 
-    execShellCommand({ cmd, errorMessage });
+    execShellCommand({ cmd, errorMessage, timeout: this.timeout });
   }
 }

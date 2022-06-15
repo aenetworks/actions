@@ -13,12 +13,15 @@ const errorMessage = 'Error while publishing package.';
  * Depending on prerelease flag it tag as next release..
  */
 export default class Publish implements Command {
+  private readonly timeout: number;
   /**
    * Constructs Publish command.
    *
    * @param {boolean} [isPrerelease=false] - Prerelease flag.
    */
-  constructor(private readonly isPrerelease: boolean = false) {}
+  constructor(private readonly isPrerelease: boolean = false) {
+    this.timeout = 30_000;
+  }
 
   /**
    * Run command.
@@ -47,7 +50,7 @@ export default class Publish implements Command {
 
     const cmd = 'npm publish --tag next';
 
-    execShellCommand({ cmd, errorMessage });
+    execShellCommand({ cmd, errorMessage, timeout: this.timeout });
   }
 
   private _publishPrereleaseLerna() {
@@ -55,7 +58,7 @@ export default class Publish implements Command {
 
     const cmd = 'npx lerna exec -- npm publish --tag next';
 
-    execShellCommand({ cmd, errorMessage });
+    execShellCommand({ cmd, errorMessage, timeout: this.timeout });
   }
 
   private _publishRelease() {
@@ -71,7 +74,7 @@ export default class Publish implements Command {
 
     const cmd = 'npx lerna exec -- npm publish';
 
-    execShellCommand({ cmd, errorMessage });
+    execShellCommand({ cmd, errorMessage, timeout: this.timeout });
   }
 
   private _publishReleaseRegular() {
@@ -79,6 +82,6 @@ export default class Publish implements Command {
 
     const cmd = 'npm publish';
 
-    execShellCommand({ cmd, errorMessage });
+    execShellCommand({ cmd, errorMessage, timeout: this.timeout });
   }
 }

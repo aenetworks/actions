@@ -8,6 +8,7 @@ import { LatestVersion } from '../version';
 export default class MergeBranches implements Command {
   private readonly sourceRef: string;
   private readonly isTag: boolean;
+  private readonly timeout: number;
   public static readonly LAST_TAG = 'LAST_TAG';
 
   /**
@@ -19,6 +20,8 @@ export default class MergeBranches implements Command {
    * @param {boolean} force - Flag to force push.
    */
   constructor(private readonly targetRef: string, sourceRef: string, private readonly force: boolean = false) {
+    this.timeout = 30_000;
+
     if (sourceRef === MergeBranches.LAST_TAG) {
       const latestVersion = new LatestVersion().run();
 
@@ -54,32 +57,37 @@ export default class MergeBranches implements Command {
     const cmd = `git checkout -b ${targetRef} || git checkout ${targetRef}`;
     const errorMessage = `Cannot checkout to '${targetRef}'`;
 
-    execShellCommand({ cmd, errorMessage });
+    execShellCommand({ cmd, errorMessage, timeout: this.timeout });
   };
 
   private _mergeBranches = (sourceRef: string, targetRef: string): void => {
     const cmd = `git merge --ff-only origin/${sourceRef}`;
     const errorMessage = `Cannot merge '${sourceRef}' into '${targetRef}'`;
 
-    execShellCommand({ cmd, errorMessage });
+    execShellCommand({
+      cmd,
+      errorMessage,
+
+      timeout: this.timeout,
+    });
   };
 
   private _resetTargetBranch = (sourceRef: string, targetRef: string, isTag: boolean): void => {
     const source = isTag ? sourceRef : `origin/${sourceRef}`;
     const cmd = `git reset --hard ${source}`;
 
-    execShellCommand({ cmd });
+    execShellCommand({ cmd, timeout: this.timeout });
   };
 
   private _pushTargetBranch = (targetRef: string, isForce: boolean): void => {
     const cmd = `git push --set-upstream origin ${targetRef} ${isForce ? ' --force' : ''}`;
     const errorMessage = `Cannot push '${targetRef}'`;
 
-    execShellCommand({ cmd, errorMessage });
+    execShellCommand({ cmd, errorMessage, timeout: this.timeout });
   };
 
   private _isTagRef = (): boolean => {
-    const out = execShellCommand({ cmd: `git tag --list "${this.sourceRef}"`, silent: true });
+    const out = execShellCommand({ cmd: `git tag --list "${this.sourceRef}"`, silent: true, timeout: this.timeout });
 
     return !!out.length;
   };
