@@ -1,7 +1,7 @@
 import * as core from '@actions/core';
 import * as github from '@actions/github';
 import { Context } from '@actions/github/lib/context';
-
+import * as ms from 'ms-typescript';
 import ReleaseType, { ReleaseTypeError } from './releaseType';
 
 interface PostmanInputs {
@@ -107,5 +107,9 @@ export default class Inputs {
       collectionId,
       environmentId,
     };
+  }
+
+  getTimeout(): number {
+    return ms.toMs(core.getInput('timeout') || '60m');
   }
 }
