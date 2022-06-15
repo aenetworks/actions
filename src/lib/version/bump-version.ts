@@ -34,7 +34,7 @@ export default class BumpVersion extends VersionBase implements Command {
 
     if (!this.skipCommit) {
       execShellCommand({
-        cmd: `git commit -am "chore(release): ${version}"`,
+        cmd: `git commit -nam "chore(release): ${version}"`,
       });
     }
 

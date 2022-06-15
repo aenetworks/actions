@@ -1,4 +1,5 @@
 import * as core from '@actions/core';
+import * as ms from 'ms-typescript';
 
 import { logGroup } from '../decorators';
 import execShellCommand from '../execShellCommand';
@@ -37,7 +38,7 @@ export default class CloneRepository implements Command {
     const cmd = `git clone https://bot:${token}@github.com/${repository}.git .`;
     const errorMessage = `Cannot clone repository '${repository}'`;
 
-    execShellCommand({ cmd, errorMessage });
+    execShellCommand({ cmd, errorMessage, timeout: ms.toMs('5m') });
   };
 
   private _switchBranchToRef = (ref: string): void => {

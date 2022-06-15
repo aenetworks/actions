@@ -7,25 +7,18 @@ import Inputs from './lib/inputs';
 import { InstallDependencies, RunNpmScript, SetupNpmRegistry } from './lib/node';
 
 async function run() {
-  let timeout;
-
   try {
     const inputs = new Inputs();
-    const ms = inputs.getTimeout();
-
-    console.log('MS: ' + ms);
-    timeout = setTimeout(() => {
-      core.setFailed('Timeout.');
-    }, ms);
 
     const repository = inputs.getRepository();
     const githubToken = inputs.getGithubToken();
     const ref = inputs.getRef();
     const npmAuthToken = inputs.getNpmAuthToken();
+    const timeout = inputs.getTimeout();
 
-    const preLintCommand = new RunNpmScript('prelint', true);
-    const lintCommand = new RunNpmScript('lint', true);
-    const postLintCommand = new RunNpmScript('postlint', true);
+    const preLintCommand = new RunNpmScript('prelint', true, timeout);
+    const lintCommand = new RunNpmScript('lint', true, timeout);
+    const postLintCommand = new RunNpmScript('postlint', true, timeout);
 
     new CloneRepository(repository, githubToken, ref).run();
 
@@ -48,6 +41,8 @@ async function run() {
 
     core.info(`${colors.green}Success${colors.reset}`);
   } catch (error) {
+    console.log('on error');
+
     const failedEslintChecks = FailedEslintChecksHandler.handle(error as Error);
 
     const errorToReport = failedEslintChecks ? failedEslintChecks : error;
@@ -55,8 +50,6 @@ async function run() {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     core.setFailed(errorToReport);
-  } finally {
-    clearTimeout(timeout);
   }
 }
 

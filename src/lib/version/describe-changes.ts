@@ -32,16 +32,16 @@ export default class DescribeChanges extends VersionBase implements Command {
    * Run command.
    */
   @logGroup('Describe changes')
-  public run(raw = false): string {
+  public run(): string {
     const currentVersion = this._getLatestVersion();
 
-    return this.getChangelog(raw, currentVersion);
+    return this.getChangelog(currentVersion);
   }
 
   @logGroup('Preview changelog')
   public previewChangelog(): void {
     const currentVersion = this._getLatestVersion();
-    const changelog = this.getChangelog(true, currentVersion);
+    const changelog = this.getChangelog(currentVersion, true);
 
     try {
       const tempChangelog = changelog.replace(
@@ -55,7 +55,7 @@ export default class DescribeChanges extends VersionBase implements Command {
     }
   }
 
-  protected getChangelog(raw = false, currentVersion: VersionVo | null) {
+  protected getChangelog(currentVersion: VersionVo | null, raw = false) {
     if (currentVersion) {
       this._ensureRightVersionIsDescribed(currentVersion);
       this._ensureThereIsLatestPrefixedTag(currentVersion);

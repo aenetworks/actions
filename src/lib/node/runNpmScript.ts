@@ -11,15 +11,18 @@ import { Command } from '../seedWorks';
  */
 export default class RunNpmScript implements Command {
   private readonly cmd: string;
+  private readonly timeout: number;
 
   /**
    * Construct RunNpmScriptCommand.
    *
    * @param {string} script - Script name to run.
-   * @param {boolean} [useStdout=false] - Should include Stdout as error description..
+   * @param {boolean} [useStdout=false] - Should include Stdout as error description.
+   * @param {number} [timeout=3600] - Execution timeout.
    */
-  constructor(private readonly script: string, private readonly useStdout: boolean = false) {
+  constructor(private readonly script: string, private readonly useStdout: boolean = false, timeout = 3600) {
     this.cmd = `npm run ${script}`;
+    this.timeout = timeout;
   }
 
   /**
@@ -27,9 +30,9 @@ export default class RunNpmScript implements Command {
    *
    * @throws {ShellCommandExecutionError}
    */
-  public run(): void {
+  run(): void {
     core.info(`Running: '${this.script}'`);
-    execShellCommand({ cmd: this.cmd, useStdout: this.useStdout });
+    execShellCommand({ cmd: this.cmd, useStdout: this.useStdout, timeout: this.timeout });
   }
 
   public hasScript(): boolean {
