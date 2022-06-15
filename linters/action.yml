@@ -14,7 +14,7 @@ inputs:
     required: false
   timeout:
     description: 'Action run timeout.'
-    default: 1ms
+    default: 30m
     required: false
 runs:
   using: 'docker'
