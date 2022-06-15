@@ -7,25 +7,18 @@ import Inputs from './lib/inputs';
 import { InstallDependencies, RunNpmScript, SetupNpmRegistry } from './lib/node';
 
 async function run() {
-  let timeout;
-
   try {
     const inputs = new Inputs();
-    const ms = inputs.getTimeout();
-
-    console.log('MS: ' + ms);
-    timeout = setTimeout(() => {
-      core.setFailed('Timeout.');
-    }, ms);
 
     const repository = inputs.getRepository();
     const githubToken = inputs.getGithubToken();
     const ref = inputs.getRef();
     const npmAuthToken = inputs.getNpmAuthToken();
+    const timeout = inputs.getTimeout();
 
-    const preUnitTestsCommand = new RunNpmScript('pretest');
-    const unitTestsCommand = new RunNpmScript('test');
-    const postUnitTestsCommand = new RunNpmScript('posttest');
+    const preUnitTestsCommand = new RunNpmScript('pretest', false, timeout);
+    const unitTestsCommand = new RunNpmScript('test', false, timeout);
+    const postUnitTestsCommand = new RunNpmScript('posttest', false, timeout);
 
     new CloneRepository(repository, githubToken, ref).run();
 
@@ -55,8 +48,6 @@ async function run() {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     core.setFailed(errorToReport);
-  } finally {
-    clearTimeout(timeout);
   }
 }
 

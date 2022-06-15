@@ -5,7 +5,7 @@ import * as path from 'path';
 import * as shell from 'shelljs';
 
 import { logGroup } from '../decorators';
-import Inputs from '../inputs';
+import execShellCommand from '../execShellCommand';
 import { Command } from '../seedWorks';
 
 const rootDir = path.resolve('./');
@@ -37,7 +37,14 @@ interface Tag {
  *
  */
 export default class SearchDockerImagesRepository implements Command {
-  constructor(private readonly token: string) {}
+  private readonly longTimeout: number;
+  private readonly shortTimeout: number;
+
+  constructor(private readonly token: string) {
+    this.shortTimeout = 30_000;
+    this.longTimeout = 2_700_000;
+  }
+
   /**
    * Run command.
    *
@@ -47,53 +54,17 @@ export default class SearchDockerImagesRepository implements Command {
   public async run(): Promise<void> {
     core.info('Searching...');
 
-    if (this.checkRequiredDependencies()) {
-      let result = this.execCommand(listTagCommand);
+    let result = execShellCommand({ cmd: listTagCommand, silent: true, timeout: this.longTimeout });
 
-      result = this.replace(result, noLineBreakRegex, empty);
-      result = this.replace(result, noWhiteSpaceRegex, empty);
-      result = this.replace(result, noBackSlashRegex, empty);
-      result = this.replace(result, objDivisionRegex, separator);
+    result = this.replace(result, noLineBreakRegex, empty);
+    result = this.replace(result, noWhiteSpaceRegex, empty);
+    result = this.replace(result, noBackSlashRegex, empty);
+    result = this.replace(result, objDivisionRegex, separator);
 
-      const convertedTags = this.convertTagsIntoArrayOfObjects(result);
-      const tags = this.processImageTags(convertedTags);
+    const convertedTags = this.convertTagsIntoArrayOfObjects(result);
+    const tags = this.processImageTags(convertedTags);
 
-      await this.processLocalVerification(tags);
-    }
-  }
-
-  private checkRequiredDependencies(): boolean {
-    core.info('Checking required dependencies.');
-
-    if (!shell.which('curl')) {
-      shell.echo('Sorry, this script requires curl');
-      shell.exit(1);
-    }
-
-    if (!shell.which('jq')) {
-      shell.echo('Sorry, this script requires jq');
-      shell.exit(1);
-    }
-
-    if (!shell.which('git')) {
-      shell.echo('Sorry, this script requires git');
-      shell.exit(1);
-    }
-
-    return true;
-  }
-
-  private execCommand(command): string {
-    core.info(`Executing command : ${command}`);
-
-    const result = shell.exec(command);
-
-    if (result.code !== 0) {
-      shell.echo(`Error while executing: ${command}`);
-      shell.exit(1);
-    }
-
-    return result.toString();
+    await this.processLocalVerification(tags);
   }
 
   private replace(text, regex, value): string {
@@ -171,19 +142,7 @@ export default class SearchDockerImagesRepository implements Command {
   private replaceTags(imageName, tagName, fileName, remoteVersion, localVersion): void {
     const replaceTagsCommand = `sed -i 's/${imageName}:${tagName}${localVersion}/${imageName}:${tagName}${remoteVersion}/g' ${rootDir}/${fileName}`;
 
-    this.execCommand(replaceTagsCommand);
-  }
-
-  private configureGitUser(): void {
-    const inputs = new Inputs();
-    const botUsername = inputs.getBotUsername();
-    const botEmail = inputs.getBotEmail();
-
-    const userEmailCommand = `git config --global user.email "${botEmail}"`;
-    const userNameCommand = `git config --global user.name "${botUsername}"`;
-
-    this.execCommand(userEmailCommand);
-    this.execCommand(userNameCommand);
+    execShellCommand({ cmd: replaceTagsCommand, timeout: this.shortTimeout });
   }
 
   private resetBranchToDevelop(): void {
@@ -191,14 +150,14 @@ export default class SearchDockerImagesRepository implements Command {
     const resetBranchCommand = 'git reset --hard';
     const checkoutBranchCommand = `git checkout ${branchName}`;
 
-    this.execCommand(resetBranchCommand);
-    this.execCommand(checkoutBranchCommand);
+    execShellCommand({ cmd: resetBranchCommand, timeout: this.shortTimeout });
+    execShellCommand({ cmd: checkoutBranchCommand, timeout: this.shortTimeout });
   }
 
   private checkoutBranch(branchName) {
     const checkoutBranchCommand = `git checkout -b ${branchName}`;
 
-    this.execCommand(checkoutBranchCommand);
+    execShellCommand({ cmd: checkoutBranchCommand, timeout: this.shortTimeout });
   }
 
   private commitChanges(imageName, tagName, remoteVersion): void {
@@ -206,19 +165,18 @@ export default class SearchDockerImagesRepository implements Command {
     const addCommand = 'git add .';
     const commitCommand = `git commit -m "${commitMessage}"`;
 
-    this.execCommand(addCommand);
-    this.execCommand(commitCommand);
+    execShellCommand({ cmd: addCommand, timeout: this.shortTimeout });
+    execShellCommand({ cmd: commitCommand, timeout: this.shortTimeout });
   }
 
   private pushBranchToRemote(branchName) {
     const pushBranchCommand = `git push origin ${branchName}`;
 
-    this.execCommand(pushBranchCommand);
+    execShellCommand({ cmd: pushBranchCommand, timeout: this.shortTimeout });
   }
 
   private async processLocalVerification(tags) {
-    core.info('Checking local version agains remote docker tags.');
-    this.configureGitUser();
+    core.info('Checking local version against remote docker tags.');
     this.resetBranchToDevelop();
 
     const fileContent = this.getDockerfileContent(dockerfileName);
@@ -256,7 +214,7 @@ export default class SearchDockerImagesRepository implements Command {
               this.replaceTags(dockerImageName, prefixTagName, dockerfileName, remoteVersion, localVersion);
               this.commitChanges(dockerImageName, prefixTagName, remoteVersion);
               this.pushBranchToRemote(branchName);
-              this.createPullRequest(branchName, dockerImageName, prefixTagName, remoteVersion);
+              await this.createPullRequest(branchName, dockerImageName, prefixTagName, remoteVersion);
             }
           } else {
             shell.echo('Your branch is up to date!');

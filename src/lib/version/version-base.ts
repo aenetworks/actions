@@ -8,18 +8,21 @@ import ReleaseType from '../releaseType';
 import VersionVo from './version-vo';
 
 export default class VersionBase {
+  protected readonly timeout: number;
   /**
    * Constructs VersionBase.
    *
    * @param {ReleaseType} releaseType - Release type.
    */
-  constructor(private readonly releaseType: ReleaseType) {}
+  constructor(private readonly releaseType: ReleaseType) {
+    this.timeout = 30_000;
+  }
 
   protected _getLatestVersion = (): VersionVo | null => {
     const cmd = 'git tag -l';
     const errorMessage = 'Cannot get current version';
 
-    const tagsList = execShellCommand({ cmd, errorMessage, silent: true });
+    const tagsList = execShellCommand({ cmd, errorMessage, silent: true, timeout: this.timeout });
     const tags = tagsList
       .split('\n')
       .map((tag) => tag.trim())
@@ -45,11 +48,13 @@ export default class VersionBase {
       execShellCommand({
         cmd: `npx lerna version --exact --no-push --no-git-tag-version -y ${currentVersion.asStringWithtPrefix()}`,
         silent: true,
+        timeout: this.timeout,
       });
     } else {
       execShellCommand({
         cmd: `npm version ${currentVersion.asStringWithtPrefix()} --no-git-tag-version --allow-same-version`,
         silent: true,
+        timeout: this.timeout,
       });
     }
   }
@@ -59,7 +64,10 @@ export default class VersionBase {
 
     if (!tagExists) {
       try {
-        execShellCommand({ cmd: `git tag ${currentVersion.asStringWithtPrefix()} ${currentVersion.original}` });
+        execShellCommand({
+          cmd: `git tag ${currentVersion.asStringWithtPrefix()} ${currentVersion.original}`,
+          timeout: this.timeout,
+        });
       } catch (e) {
         core.info((e as Error).message);
       }
@@ -75,7 +83,7 @@ export default class VersionBase {
       this._getReleaseTypeParam(),
     ].join(' ');
 
-    const rawChangelog = execShellCommand({ cmd, silent: true });
+    const rawChangelog = execShellCommand({ cmd, silent: true, timeout: this.timeout });
 
     const changelogLines = rawChangelog.split('\n');
     let changelog = changelogLines
@@ -116,7 +124,7 @@ export default class VersionBase {
   protected _bumpVersion(): void {
     const cmd = `npx standard-version --silent --skip.changelog --skip.commit ${this._getReleaseTypeParam()}`;
 
-    execShellCommand({ cmd, silent: true });
+    execShellCommand({ cmd, silent: true, timeout: this.timeout });
   }
 
   private _getDependenciesSection(tag: string, raw: boolean): string {
@@ -126,7 +134,7 @@ export default class VersionBase {
     };
 
     const filePath = path.join(process.cwd(), 'package.json');
-    const old = execShellCommand({ cmd: `git show ${tag}:./package.json`, silent: true });
+    const old = execShellCommand({ cmd: `git show ${tag}:./package.json`, silent: true, timeout: this.timeout });
 
     const oldDeps = JSON.parse(old).dependencies;
     // eslint-disable-next-line @typescript-eslint/no-var-requires

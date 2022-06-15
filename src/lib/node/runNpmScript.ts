@@ -18,9 +18,9 @@ export default class RunNpmScript implements Command {
    *
    * @param {string} script - Script name to run.
    * @param {boolean} [useStdout=false] - Should include Stdout as error description.
-   * @param {number} [timeout=3600] - Execution timeout.
+   * @param {number} [timeout=3600000] - Execution timeout. One hour default.
    */
-  constructor(private readonly script: string, private readonly useStdout: boolean = false, timeout = 3600) {
+  constructor(private readonly script: string, private readonly useStdout: boolean = false, timeout = 3_600_000) {
     this.cmd = `npm run ${script}`;
     this.timeout = timeout;
   }
