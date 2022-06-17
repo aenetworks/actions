@@ -2,6 +2,7 @@ import * as core from '@actions/core';
 
 import { logGroup } from '../decorators';
 import execShellCommand from '../execShellCommand';
+import * as utils from '../node/utils';
 import { Command } from '../seedWorks';
 import { LatestVersion } from '../version';
 
@@ -45,6 +46,11 @@ export default class MergeBranches implements Command {
     if (this.force) {
       this._checkout(this.targetRef);
       this._resetTargetBranch(this.sourceRef, this.targetRef, this.isTag);
+
+      if (this.isTag) {
+        this._addVersionCommit(this.sourceRef);
+      }
+
       this._pushTargetBranch(this.targetRef, true);
     } else {
       this._checkout(this.targetRef);
@@ -78,6 +84,16 @@ export default class MergeBranches implements Command {
 
     execShellCommand({ cmd, timeout: this.timeout });
   };
+
+  private _addVersionCommit(sourceRef: string) {
+    const versionCmd = utils.shouldUseYarn()
+      ? `yarn version --new-version ${sourceRef} --no-git-tag-version`
+      : `npm version ${sourceRef} --no-git-tag-version`;
+    const commitCmd = `git commit -am 'release: ${sourceRef}'`;
+
+    execShellCommand({ cmd: versionCmd, timeout: this.timeout });
+    execShellCommand({ cmd: commitCmd, timeout: this.timeout });
+  }
 
   private _pushTargetBranch = (targetRef: string, isForce: boolean): void => {
     const cmd = `git push --set-upstream origin ${targetRef} ${isForce ? ' --force' : ''}`;
