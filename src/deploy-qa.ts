@@ -1,7 +1,7 @@
 import * as core from '@actions/core';
 
 import * as colors from './lib/colors';
-import {CloneRepository, MergeBranches, SetupGitUser} from './lib/git';
+import { CloneRepository, MergeBranches, SetupGitUser } from './lib/git';
 import Inputs from './lib/inputs';
 import ReleaseType from './lib/releaseType';
 import { DescribeChanges } from './lib/version';
