@@ -1,8 +1,7 @@
-import * as core from '@actions/core';
-
 import { logGroup } from '../decorators';
 import ReleaseType from '../releaseType';
 import { Command } from '../seedWorks';
+import Summary from '../summary';
 import VersionBase from './version-base';
 import VersionVo from './version-vo';
 
@@ -49,7 +48,7 @@ export default class DescribeChanges extends VersionBase implements Command {
         `compare/${currentVersion?.original}...${this.ref})`
       );
 
-      core.notice(tempChangelog);
+      Summary.append(tempChangelog);
     } catch (e) {
       // suppressed
     }
