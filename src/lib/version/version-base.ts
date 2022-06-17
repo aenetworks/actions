@@ -88,9 +88,15 @@ export default class VersionBase {
     const changelogLines = rawChangelog.split('\n');
     let changelog = changelogLines
       .slice(2, changelogLines.length - 3)
+      .map((line) => {
+        return line
+          .replace(/, closes.*$/g, '')
+          .replace(/#?([A-Z]{3,8}-\d+)/g, '[#$1](https://aetndigital.atlassian.net/browse/$1)')
+          .replace(/\(\[#(\d+)]\(.*?\)\) \(\[.*?\]\((.*?)\/commit\/.*?\)\)/g, '([#$1]($2/pull/$1))');
+      })
       .join('\n')
-      .replace(/\(\[#\d+]\(.*?\)\)/g, '')
-      .replace(/^#{1,3}/, '##');
+      .replace(/^#{1,3}/, '##')
+      .replace(/ (\d{4}-\d{2}-\d{2})/, '');
 
     if (currentVersion) {
       try {
