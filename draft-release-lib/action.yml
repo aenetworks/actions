@@ -29,6 +29,6 @@ inputs:
     required: true
 runs:
   using: 'docker'
-  image: 'docker://ghcr.io/aenetworks/actions:latest'
+  image: 'docker://ghcr.io/aenetworks/actions:test'
   args: ['node', '/action/dist/draft-release.js']
 
