@@ -25,5 +25,5 @@ inputs:
     required: false
 runs:
   using: 'docker'
-  image: 'docker://ghcr.io/aenetworks/actions:test'
+  image: 'docker://ghcr.io/aenetworks/actions:latest'
   args: ['node', '/action/dist/deploy-prod.js']
