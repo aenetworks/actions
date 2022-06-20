@@ -17,7 +17,7 @@ export default class InstallNpmDependencies implements Command {
   private readonly timeout: number;
 
   constructor() {
-    this.timeout = 90_000;
+    this.timeout = 600_000;
   }
   /**
    * Run command.
