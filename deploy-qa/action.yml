@@ -11,7 +11,7 @@ inputs:
     required: false
   token:
     description: 'GitHub Token'
-    default: ${{ github.token }}
+    default: ${{ secrets.GPR_AUTH_TOKEN }}
     required: false
   npmAuthToken:
     description: 'NPM Auth Token or env variable NPM_AUTH_TOKEN'
@@ -22,10 +22,11 @@ inputs:
     default: 'false'
   botUsername:
     description: 'GitHub bot username or env variable GH_ACTION_BOT_NAME'
-    default: 'GitHub Actions Bot'
+    default: 'aetn'
     required: false
   botEmail:
     description: 'Github bot email or env variable GH_ACTION_BOT_EMAIL'
+    default: ${{ secrets.GH_ACTION_BOT_EMAIL }}
     required: false
 runs:
   using: 'docker'
