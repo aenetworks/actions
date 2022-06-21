@@ -96,7 +96,7 @@ export default class VersionBase {
       })
       .join('\n')
       .replace(/^#{1,3}/, '##')
-      .replace(/ (\d{4}-\d{2}-\d{2})/, '');
+      .replace(/ \(\d{4}-\d{2}-\d{2}\)/, '');
 
     if (currentVersion) {
       try {

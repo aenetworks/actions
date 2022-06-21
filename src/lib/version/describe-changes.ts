@@ -48,7 +48,7 @@ export default class DescribeChanges extends VersionBase implements Command {
         `compare/${currentVersion?.original}...${this.ref})`
       );
 
-      Summary.append(tempChangelog);
+      Summary.append(tempChangelog.replace(/`/gi, '\\`'));
     } catch (e) {
       // suppressed
     }
