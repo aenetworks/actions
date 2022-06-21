@@ -74,7 +74,7 @@ export default class VersionBase {
     }
   }
 
-  protected _getChangelogEntry(currentVersion: VersionVo | null, raw: boolean): string {
+  protected _getChangelogEntry(currentVersion: VersionVo | null): string {
     const cmd = [
       'npx standard-version',
       '--dry-run',
@@ -100,7 +100,7 @@ export default class VersionBase {
 
     if (currentVersion) {
       try {
-        changelog += this._getDependenciesSection(currentVersion.asString(), raw);
+        changelog += this._getDependenciesSection(currentVersion.asString());
       } catch (e) {
         // suppressed
       }
@@ -133,7 +133,7 @@ export default class VersionBase {
     execShellCommand({ cmd, silent: true, timeout: this.timeout });
   }
 
-  private _getDependenciesSection(tag: string, raw: boolean): string {
+  private _getDependenciesSection(tag: string): string {
     let key;
     const getVer = (v) => {
       return v.replace(/^\D+/, '');
@@ -176,11 +176,8 @@ export default class VersionBase {
     let response = '';
 
     response += '\n\n\n### Dependencies\n\n';
-
-    if (!raw) {
-      response += '<details>\n';
-      response += '<summary>';
-    }
+    response += '<details>\n';
+    response += '<summary>';
 
     const summary: Array<string> = [];
     let body = '';
@@ -203,16 +200,9 @@ export default class VersionBase {
     const sumText = summary.join(',');
 
     response += sumText.charAt(0).toUpperCase() + sumText.slice(1) + ' packages';
-
-    if (!raw) {
-      response += '</summary>';
-    }
-
+    response += '</summary>';
     response += '\n' + body;
-
-    if (!raw) {
-      response += '\n\n</details>';
-    }
+    response += '\n\n</details>';
 
     return response;
   }

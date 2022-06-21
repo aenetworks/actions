@@ -40,7 +40,7 @@ export default class DescribeChanges extends VersionBase implements Command {
   @logGroup('Preview changelog')
   public previewChangelog(): void {
     const currentVersion = this._getLatestVersion();
-    const changelog = this.getChangelog(currentVersion, true);
+    const changelog = this.getChangelog(currentVersion);
 
     try {
       const tempChangelog = changelog.replace(
@@ -54,12 +54,12 @@ export default class DescribeChanges extends VersionBase implements Command {
     }
   }
 
-  protected getChangelog(currentVersion: VersionVo | null, raw = false) {
+  protected getChangelog(currentVersion: VersionVo | null) {
     if (currentVersion) {
       this._ensureRightVersionIsDescribed(currentVersion);
       this._ensureThereIsLatestPrefixedTag(currentVersion);
     }
 
-    return this._getChangelogEntry(currentVersion, raw);
+    return this._getChangelogEntry(currentVersion);
   }
 }

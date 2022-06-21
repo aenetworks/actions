@@ -32,6 +32,8 @@ export default class CreateDraftRelease implements Command {
 
     Summary.append(`## Draft release`);
     Summary.append('');
+    Summary.append(`[Draft Release ${this.version}](${releaseUrl})`);
+    Summary.append('');
     Summary.append(
       `Open this [Github Release UI](${releaseUrl}) page and click green 'Publish' button to publish changes.`
     );
@@ -49,6 +51,6 @@ export default class CreateDraftRelease implements Command {
     Summary.append(`- [Tag](${tagUrl})`);
     Summary.append('');
     Summary.append('## Generated Changelog:');
-    Summary.append(this.changelog);
+    Summary.append(this.changelog.replace(/`/gi, '\\`'));
   }
 }
