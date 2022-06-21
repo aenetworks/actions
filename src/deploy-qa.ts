@@ -1,7 +1,7 @@
 import * as core from '@actions/core';
 
 import * as colors from './lib/colors';
-import { CloneRepository, MergeBranches } from './lib/git';
+import { CloneRepository, MergeBranches, SetupGitUser } from './lib/git';
 import Inputs from './lib/inputs';
 import ReleaseType from './lib/releaseType';
 import { DescribeChanges } from './lib/version';
@@ -15,8 +15,11 @@ async function run() {
     const sourceRef = inputs.getSourceRef();
     const targetRef = inputs.getTargetRef();
     const force = inputs.getForce();
+    const botUsername = inputs.getBotUsername();
+    const botEmail = inputs.getBotEmail();
 
     new CloneRepository(repository, githubToken, targetRef).run();
+    new SetupGitUser(botUsername, botEmail).run();
     new MergeBranches(targetRef, sourceRef, force).run();
     new DescribeChanges(ReleaseType.PROD, targetRef).previewChangelog();
     core.info(`${colors.green}Success${colors.reset}`);

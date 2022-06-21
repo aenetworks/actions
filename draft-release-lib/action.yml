@@ -14,7 +14,7 @@ inputs:
     required: false
   botUsername:
     description: 'GitHub bot username or env variable GH_ACTION_BOT_NAME'
-    default: 'GitHub Actions Bot'
+    default: 'Github Actions bot'
     required: false
   botEmail:
     description: 'Github bot email or env variable GH_ACTION_BOT_EMAIL'
