@@ -15,7 +15,7 @@ export default class VersionBase {
    * @param {ReleaseType} releaseType - Release type.
    */
   constructor(private readonly releaseType: ReleaseType) {
-    this.timeout = 30_000;
+    this.timeout = 300_000;
   }
 
   protected _getLatestVersion = (): VersionVo | null => {
