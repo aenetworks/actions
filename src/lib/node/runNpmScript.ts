@@ -32,7 +32,7 @@ export default class RunNpmScript implements Command {
    */
   run(): void {
     core.info(`Running: '${this.script}'`);
-    execShellCommand({ cmd: this.cmd, useStdout: this.useStdout, timeout: this.timeout });
+    execShellCommand({ cmd: this.cmd, useStdout: this.useStdout, timeout: this.timeout, printOutputOnError: true });
   }
 
   public hasScript(): boolean {

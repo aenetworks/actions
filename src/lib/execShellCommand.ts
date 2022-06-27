@@ -17,6 +17,7 @@ interface ExecShellCommandProps {
   readonly errorMessage?: string;
   readonly useStdout?: boolean;
   readonly silent?: boolean;
+  readonly printOutputOnError?: boolean;
   readonly timeout?: number;
 }
 
@@ -27,6 +28,7 @@ interface ExecShellCommandProps {
  * @param {string} [errorMessage=''] - Error message used to throw error.
  * @param {boolean} [useStdout=false] - Should use Stdout instead Stderr to describe error details.
  * @param {boolean} [silent=false] - Should echo to console.
+ * @param {boolean} [printOutputOnError=false] - Print warning with output on error.
  * @param {number} [timeout] - Execution timout in milliseconds.
  * @return {string} - Command output.
  * @throws {ShellCommandExecutionError} - Command execution error.
@@ -36,6 +38,7 @@ const execShellCommand = ({
   errorMessage = '',
   useStdout = false,
   silent = false,
+  printOutputOnError = false,
   timeout,
 }: ExecShellCommandProps): string => {
   core.info(`${colors.grey}$ ${cmd}${colors.reset}`);
@@ -54,6 +57,10 @@ const execShellCommand = ({
   if (res.code !== 0) {
     const message = errorMessage ? errorMessage.trim() + '\n' : '';
     const description = useStdout ? res.stdout.trim() : res.stderr.trim();
+
+    if (res.stdout && printOutputOnError) {
+      core.warning(res.stdout);
+    }
 
     throw new ShellCommandExecutionError(`${message}${description}`);
   }
