@@ -48,7 +48,11 @@ export default class MergeBranches implements Command {
       this._resetTargetBranch(this.sourceRef, this.targetRef, this.isTag);
 
       if (this.isTag) {
-        this._addVersionCommit(this.sourceRef);
+        try {
+          this._addVersionCommit(this.sourceRef);
+        } catch (e) {
+          // No package.json, it's ok to skip.
+        }
       }
 
       this._pushTargetBranch(this.targetRef, true);
